@@ -1,5 +1,6 @@
 name: base
 channels:
+  - bioconda
   - conda-forge
 dependencies:
   - _ipython_minor_entry_point=8.7.0=h3b92ee0_0
@@ -218,6 +219,4 @@ dependencies:
   - zlib=1.2.13=h166bdaf_4
   - zstandard=0.19.0=py38h5945529_1
   - zstd=1.5.2=h6239696_4
-  - pip:
-      - gempipe==0.0.1
 prefix: /opt/conda
