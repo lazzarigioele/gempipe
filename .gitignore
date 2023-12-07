@@ -1,0 +1,15 @@
+**/.DS_Store
+**/.ipynb_checkpoints
+**/__pycache__
+ 
+**/.DS_Store
+**/.ipynb_checkpoints
+**/__pycache__
+
+dist/
+poetry.lock
+
+
+docs/_build/ 
+docs/_build*.zip
+docs/gempipe/*.html
