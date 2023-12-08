@@ -1,4 +1,4 @@
-FROM lazzarigioele/python38:latest
+FROM lazzarigioele/python39:latest
 
 COPY gempipe.yml /tmp/
 
