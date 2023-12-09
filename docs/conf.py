@@ -9,8 +9,9 @@ extensions = [
 ]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 html_theme = "sphinx_rtd_theme"
-autoapi_dirs = ["../src"]
+autoapi_dirs = ["../src/gempipe"]
 autoapi_ignore = ['*-checkpoint.py']
+
 
 
 
