@@ -1,3 +1,6 @@
-myst-nb
-sphinx-autoapi
-sphinx-rtd-theme
+sphinx==7.1.2
+myst-nb==1.0.0
+sphinx-autoapi==3.0.0 
+sphinx_rtd_theme==2.0.0
+
+
