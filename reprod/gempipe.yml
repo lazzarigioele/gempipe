@@ -35,7 +35,6 @@ dependencies:
   - cffi=1.15.1=py39he91dace_3
   - charset-normalizer=2.1.1=pyhd8ed1ab_0
   - cleo=2.1.0=pyhd8ed1ab_0
-  - click=8.1.7=unix_pyh707e725_0
   - cobra=0.28.0=pyhd8ed1ab_0
   - colorama=0.4.6=pyhd8ed1ab_0
   - comm=0.1.2=pyhd8ed1ab_0

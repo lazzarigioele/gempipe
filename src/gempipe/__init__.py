@@ -2,35 +2,27 @@ import argparse
 
 
 
-from .moduleA import funcA
-from .moduleB import funcB
+from .commons import funcA, funcB
 
-
-
-def recon_command(args):
-    print(args)
-    
-    
-def derive_command(args):
-    print(args)
-
+from .recon import recon_command
+from .derive import derive_command
 
 
 
 
 def main(): 
     parser = argparse.ArgumentParser(description='')
-    subparsers = parser.add_subparsers(title='', dest='subcommand', help='')
+    subparsers = parser.add_subparsers(title='gempipe subcommands', dest='subcommand', help='')
 
     # Subparser for the 'recon' command
-    recon_parser = subparsers.add_parser('recon', help='')
-    recon_parser.add_argument('arg1', help='')
-    recon_parser.add_argument('arg2', help='')
+    recon_parser = subparsers.add_parser('recon', help='Reconstruct a draft pan-model and a PAM.')
+    recon_parser.add_argument('--arg1', help='Description for --arg1 argument.')
+    recon_parser.add_argument('--arg2', help='Description for --arg2 argument.')
 
     # Subparser for the 'derive' command
-    derive_parser = subparsers.add_parser('derive', help='')
-    derive_parser.add_argument('arg1', help='')
-    derive_parser.add_argument('arg2', help='')
+    derive_parser = subparsers.add_parser('derive', help='Derive strain- and species-specific models.')
+    derive_parser.add_argument('--arg1', help='Description for --arg1 argument.')
+    derive_parser.add_argument('--arg2', help='Description for --arg2 argument.')
 
     
     args = parser.parse_args()
@@ -39,7 +31,7 @@ def main():
     elif args.subcommand == 'derive':
         derive_command(args)
     else:
-        print("Invalid subcommand. Use 'recon' or 'derive'. EEEE")
+        print("Invalid subcommand.")
         
         
         
