@@ -138,6 +138,7 @@ dependencies:
   - lzo=2.10=h516909a_1000
   - mako=1.2.4=pyhd8ed1ab_0
   - mamba=1.1.0=py39hc5d2bb1_3
+  - markdown-it-py=3.0.0=pyhd8ed1ab_0
   - markupsafe=2.1.1=py39hb9d737c_2
   - matplotlib-inline=0.1.6=pyhd8ed1ab_0
   - mdurl=0.1.0=pyhd8ed1ab_0
@@ -271,5 +272,5 @@ dependencies:
   - zstandard=0.19.0=py39h29414ee_1
   - zstd=1.5.2=h6239696_4
   - pip:
-      - gempipe==0.0.1
+      - gempipe==0.0.2
 prefix: /opt/conda
