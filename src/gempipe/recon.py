@@ -1,3 +1,4 @@
 def recon_command(args):
-    print(args.arg1)
-    print(args.arg2)
+    print(args.optionA)
+    print(args.optionB)
+    print(args.optionC)
