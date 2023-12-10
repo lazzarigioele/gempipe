@@ -1,20 +1,21 @@
 [tool.poetry]
 name = "gempipe"
-version = "0.0.1"
+version = "0.0.2"
 description = ""
 authors = ["Gioele Lazzari"]
 license = "GNU General Public License v3.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9, <3.10"
+python = ">=3.9"
 cobra = ">=0.28"
 pandas = ">=2.0.0"
 openpyxl = ">=3.0.0"
 
-[tool.poetry.dev-dependencies]
-
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+gempipe = "gempipe:main"
 

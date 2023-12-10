@@ -1,6 +1,7 @@
 import argparse
 
 
+
 from .moduleA import funcA
 from .moduleB import funcB
 
@@ -15,9 +16,9 @@ def derive_command(args):
 
 
 
-if __name__ == "__main__":
-    
-    
+
+
+def main(): 
     parser = argparse.ArgumentParser(description='')
     subparsers = parser.add_subparsers(title='', dest='subcommand', help='')
 
@@ -38,4 +39,11 @@ if __name__ == "__main__":
     elif args.subcommand == 'derive':
         derive_command(args)
     else:
-        print("Invalid subcommand. Use 'recon' or 'derive'.")
+        print("Invalid subcommand. Use 'recon' or 'derive'. EEEE")
+        
+        
+        
+if __name__ == "__main__":
+    
+    
+    main()
