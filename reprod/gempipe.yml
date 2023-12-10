@@ -154,6 +154,7 @@ dependencies:
   - nbconvert-pandoc=7.2.7=pyhd8ed1ab_0
   - nbformat=5.7.1=pyhd8ed1ab_0
   - nbsphinx=0.9.3=pyhd8ed1ab_0
+  - ncbi-genome-download=0.3.3=pyh7cba7a3_0
   - ncurses=6.3=h27087fc_1
   - nest-asyncio=1.5.6=pyhd8ed1ab_0
   - nodejs=18.12.1=h8839609_0

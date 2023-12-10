@@ -5,3 +5,6 @@ poetry.lock
 docs/_build/ 
 docs/_build*.zip
 docs/gempipe/*.html
+
+
+working/
