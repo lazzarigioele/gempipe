@@ -20,8 +20,6 @@ def recon_command(args, logger):
         logger.info("Ereasing the ./working/ directory as requested (-o/--overwrite).")
         shutil.rmtree('working/')  
         os.makedirs('working/')
-        
-        
 
     
     if args.genomes != '-':
