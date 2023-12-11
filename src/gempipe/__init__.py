@@ -49,8 +49,11 @@ def main():
     
     # Create a logging queue in a dedicated process.
     def logger_process_target(queue):
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler = logging.StreamHandler()
+        handler.setFormatter(formatter)
         logger = logging.getLogger('gempipe')
-        logger.addHandler(logging.StreamHandler())
+        logger.addHandler(handler)
         logger.setLevel(logging.DEBUG) # debug (lvl 10) and up
         while True:
             message = queue.get() # block until a new message arrives
