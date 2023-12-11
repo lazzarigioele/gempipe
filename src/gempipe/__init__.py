@@ -26,8 +26,9 @@ def main():
     # Subparser for the 'recon' command
     recon_parser = subparsers.add_parser('recon', help='Reconstruct a draft pan-model and a PAM.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     recon_parser.add_argument("-p", "--processes", metavar='', type=int, default=1, help="Number of parallel processes to use.")
-    recon_parser.add_argument("-o", "--overwrite", metavar='', type=bool, default=False, help="Delete the working/ directory as first step.")
+    recon_parser.add_argument("-o", "--overwrite", action='store_true', help="Delete the working/ directory as first step.")
     recon_parser.add_argument("-t", "--taxids", metavar='', type=str, default='-', help="Taxids of the species to model (comma separated, for example '252393,68334').")
+    recon_parser.add_argument("-g", "--genomes", metavar='', type=str, default='-', help="Path to the input genomes (comma separated, for example 'mydir/g1.fna,mydir/g2.fna,mydir/g3.fna' or 'SpA:mydir/g1.fna;SpB:mydir/g2.fna,mydir/g3.fna').")
     recon_parser.add_argument("-a", "--optionA", metavar='', help="Option A for recon")
     recon_parser.add_argument("-b", "--optionB", metavar='', help="Option B for recon")
     recon_parser.add_argument("-c", "--optionC", metavar='', help="Option C for recon")
