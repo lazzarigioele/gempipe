@@ -1,4 +1,8 @@
 import argparse
+import sys
+import multiprocessing 
+import logging 
+from logging.handlers import QueueHandler
 
 
 
@@ -8,11 +12,16 @@ from .recon import recon_command
 from .derive import derive_command
 
 
+    
 
 
 def main(): 
+    
+
+    # Create the command line arguments:
     parser = argparse.ArgumentParser(description='')
     subparsers = parser.add_subparsers(title='gempipe subcommands', dest='subcommand', help='', required=True)
+    
     
     # Subparser for the 'recon' command
     recon_parser = subparsers.add_parser('recon', help='Reconstruct a draft pan-model and a PAM.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -23,6 +32,7 @@ def main():
     recon_parser.add_argument("-b", "--optionB", metavar='', help="Option B for recon")
     recon_parser.add_argument("-c", "--optionC", metavar='', help="Option C for recon")
 
+    
     # Subparser for the 'derive' command
     derive_parser = subparsers.add_parser('derive', help='Derive strain- and species-specific models.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # optional
@@ -33,17 +43,49 @@ def main():
     derive_parser.add_argument("N", help="Option N for derive")
    
 
-    # Call the appropriate function based on the sub-command
+    # Check the inputted subcommand, sys.exit(1) if a bad subprogram was specied. 
     args = parser.parse_args()
+    
+    
+    # Create a logging queue in a dedicated process.
+    def logger_process_target(queue):
+        logger = logging.getLogger('gempipe')
+        logger.addHandler(logging.StreamHandler())
+        logger.setLevel(logging.DEBUG) # debug (lvl 10) and up
+        while True:
+            message = queue.get() # block until a new message arrives
+            if message is None: # sentinel message to exit the loop
+                break
+            logger.handle(message)
+    queue = multiprocessing.Queue()
+    logger_process = multiprocessing.Process(target=logger_process_target, args=(queue,))
+    logger_process.start()
+    
+    
+    # Connect the logger for this (main) function: 
+    logger = logging.getLogger('gempipe')
+    logger.addHandler(QueueHandler(queue))
+    logger.setLevel(logging.DEBUG) # debug (lvl 10) and up
+    
+    
+    # Show a welcome message:
+    logger.info('Welcome to gempipe! Launching the pipeline...')
+
+    
+    # choose which subcommand to lauch: 
     if args.subcommand == 'recon':
-        recon_command(args)
-    elif args.subcommand == 'derive':
-        derive_command(args)
-    else:
-        print("Invalid subcommand.")
+        response = recon_command(args, logger)
+    if args.subcommand == 'derive':
+        response = derive_command(args)
+
+
+    # terminate the program
+    queue.put(None) # send the sentinel message
+    logger_process.join() # wait for all logs to be digested
+    if response == 1: sys.exit(1)
+    else: sys.exit(0) # exit without errors
         
         
         
 if __name__ == "__main__":
-
     main()
