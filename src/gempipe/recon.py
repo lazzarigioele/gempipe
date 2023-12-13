@@ -23,6 +23,7 @@ def recon_command(args, logger):
 
     
     if args.genomes != '-':
+        # -g/--genomes has precedence over -t/--taxids.
         # handle the manually defined genomes: 
         response = handle_manual_genomes(logger, args.genomes)
         if response == 1: return 1

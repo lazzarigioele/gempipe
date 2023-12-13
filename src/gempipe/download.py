@@ -66,12 +66,20 @@ def get_metadata_table(logger):
     
     
     logger.info("Creating the metadata table for your genomes...") 
+    
+    
+    # check if raw metadata file exists:
+    if not os.path.exists('working/genomes/metadata.txt'):
+        logger.error("The list of genome downloaded is missing. Please run again with -o/--overwrite option.")
+        return 1
+    
+    
+    # read the raw metadata: 
     metadata = pnd.read_csv("working/genomes/metadata.txt", sep='\t')
     
     
-    # this table contains a row for each type of file downloaded 
-    # (eg: for the same assembly, two rows: a row for *.fna, a row for *assebmly_stats.txt)
-    # now we delete *assembly_stats rows: 
+    # this table has 2 rows for each genome, one if the '_assembly_stats.txt' row.
+    # here we delete the *assembly_stats rows: 
     to_drop = []
     for index, row in metadata.iterrows(): 
         if row.local_filename.endswith('_assembly_stats.txt'):
@@ -124,29 +132,38 @@ def handle_manual_genomes(logger, genomes):
     # create a species-to-genome dictionary
     species_to_genome = {}
     logger.debug(f"Checking the formatting of the provided -g/-genomes attribute...") 
-    try: 
-        if '+' in genomes: 
-            for species_block in genomes.split('+'):
-                if '@' in species_block: 
-                    species, paths = species_block.split('@')
-                    for path in paths.split(','): 
-                        if not os.path.exists(path):
-                            logger.error("At least one of the paths provided in -g/--genomes does not exists.")
-                            return 1
-                    species_to_genome[species] = paths.split(',')
-        else: # the user has just 1 species
-            for path in genomes.split(','): 
-                if not os.path.exists(path):
-                    logger.error("At least one of the paths provided in -g/--genomes does not exists.")
-                    return 1
-            species_to_genome['___'] = genomes.split(',')
-    except: 
-        logger.error("The provided -g/--genomes is badly formatted.")
-        return 1
-        # examples of good formatting: 
-        # Eda@testing/manually_downloaded/GCA_001689725.1.fasta,testing/manually_downloaded/GCA_001756855.1.fasta+Eap@testing/manually_downloaded/GCA_016925695.1.fna,testing/manually_downloaded/GCA_918698235.1.fna 
-        # testing/manually_downloaded/GCA_001689725.1.fna,testing/manually_downloaded/GCA_001756855.1.fna
     
+    
+    # check if the user specified a folder:
+    if os.path.exists(genomes):
+        if os.path.isdir(genomes):
+            if genomes[-1] != '/': genomes = genomes + '/'
+            files = glob.glob(genomes + '*')
+            species_to_genome['Spp'] = files
+            ciccio
+    
+    elif '+' in genomes and '@' in genomes: 
+        for species_block in genomes.split('+'):
+            species, files = species_block.split('@')
+            for file in files.split(','): 
+                if not os.path.exists(file):
+                    logger.error("The following file provided in -g/--genomes does not exists: " + file)
+                    return 1
+            species_to_genome[species] = files.split(',')
+            
+    else: # the user has just 1 species
+        for file in genomes.split(','): 
+            if not os.path.exists(file):
+                logger.error("The following file provided in -g/--genomes does not exists: " + file)
+                return 1
+        species_to_genome['Spp'] = genomes.split(',')
+
+
+    # examples of good formatting: 
+    # Eda@testing/manually_downloaded/GCA_001689725.1.fasta,testing/manually_downloaded/GCA_001756855.1.fasta+Eap@testing/manually_downloaded/GCA_016925695.1.fna,testing/manually_downloaded/GCA_918698235.1.fna 
+    # testing/manually_downloaded/GCA_001689725.1.fasta,testing/manually_downloaded/GCA_001756855.1.fasta
+    # testing/manually_downloaded
+        
     
     # report a summary of the parsing: 
     logger.info(f"Inputted {len(species_to_genome.keys())} species with well-formatted paths to assemblies.") 
@@ -155,9 +172,12 @@ def handle_manual_genomes(logger, genomes):
     # move the genomes to the usual directory: 
     os.makedirs('working/genomes/provided/', exist_ok=True)
     for species in species_to_genome.keys():
+        copied_files = []
         for file in species_to_genome[species]:
             shutil.copy(file, 'working/genomes/provided/')
-        species_to_genome[species] = glob.glob('working/genomes/provided/*')
+            basename = os.path.basename(file)
+            copied_files.append('working/genomes/provided/' + basename)
+        species_to_genome[species] = copied_files
     logger.debug(f"Input genomes copied to ./working/genomes/provided/.")
     logger.debug(f"Created the species-to-genome dictionary: {str(species_to_genome)}.") 
     
