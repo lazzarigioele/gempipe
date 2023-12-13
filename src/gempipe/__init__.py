@@ -29,20 +29,12 @@ def main():
     recon_parser.add_argument("-p", "--processes", metavar='', type=int, default=1, help="Number of parallel processes to use.")
     recon_parser.add_argument("-o", "--overwrite", action='store_true', help="Delete the working/ directory at the startup.")
     recon_parser.add_argument("-t", "--taxids", metavar='', type=str, default='-', help="Taxids of the species to model (comma separated, for example '252393,68334').")
-    recon_parser.add_argument("-g", "--genomes", metavar='', type=str, default='-', help="Path to the input genomes (comma separated, for example 'mydir/g1.fa,mydir/g2.fa.').")
-    recon_parser.add_argument("-a", "--optionA", metavar='', help="Option A for recon")
-    recon_parser.add_argument("-b", "--optionB", metavar='', help="Option B for recon")
-    recon_parser.add_argument("-c", "--optionC", metavar='', help="Option C for recon")
+    recon_parser.add_argument("-g", "--genomes", metavar='', type=str, default='-', help="Input genome files or folder containing the genomes (see documentation).")
 
     
     # subparser for the 'derive' command
     derive_parser = subparsers.add_parser('derive', help='Derive strain- and species-specific models.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    # optional
     derive_parser.add_argument("-p", "--processes", metavar='', type=int, help="How many parallel processes to use.")
-    derive_parser.add_argument("-x", "--optionX", metavar='', help="Option X for derive")
-    derive_parser.add_argument("-y", "--optionY", metavar='', help="Option Y for derive")
-    # positional
-    derive_parser.add_argument("N", help="Option N for derive")
    
 
     # check the inputted subcommand, automatic sys.exit(1) if a bad subprogram was specied. 

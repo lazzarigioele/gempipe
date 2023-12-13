@@ -158,12 +158,6 @@ def handle_manual_genomes(logger, genomes):
                 return 1
         species_to_genome['Spp'] = genomes.split(',')
 
-
-    # examples of good formatting: 
-    # Eda@testing/manually_downloaded/GCA_001689725.1.fasta,testing/manually_downloaded/GCA_001756855.1.fasta+Eap@testing/manually_downloaded/GCA_016925695.1.fna,testing/manually_downloaded/GCA_918698235.1.fna 
-    # testing/manually_downloaded/GCA_001689725.1.fasta,testing/manually_downloaded/GCA_001756855.1.fasta
-    # testing/manually_downloaded
-        
     
     # report a summary of the parsing: 
     logger.info(f"Inputted {len(species_to_genome.keys())} species with well-formatted paths to assemblies.") 
