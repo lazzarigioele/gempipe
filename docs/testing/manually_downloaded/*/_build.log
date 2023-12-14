@@ -1,0 +1,51 @@
+[08:51:27] This is prokka 1.14.6
+[08:51:27] Written by Torsten Seemann <torsten.seemann@gmail.com>
+[08:51:27] Homepage is https://github.com/tseemann/prokka
+[08:51:27] Local time is Thu Dec 14 08:51:27 2023
+[08:51:27] You are not telling me who you are!
+[08:51:27] Operating system is linux
+[08:51:27] You have BioPerl 1.7.8
+[08:51:27] System has 72 cores.
+[08:51:27] Will use maximum of 16 cores.
+[08:51:27] Annotating as >>> Bacteria <<<
+[08:51:27] Generating locus_tag from 'conf.py' contents.
+[08:51:27] Setting --locustag NNADGMBM from MD5 77ad06b64fe92290a82334d35ce5f816
+[08:51:27] Creating new output folder: testing/manually_downloaded/*
+[08:51:27] Running: mkdir -p testing\/manually_downloaded\/\*
+[08:51:27] Using filename prefix: _build.XXX
+[08:51:27] Setting HMMER_NCPU=1
+[08:51:27] Writing log to: testing/manually_downloaded/*/_build.log
+[08:51:27] Command: /opt/conda/bin/prokka --force --quiet --cpus 16 --outdir testing/manually_downloaded/* --prefix _build conf.py index.ipynb page_1.ipynb page_2.ipynb page_3.ipynb page_4.ipynb page_5.ipynb --noanno --norrna --notrna testing/manually_downloaded/***
+[08:51:27] Appending to PATH: /opt/conda/bin
+[08:51:27] Looking for 'aragorn' - found /opt/conda/bin/aragorn
+[08:51:27] Determined aragorn version is 001002 from 'ARAGORN v1.2.41 Dean Laslett'
+[08:51:27] Looking for 'barrnap' - found /opt/conda/bin/barrnap
+[08:51:27] Determined barrnap version is 000009 from 'barrnap 0.9'
+[08:51:27] Looking for 'blastp' - found /opt/conda/bin/blastp
+[08:51:27] Determined blastp version is 002014 from 'blastp: 2.14.1+'
+[08:51:27] Looking for 'cmpress' - found /opt/conda/bin/cmpress
+[08:51:27] Determined cmpress version is 001001 from '# INFERNAL 1.1.4 (Dec 2020)'
+[08:51:27] Looking for 'cmscan' - found /opt/conda/bin/cmscan
+[08:51:27] Determined cmscan version is 001001 from '# INFERNAL 1.1.4 (Dec 2020)'
+[08:51:27] Looking for 'egrep' - found /usr/bin/egrep
+[08:51:27] Looking for 'find' - found /usr/bin/find
+[08:51:27] Looking for 'grep' - found /usr/bin/grep
+[08:51:27] Looking for 'hmmpress' - found /opt/conda/bin/hmmpress
+[08:51:27] Determined hmmpress version is 003004 from '# HMMER 3.4 (Aug 2023); http://hmmer.org/'
+[08:51:27] Looking for 'hmmscan' - found /opt/conda/bin/hmmscan
+[08:51:27] Determined hmmscan version is 003004 from '# HMMER 3.4 (Aug 2023); http://hmmer.org/'
+[08:51:27] Looking for 'java' - found /opt/conda/bin/java
+[08:51:27] Looking for 'makeblastdb' - found /opt/conda/bin/makeblastdb
+[08:51:27] Determined makeblastdb version is 002014 from 'makeblastdb: 2.14.1+'
+[08:51:27] Looking for 'minced' - found /opt/conda/bin/minced
+[08:51:27] Determined minced version is 004002 from 'minced 0.4.2'
+[08:51:27] Looking for 'parallel' - found /opt/conda/bin/parallel
+[08:51:27] Determined parallel version is 20231122 from 'GNU parallel 20231122'
+[08:51:27] Looking for 'prodigal' - found /opt/conda/bin/prodigal
+[08:51:27] Determined prodigal version is 002006 from 'Prodigal V2.6.3: February, 2016'
+[08:51:27] Looking for 'prokka-genbank_to_fasta_db' - found /opt/conda/bin/prokka-genbank_to_fasta_db
+[08:51:27] Looking for 'sed' - found /usr/bin/sed
+[08:51:27] Looking for 'tbl2asn' - found /opt/conda/bin/tbl2asn
+[08:51:27] Determined tbl2asn version is 025007 from 'tbl2asn 25.7   arguments:'
+[08:51:27] Using genetic code table 11.
+[08:51:27] Loading and checking input file: conf.py

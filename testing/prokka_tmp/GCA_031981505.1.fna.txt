@@ -1,0 +1,5 @@
+organism: Genus species strain 
+contigs: 1279
+bases: 3196501
+CDS: 3664
+repeat_region: 1

@@ -8,7 +8,8 @@ import shutil
 import pandas as pnd
 
 
-def get_genomes(logger, taxids, processes):
+
+def get_genomes(logger, taxids, cores):
     
     
     # create a sub-directory without overwriting
@@ -52,7 +53,7 @@ def get_genomes(logger, taxids, processes):
     # execute the decompression
     logger.info("Decompressing the genomes using pigz...")
     with open('working/genomes/stdout_decompression.txt', 'w') as stdout, open('working/genomes/stderr_decompression.txt', 'w') as stderr: 
-        command = f"""unpigz -p {processes} working/genomes/downloaded/*.fna.gz""" 
+        command = f"""unpigz -p {cores} working/genomes/downloaded/*.fna.gz""" 
         process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
         process.wait()
     logger.debug("Decompression finished. Logs are stored in ./working/genomes/stdout_decompression.txt and ./working/genomes/stderr_decompression.txt.") 
@@ -140,7 +141,6 @@ def handle_manual_genomes(logger, genomes):
             if genomes[-1] != '/': genomes = genomes + '/'
             files = glob.glob(genomes + '*')
             species_to_genome['Spp'] = files
-            ciccio
     
     elif '+' in genomes and '@' in genomes: 
         for species_block in genomes.split('+'):
@@ -160,7 +160,7 @@ def handle_manual_genomes(logger, genomes):
 
     
     # report a summary of the parsing: 
-    logger.info(f"Inputted {len(species_to_genome.keys())} species with well-formatted paths to assemblies.") 
+    logger.info(f"Inputted {len(species_to_genome.keys())} species with well-formatted paths to genomes.") 
     
     
     # move the genomes to the usual directory: 

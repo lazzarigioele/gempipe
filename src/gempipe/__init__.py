@@ -7,8 +7,6 @@ import traceback
 
 
 
-from .commons import funcA, funcB
-
 from .recon import recon_command
 from .derive import derive_command
 
@@ -26,19 +24,25 @@ def main():
     
     # subparser for the 'recon' command
     recon_parser = subparsers.add_parser('recon', help='Reconstruct a draft pan-model and a PAM.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    recon_parser.add_argument("-p", "--processes", metavar='', type=int, default=1, help="Number of parallel processes to use.")
+    recon_parser.add_argument("-c", "--cores", metavar='', type=int, default=1, help="Number of parallel processes to use.")
     recon_parser.add_argument("-o", "--overwrite", action='store_true', help="Delete the working/ directory at the startup.")
     recon_parser.add_argument("-t", "--taxids", metavar='', type=str, default='-', help="Taxids of the species to model (comma separated, for example '252393,68334').")
     recon_parser.add_argument("-g", "--genomes", metavar='', type=str, default='-', help="Input genome files or folder containing the genomes (see documentation).")
-
+    recon_parser.add_argument("-p", "--proteomes", metavar='', type=str, default='-', help="Input proteome files or folder containing the proteomes (see documentation).")
+    recon_parser.add_argument("-s", "--staining", metavar='', type=str, default='neg', help="Gram staining, 'pos' or 'neg'.")
+    
     
     # subparser for the 'derive' command
     derive_parser = subparsers.add_parser('derive', help='Derive strain- and species-specific models.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    derive_parser.add_argument("-p", "--processes", metavar='', type=int, help="How many parallel processes to use.")
+    derive_parser.add_argument("-c", "--cores", metavar='', type=int, help="How many parallel processes to use.")
    
 
     # check the inputted subcommand, automatic sys.exit(1) if a bad subprogram was specied. 
     args = parser.parse_args()
+    
+    
+    # set the multiprocessing context
+    multiprocessing.set_start_method('fork') 
     
     
     # create a logging queue in a dedicated process.

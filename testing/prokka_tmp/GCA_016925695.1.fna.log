@@ -1,0 +1,100 @@
+[08:59:32] This is prokka 1.14.6
+[08:59:32] Written by Torsten Seemann <torsten.seemann@gmail.com>
+[08:59:32] Homepage is https://github.com/tseemann/prokka
+[08:59:32] Local time is Thu Dec 14 08:59:32 2023
+[08:59:32] You are not telling me who you are!
+[08:59:32] Operating system is linux
+[08:59:32] You have BioPerl 1.7.8
+[08:59:32] System has 72 cores.
+[08:59:32] Will use maximum of 16 cores.
+[08:59:32] Annotating as >>> Bacteria <<<
+[08:59:32] Generating locus_tag from 'testing/manually_downloaded/GCA_016925695.1.fna' contents.
+[08:59:32] Setting --locustag MCIDHJCK from MD5 6c2d13c42ee666901020c1dfe6288f4a
+[08:59:32] Re-using existing --outdir testing/prokka_tmp/
+[08:59:32] Using filename prefix: GCA_016925695.1.fna.XXX
+[08:59:32] Setting HMMER_NCPU=1
+[08:59:32] Writing log to: testing/prokka_tmp//GCA_016925695.1.fna.log
+[08:59:32] Command: /opt/conda/bin/prokka --force --quiet --cpus 16 --outdir testing/prokka_tmp/ --prefix GCA_016925695.1.fna --noanno --norrna --notrna testing/manually_downloaded/GCA_016925695.1.fna
+[08:59:32] Appending to PATH: /opt/conda/bin
+[08:59:32] Looking for 'aragorn' - found /opt/conda/bin/aragorn
+[08:59:32] Determined aragorn version is 001002 from 'ARAGORN v1.2.41 Dean Laslett'
+[08:59:32] Looking for 'barrnap' - found /opt/conda/bin/barrnap
+[08:59:32] Determined barrnap version is 000009 from 'barrnap 0.9'
+[08:59:32] Looking for 'blastp' - found /opt/conda/bin/blastp
+[08:59:32] Determined blastp version is 002014 from 'blastp: 2.14.1+'
+[08:59:32] Looking for 'cmpress' - found /opt/conda/bin/cmpress
+[08:59:32] Determined cmpress version is 001001 from '# INFERNAL 1.1.4 (Dec 2020)'
+[08:59:32] Looking for 'cmscan' - found /opt/conda/bin/cmscan
+[08:59:32] Determined cmscan version is 001001 from '# INFERNAL 1.1.4 (Dec 2020)'
+[08:59:32] Looking for 'egrep' - found /usr/bin/egrep
+[08:59:32] Looking for 'find' - found /usr/bin/find
+[08:59:32] Looking for 'grep' - found /usr/bin/grep
+[08:59:32] Looking for 'hmmpress' - found /opt/conda/bin/hmmpress
+[08:59:32] Determined hmmpress version is 003004 from '# HMMER 3.4 (Aug 2023); http://hmmer.org/'
+[08:59:32] Looking for 'hmmscan' - found /opt/conda/bin/hmmscan
+[08:59:32] Determined hmmscan version is 003004 from '# HMMER 3.4 (Aug 2023); http://hmmer.org/'
+[08:59:32] Looking for 'java' - found /opt/conda/bin/java
+[08:59:32] Looking for 'makeblastdb' - found /opt/conda/bin/makeblastdb
+[08:59:32] Determined makeblastdb version is 002014 from 'makeblastdb: 2.14.1+'
+[08:59:32] Looking for 'minced' - found /opt/conda/bin/minced
+[08:59:32] Determined minced version is 004002 from 'minced 0.4.2'
+[08:59:32] Looking for 'parallel' - found /opt/conda/bin/parallel
+[08:59:32] Determined parallel version is 20231122 from 'GNU parallel 20231122'
+[08:59:32] Looking for 'prodigal' - found /opt/conda/bin/prodigal
+[08:59:32] Determined prodigal version is 002006 from 'Prodigal V2.6.3: February, 2016'
+[08:59:32] Looking for 'prokka-genbank_to_fasta_db' - found /opt/conda/bin/prokka-genbank_to_fasta_db
+[08:59:32] Looking for 'sed' - found /usr/bin/sed
+[08:59:32] Looking for 'tbl2asn' - found /opt/conda/bin/tbl2asn
+[08:59:32] Determined tbl2asn version is 025007 from 'tbl2asn 25.7   arguments:'
+[08:59:32] Using genetic code table 11.
+[08:59:32] Loading and checking input file: testing/manually_downloaded/GCA_016925695.1.fna
+[08:59:33] Wrote 5 contigs totalling 5158255 bp.
+[08:59:33] Skipping tRNA search at user request.
+[08:59:33] Disabling rRNA search: --kingdom=Bacteria or --norrna=1
+[08:59:33] Skipping ncRNA search, enable with --rfam if desired.
+[08:59:33] Total of 0 tRNA + rRNA features
+[08:59:33] Searching for CRISPR repeats
+[08:59:34] Found 0 CRISPRs
+[08:59:34] Predicting coding sequences
+[08:59:34] Contigs total 5158255 bp, so using single mode
+[08:59:34] Running: prodigal -i testing\/prokka_tmp\/\/GCA_016925695\.1\.fna\.fna -c -m -g 11 -p single -f sco -q
+[08:59:51] Found 5760 CDS
+[08:59:51] Connecting features back to sequences
+[08:59:51] Not using genus-specific database. Try --usegenus to enable it.
+[08:59:51] Option --noanno enabled, so skipping CDS similarity searches
+[08:59:51] Labelling remaining 5760 proteins as 'unannotated protein'
+[08:59:51] Found 0 unique /gene codes.
+[08:59:51] Fixed 0 colliding /gene names.
+[08:59:51] Adding /locus_tag identifiers
+[08:59:51] Assigned 5760 locus_tags to CDS and RNA features.
+[08:59:51] Writing outputs to testing/prokka_tmp//
+[09:00:05] Generating annotation statistics file
+[09:00:05] Generating Genbank and Sequin files
+[09:00:05] Running: tbl2asn -V b -a r10k -l paired-ends -M n -N 1 -y 'Annotated using prokka 1.14.6 from https://github.com/tseemann/prokka' -Z testing\/prokka_tmp\/\/GCA_016925695\.1\.fna\.err -i testing\/prokka_tmp\/\/GCA_016925695\.1\.fna\.fsa 2> /dev/null
+[09:00:21] Deleting unwanted file: testing/prokka_tmp//errorsummary.val
+[09:00:21] Deleting unwanted file: testing/prokka_tmp//GCA_016925695.1.fna.dr
+[09:00:21] Deleting unwanted file: testing/prokka_tmp//GCA_016925695.1.fna.fixedproducts
+[09:00:21] Deleting unwanted file: testing/prokka_tmp//GCA_016925695.1.fna.ecn
+[09:00:21] Deleting unwanted file: testing/prokka_tmp//GCA_016925695.1.fna.val
+[09:00:21] Repairing broken .GBK output that tbl2asn produces...
+[09:00:21] Running: sed 's/COORDINATES: profile/COORDINATES:profile/' < testing\/prokka_tmp\/\/GCA_016925695\.1\.fna\.gbf > testing\/prokka_tmp\/\/GCA_016925695\.1\.fna\.gbk
+[09:00:21] Deleting unwanted file: testing/prokka_tmp//GCA_016925695.1.fna.gbf
+[09:00:21] Output files:
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.tsv
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.gbk
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.err
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.log
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.faa
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.gff
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.tbl
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.ffn
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.fsa
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.sqn
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.fna
+[09:00:21] testing/prokka_tmp/GCA_016925695.1.fna.txt
+[09:00:21] Annotation finished successfully.
+[09:00:21] Walltime used: 0.82 minutes
+[09:00:21] If you use this result please cite the Prokka paper:
+[09:00:21] Seemann T (2014) Prokka: rapid prokaryotic genome annotation. Bioinformatics. 30(14):2068-9.
+[09:00:21] Type 'prokka --citation' for more details.
+[09:00:21] Share and enjoy!
