@@ -16,6 +16,8 @@ from .annotatecds import handle_manual_proteomes
 from .filtergenomes import filter_genomes
 
 
+from .clustercds import compute_clusters
+
 
 def recon_command(args, logger):
 
@@ -88,4 +90,12 @@ def recon_command(args, logger):
     else:
         logger.error("Please specify the species taxids (-t/--taxids) or the input genomes (-g/--genomes) or the input proteomes (-p/--proteomes).")
         return 1
+    
+    
+    
+    ### PART 2. Clustering. 
+    
+    # cluster the aminoacid sequences according to sequence similarity. 
+    response = compute_clusters(logger, args.cores)
+    if response == 1: return 1 
     

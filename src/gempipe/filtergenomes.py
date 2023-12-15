@@ -17,7 +17,7 @@ def compute_bmetrics(logger, cores, buscodb):
     logger.info("Calculating the biological metrics to filter the genomes...")
     
     
-    # load the previously created species_to_genome: 
+    # load the previously created species_to_proteome: 
     with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
         species_to_proteome = pickle.load(handler)
         
@@ -101,6 +101,7 @@ def compute_bmetrics(logger, cores, buscodb):
     
     # cleaning the workspace from useless files: 
     shutil.rmtree('working/bmetrics/')
+    for file in glob.glob('./busco_*.log'): os.remove(file)
     logger.debug("Removed useless files.")
     
     
@@ -162,10 +163,12 @@ def filter_genomes(logger, cores, buscodb, buscoM, ncontigs, N50):
     
     # compoute biological metrics: 
     response = compute_bmetrics(logger, cores, buscodb)
+    if response == 1: return 1
     
     
     # compute technical metrics: 
     response = compute_tmetrics(logger, cores)
+    if response == 1: return 1
     
     
     # read the metrics tables
@@ -194,9 +197,11 @@ def filter_genomes(logger, cores, buscodb, buscoM, ncontigs, N50):
     bad_genomes = all_genomes - good_genomes
     
     
-    # load the previously created species_to_genome: 
+    # load the previously created dictionaries: 
     with open('working/genomes/species_to_genome.pickle', 'rb') as handler:
         species_to_genome = pickle.load(handler)
+    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+        species_to_proteome = pickle.load(handler)
     
     
     # re-writes the dictionaries:
@@ -205,12 +210,12 @@ def filter_genomes(logger, cores, buscodb, buscoM, ncontigs, N50):
     for species in species_to_genome.keys(): 
         species_to_genome_new[species] = []
         species_to_proteome_new[species] = []
-        for genome in species_to_genome[species]:
+        for genome, proteome in zip(species_to_genome[species], species_to_proteome[species]):
             basename = os.path.basename(genome)
             accession, _ = os.path.splitext(basename)
             if accession in good_genomes:
-                species_to_genome_new[species].append(accession)
-                species_to_proteome_new[species].append(accession)
+                species_to_genome_new[species].append(genome)
+                species_to_proteome_new[species].append(proteome)
             else: 
                 logger.info("Found a bad quality genome: " + genome + ". Will be ignored in subsequent analysis.")
     with open('working/genomes/species_to_genome.pickle', 'wb') as file:

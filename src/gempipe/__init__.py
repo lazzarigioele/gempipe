@@ -19,7 +19,8 @@ def main():
     
     
     # define the header of main- and sub-commands. 
-    header = f'gempipe v{importlib.metadata.metadata("gempipe")["Version"]}, please cite "TODO".'
+    pub_details = 'TODO'
+    header = f'gempipe v{importlib.metadata.metadata("gempipe")["Version"]}, please cite "{pub_details}".'
     
     
     # create the command line arguments:
