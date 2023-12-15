@@ -4,6 +4,7 @@ import multiprocessing
 import logging 
 from logging.handlers import QueueHandler
 import traceback
+import importlib.metadata
 
 
 
@@ -16,24 +17,38 @@ from .derive import derive_command
 
 def main(): 
     
-
+    
+    # define the header of main- and sub-commands. 
+    header = f'gempipe v{importlib.metadata.metadata("gempipe")["Version"]}, please cite "TODO".'
+    
+    
     # create the command line arguments:
-    parser = argparse.ArgumentParser(description='')
+    parser = argparse.ArgumentParser(description=header, add_help=False)
+    parser.add_argument("-h", "--help", action="help", help="Show this help message and exit.")
+    parser.add_argument("-v", "--version", action="version", version=f"v{importlib.metadata.metadata('gempipe')['Version']}", help="Show version number and exit.")
     subparsers = parser.add_subparsers(title='gempipe subcommands', dest='subcommand', help='', required=True)
     
     
     # subparser for the 'recon' command
-    recon_parser = subparsers.add_parser('recon', help='Reconstruct a draft pan-model and a PAM.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    recon_parser = subparsers.add_parser('recon', description=header, help='Reconstruct a draft pan-model and a PAM.', formatter_class=argparse.ArgumentDefaultsHelpFormatter, add_help=False)
+    recon_parser.add_argument("-h", "--help", action="help", help="Show this help message and exit.")
+    recon_parser.add_argument("-v", "--version", action="version", version=f"v{importlib.metadata.metadata('gempipe')['Version']}", help="Show version number and exit.")
     recon_parser.add_argument("-c", "--cores", metavar='', type=int, default=1, help="Number of parallel processes to use.")
     recon_parser.add_argument("-o", "--overwrite", action='store_true', help="Delete the working/ directory at the startup.")
     recon_parser.add_argument("-t", "--taxids", metavar='', type=str, default='-', help="Taxids of the species to model (comma separated, for example '252393,68334').")
     recon_parser.add_argument("-g", "--genomes", metavar='', type=str, default='-', help="Input genome files or folder containing the genomes (see documentation).")
     recon_parser.add_argument("-p", "--proteomes", metavar='', type=str, default='-', help="Input proteome files or folder containing the proteomes (see documentation).")
     recon_parser.add_argument("-s", "--staining", metavar='', type=str, default='neg', help="Gram staining, 'pos' or 'neg'.")
+    recon_parser.add_argument("-b", "--buscodb", metavar='', type=str, default='bacteria_odb10', help="Busco database to use ('show' to see the list of available databases).")
+    recon_parser.add_argument("--buscoM", metavar='', type=str, default='2%', help="Maximum number of missing Busco's single copy orthologs (absolute or percentage).")
+    recon_parser.add_argument("--ncontigs", metavar='', type=int, default=200, help="Maximum number of contigs allowed per genome.")
+    recon_parser.add_argument("--N50", metavar='', type=int, default=50000, help="Minimum N50 allowed per genome.")
     
     
     # subparser for the 'derive' command
-    derive_parser = subparsers.add_parser('derive', help='Derive strain- and species-specific models.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    derive_parser = subparsers.add_parser('derive', description=header, help='Derive strain- and species-specific models.', formatter_class=argparse.ArgumentDefaultsHelpFormatter, add_help=False)
+    derive_parser.add_argument("-h", "--help", action="help", help="Show this help message and exit.")
+    derive_parser.add_argument("-v", "--version", action="version", version=f"v{importlib.metadata.metadata('gempipe')['Version']}", help="Show version number and exit.")
     derive_parser.add_argument("-c", "--cores", metavar='', type=int, help="How many parallel processes to use.")
    
 
@@ -70,7 +85,8 @@ def main():
     
     
     # show a welcome message:
-    logger.info('Welcome to gempipe! Launching the pipeline...')
+    print('\n' + header + '\n', file=sys.stdout)
+    logger.info("Welcome to gempipe! Launching the pipeline...")
 
 
     try: 
@@ -86,10 +102,17 @@ def main():
 
 
     # Terminate the program:
-    queue.put(None) # send the sentinel message
-    logger_process.join() # wait for all logs to be digested
-    if response == 1: sys.exit(1)
-    else: sys.exit(0) # exit without errors
+    if response == 1: 
+        queue.put(None) # send the sentinel message
+        logger_process.join() # wait for all logs to be digested
+        sys.exit(1)
+    else: 
+        # show a bye message
+        logger.info("gempipe terminated without errors!")
+        queue.put(None) # send the sentinel message
+        logger_process.join() # wait for all logs to be digested
+        print('\n' + header + '\n', file=sys.stdout)
+        sys.exit(0) # exit without errors
         
         
         

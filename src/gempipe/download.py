@@ -14,10 +14,11 @@ def get_genomes(logger, taxids, cores):
     
     # create a sub-directory without overwriting
     os.makedirs('working/genomes/', exist_ok=True)
+    os.makedirs('working/tables/', exist_ok=True)
     
     
     # check the presence of already availables genomes:
-    found_genomes = glob.glob('working/genomes/downloaded/*.fna')
+    found_genomes = glob.glob('working/genomes/*.fna')
     if len(found_genomes) > 0:
         logger.info(f"Found {len(found_genomes)} genome assemblies already stored in your ./working/ directory: skipping the download from NCBI.")
         logger.debug(f"Genomes found: " + str(found_genomes))
@@ -26,10 +27,10 @@ def get_genomes(logger, taxids, cores):
 
     # execute the download
     logger.info("Downloading from NCBI all the genome assemblies linked to the provided taxids...")
-    with open('working/genomes/stdout_download.txt', 'w') as stdout, open('working/genomes/stderr_download.txt', 'w') as stderr: 
+    with open('working/logs/stdout_download.txt', 'w') as stdout, open('working/logs/stderr_download.txt', 'w') as stderr: 
         command = f"""ncbi-genome-download \
             --no-cache \
-            --metadata-table working/genomes/metadata.txt \
+            --metadata-table working/tables/raw_ncbi.txt \
             --retries 100 --parallel 10 \
             --output-folder working/genomes/ \
             --species-taxids {taxids} \
@@ -38,25 +39,30 @@ def get_genomes(logger, taxids, cores):
             bacteria"""
         process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
         process.wait()
-    logger.debug("Download finished. Logs are stored in ./working/genomes/stdout_download.txt and ./working/genomes/stderr_download.txt.") 
+    logger.debug("Download finished. Logs are stored in ./working/logs/stdout_download.txt and ./working/logs/stderr_download.txt.") 
+    
+    
+    # format the metadata
+    metadata = pnd.read_csv("working/tables/raw_ncbi.txt", sep='\t')
+    metadata.to_csv("working/tables/raw_ncbi.csv")
+    os.remove("working/tables/raw_ncbi.txt")
     
     
     # moving the genomes to the right directory
-    os.makedirs('working/genomes/downloaded/', exist_ok=True)
     for file in glob.glob('working/genomes/genbank/bacteria/*/*.fna.gz'):
         accession = file.split('/')[-2]
-        shutil.copy(file, f'working/genomes/downloaded/{accession}.fna.gz')
+        shutil.copy(file, f'working/genomes/{accession}.fna.gz')
     shutil.rmtree('working/genomes/genbank/') # delete the old tree
-    logger.debug("Moved the downloaded genomes to ./working/genomes/downloaded/.") 
+    logger.debug("Moved the downloaded genomes to ./working/genomes/.") 
     
     
     # execute the decompression
-    logger.info("Decompressing the genomes using pigz...")
-    with open('working/genomes/stdout_decompression.txt', 'w') as stdout, open('working/genomes/stderr_decompression.txt', 'w') as stderr: 
-        command = f"""unpigz -p {cores} working/genomes/downloaded/*.fna.gz""" 
+    logger.info("Decompressing the genomes...")
+    with open('working/logs/stdout_decompression.txt', 'w') as stdout, open('working/logs/stderr_decompression.txt', 'w') as stderr: 
+        command = f"""unpigz -p {cores} working/genomes/*.fna.gz""" 
         process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
         process.wait()
-    logger.debug("Decompression finished. Logs are stored in ./working/genomes/stdout_decompression.txt and ./working/genomes/stderr_decompression.txt.") 
+    logger.debug("Decompression finished. Logs are stored in ./working/logs/stdout_decompression.txt and ./working/logs/stderr_decompression.txt.") 
     
     
     return 0 
@@ -70,13 +76,13 @@ def get_metadata_table(logger):
     
     
     # check if raw metadata file exists:
-    if not os.path.exists('working/genomes/metadata.txt'):
+    if not os.path.exists('working/tables/raw_ncbi.csv'):
         logger.error("The list of genome downloaded is missing. Please run again with -o/--overwrite option.")
         return 1
     
     
     # read the raw metadata: 
-    metadata = pnd.read_csv("working/genomes/metadata.txt", sep='\t')
+    metadata = pnd.read_csv("working/tables/raw_ncbi.csv", index_col=0)
     
     
     # this table has 2 rows for each genome, one if the '_assembly_stats.txt' row.
@@ -113,7 +119,7 @@ def get_metadata_table(logger):
     for species in groups.keys():
         indexes = groups[species]
         subset_metadata = metadata.iloc[indexes, ]
-        species_to_genome[species] = [f'working/genomes/downloaded/{accession}.fna' for accession in subset_metadata['assembly_accession']]
+        species_to_genome[species] = [f'working/genomes/{accession}.fna' for accession in subset_metadata['assembly_accession']]
     logger.debug(f"Created the species-to-genome dictionary: {str(species_to_genome)}.") 
     
     
@@ -164,15 +170,14 @@ def handle_manual_genomes(logger, genomes):
     
     
     # move the genomes to the usual directory: 
-    os.makedirs('working/genomes/provided/', exist_ok=True)
     for species in species_to_genome.keys():
         copied_files = []
         for file in species_to_genome[species]:
-            shutil.copy(file, 'working/genomes/provided/')
+            shutil.copy(file, 'working/genomes/')
             basename = os.path.basename(file)
-            copied_files.append('working/genomes/provided/' + basename)
+            copied_files.append('working/genomes/' + basename)
         species_to_genome[species] = copied_files
-    logger.debug(f"Input genomes copied to ./working/genomes/provided/.")
+    logger.debug(f"Input genomes copied to ./working/genomes/.")
     logger.debug(f"Created the species-to-genome dictionary: {str(species_to_genome)}.") 
     
     

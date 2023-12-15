@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gempipe"
-version = "0.0.5"
+version = "0.0.6"
 description = ""
 authors = ["Gioele Lazzari"]
 license = "GNU General Public License v3.0"
@@ -17,6 +17,8 @@ ncbi-genome-download = ">=0.3.3"
 # pigz >= 2.5
 # prokka >= 1.14.6
 # prodigal >= 2.6.3
+# busco >= 5.4.0
+# seqkit >= 2.2.0
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

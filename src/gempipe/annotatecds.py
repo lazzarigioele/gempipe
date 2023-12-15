@@ -24,16 +24,11 @@ def task_annotation(genome, args):
     accession, _ = os.path.splitext(basename)
 
 
-    # create a directory for the annotation of this genome: 
-    path =  f'working/proteomes/{accession}/'
-    os.makedirs(path, exist_ok=True)
-
-
     # launch the command
-    with open(path + 'stdout_download.txt', 'w') as stdout, open(path + 'stderr_download.txt', 'w') as stderr: 
+    with open(f'working/logs/stdout_annot_{accession}.txt', 'w') as stdout, open(f'working/logs/stderr_annot_{accession}.txt', 'w') as stderr: 
         command = f"""prokka --force --quiet \
             --cpus 1 \
-            --outdir {path} \
+            --outdir working/proteomes/ \
             --prefix {accession} \
             --noanno \
             --norrna \
@@ -41,6 +36,19 @@ def task_annotation(genome, args):
             {genome}"""
         process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
         process.wait()
+        
+        
+    # remove useless files:
+    os.remove(f'working/proteomes/{accession}.err')
+    os.remove(f'working/proteomes/{accession}.ffn')
+    os.remove(f'working/proteomes/{accession}.fna')
+    os.remove(f'working/proteomes/{accession}.fsa')
+    os.remove(f'working/proteomes/{accession}.gbk')
+    os.remove(f'working/proteomes/{accession}.log')
+    os.remove(f'working/proteomes/{accession}.sqn')
+    os.remove(f'working/proteomes/{accession}.tbl')
+    os.remove(f'working/proteomes/{accession}.tsv')
+    os.remove(f'working/proteomes/{accession}.txt')
         
     
     # return a row for the dataframe
@@ -63,7 +71,7 @@ def create_species_to_proteome(logger):
         for genome in species_to_genome[species]: 
             basename = os.path.basename(genome)
             accession, _ = os.path.splitext(basename)
-            species_to_proteome[species].append(f'working/proteomes/{accession}/{accession}.faa')
+            species_to_proteome[species].append(f'working/proteomes/{accession}.faa')
     logger.debug(f"Created the species-to-proteome dictionary: " + str(species_to_proteome))
     
             
@@ -100,7 +108,7 @@ def extract_cds(logger, cores):
     for genome in items: 
         basename = os.path.basename(genome)
         accession, _ = os.path.splitext(basename)
-        already_computed.append(os.path.exists(f'working/proteomes/{accession}/{accession}.faa'))
+        already_computed.append(os.path.exists(f'working/proteomes/{accession}.faa'))
     if all(already_computed):
         logger.info("Found all the proteomes already stored in your ./working/ directory: skipping this step.")
         # save the species_to_proteome dictionary to disk:
@@ -131,8 +139,7 @@ def extract_cds(logger, cores):
     
     
     # save tabular results:
-    os.makedirs('working/tables/', exist_ok=True)
-    all_df_combined.to_csv('working/tables/log_annotatecds.csv')
+    all_df_combined.to_csv('working/logs/mptab_annotatecds.csv')
     
     
     # empty the globalpool
@@ -185,15 +192,15 @@ def handle_manual_proteomes(logger, proteomes):
     
     
     # move the genomes to the usual directory: 
-    os.makedirs('working/proteomes/provided/', exist_ok=True)
+    os.makedirs('working/proteomes/', exist_ok=True)
     for species in species_to_proteome.keys():
         copied_files = []
         for file in species_to_proteome[species]:
-            shutil.copy(file, 'working/proteomes/provided/')
+            shutil.copy(file, 'working/proteomes/')
             basename = os.path.basename(file)
-            copied_files.append('working/proteomes/provided/' + basename)
+            copied_files.append('working/proteomes/' + basename)
         species_to_proteome[species] = copied_files
-    logger.debug(f"Input proteomes copied to ./working/proteomes/provided/.")
+    logger.debug(f"Input proteomes copied to ./working/proteomes/.")
     logger.debug(f"Created the species-to-proteome dictionary: {str(species_to_proteome)}.") 
     
     
