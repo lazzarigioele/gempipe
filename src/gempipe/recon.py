@@ -11,7 +11,9 @@ from .annotatecds import extract_cds
 from .annotatecds import handle_manual_proteomes
 from .filtergenomes import filter_genomes
 from .clustercds import compute_clusters
-from .recmasking import recovery_masking
+from .rec_masking import recovery_masking
+from .rec_broken import recovery_broken
+from .rec_overlap import recovery_overlap
 
 
 
@@ -105,10 +107,14 @@ def recon_command(args, logger):
         if response == 1: return 1 
     
     
-        # Recovery 2: search for fragmented genes
+        # Recovery 2: search for proteins broken in two
+        response = recovery_broken(logger, args.cores)
+        if response == 1: return 1
         
         
         # Recovery 3: search for overlapping genes
+        response = recovery_overlap(logger, args.cores)
+        if response == 1: return 1
         
         
     # warning if starting from proteomes
