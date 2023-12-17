@@ -77,7 +77,7 @@ def get_metadata_table(logger):
     
     # check if raw metadata file exists:
     if not os.path.exists('working/tables/raw_ncbi.csv'):
-        logger.error("The list of genome downloaded is missing. Please run again with -o/--overwrite option.")
+        logger.error("The list of genome downloaded is missing. Please run again with --overwrite option.")
         return 1
     
     

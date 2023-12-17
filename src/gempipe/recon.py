@@ -7,16 +7,12 @@ import subprocess
 from .download import get_genomes
 from .download import get_metadata_table
 from .download import handle_manual_genomes
-
-
 from .annotatecds import extract_cds
 from .annotatecds import handle_manual_proteomes
-
-
 from .filtergenomes import filter_genomes
-
-
 from .clustercds import compute_clusters
+from .recmasking import recovery_masking
+
 
 
 def recon_command(args, logger):
@@ -26,7 +22,7 @@ def recon_command(args, logger):
     if os.path.exists('working/'):
         logger.info("Found a previously created ./working/ directory.")
         if args.overwrite:
-            logger.info("Ereasing the ./working/ directory as requested (-o/--overwrite).")
+            logger.info("Ereasing the ./working/ directory as requested (--overwrite).")
             shutil.rmtree('working/')  
     os.makedirs('working/', exist_ok=True)
     os.makedirs('working/logs/', exist_ok=True)
@@ -98,4 +94,24 @@ def recon_command(args, logger):
     # cluster the aminoacid sequences according to sequence similarity. 
     response = compute_clusters(logger, args.cores)
     if response == 1: return 1 
+
+
+
+    ### PART 3. Gene recovery.
+    
+    if args.genomes != '-' or args.taxids != '-': 
+        # Recovery 1: search missing genes after masking the genome 
+        response = recovery_masking(logger, args.cores)
+        if response == 1: return 1 
+    
+    
+        # Recovery 2: search for fragmented genes
+        
+        
+        # Recovery 3: search for overlapping genes
+        
+        
+    # warning if starting from proteomes
+    if args.proteomes != '-': 
+        logger.warning("gempipe gives its best when starting from genomes. Starting from proteomes will skip the gene recovery modules.")
     

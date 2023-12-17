@@ -35,7 +35,7 @@ def main():
     recon_parser.add_argument("-h", "--help", action="help", help="Show this help message and exit.")
     recon_parser.add_argument("-v", "--version", action="version", version=f"v{importlib.metadata.metadata('gempipe')['Version']}", help="Show version number and exit.")
     recon_parser.add_argument("-c", "--cores", metavar='', type=int, default=1, help="Number of parallel processes to use.")
-    recon_parser.add_argument("-o", "--overwrite", action='store_true', help="Delete the working/ directory at the startup.")
+    recon_parser.add_argument("--overwrite", action='store_true', help="Delete the working/ directory at the startup.")
     recon_parser.add_argument("-t", "--taxids", metavar='', type=str, default='-', help="Taxids of the species to model (comma separated, for example '252393,68334').")
     recon_parser.add_argument("-g", "--genomes", metavar='', type=str, default='-', help="Input genome files or folder containing the genomes (see documentation).")
     recon_parser.add_argument("-p", "--proteomes", metavar='', type=str, default='-', help="Input proteome files or folder containing the proteomes (see documentation).")

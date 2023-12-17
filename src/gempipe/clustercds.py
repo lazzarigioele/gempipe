@@ -8,6 +8,10 @@ from Bio import SeqIO, SeqRecord, Seq
 
 
 
+from .commons import check_cached
+
+
+
 
 def create_combined(logger):
     
@@ -73,7 +77,7 @@ def create_combined(logger):
         # write the protein dataframe to file: 
         sequences_df = pnd.DataFrame.from_records(sequences_df)
         sequences_df = sequences_df.set_index('cds', verify_integrity=True)
-        sequences_df.to_csv('working/tables/combined.csv')
+        sequences_df.to_csv('working/clustering/sequences.csv')
         
         
         # write dictionaries to file:
@@ -179,7 +183,6 @@ def perform_clustering(logger, cores):
 
 
 
-
 def create_pam(logger):
     
     
@@ -214,64 +217,27 @@ def create_pam(logger):
     # write the pam to disk
     pam = pnd.DataFrame.from_records(rows)
     pam = pam.set_index('cluster', verify_integrity=True)
-    pam.to_csv('working/clustering/pam_0.csv')
+    pam.to_csv('working/clustering/pam.csv')
     
     
     # some log messages: 
     logger.debug("Created an initial presence/absence matrix (PAM) with shape: " + str(pam.shape))
     
     
+    # create accession to suffixes dictionary: 
+    logger.debug("Storing the suffix for each genome...")
+    acc_to_suffix = {}
+    for acc in pam.columns:
+        suffixes = [i for i in pam[acc].to_list() if type(i) != float]
+        suffix = list(set([i.split('_', 1)[0] for i in suffixes]))[0]
+        acc_to_suffix[acc] = suffix
+    with open('working/clustering/acc_to_suffix.pickle', 'wb') as handler:
+        pickle.dump(acc_to_suffix, handler)
+    
+    
     return 0
         
 
-    
-    
-def check_chached(logger):
-    
-    
-    # read which proteomes passed the filters: 
-    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
-        species_to_proteome = pickle.load(handler)
-        
-        
-    # get the accessions to search for: 
-    accessions = []
-    for species in species_to_proteome.keys(): 
-        for proteome in species_to_proteome[species]:
-            basename = os.path.basename(proteome)
-            accession, _ = os.path.splitext(basename)
-            accessions.append(accession)
-    accessions = set(accessions)
-    
-    
-    # search for the PAM: 
-    if os.path.exists('working/clustering/pam_0.csv'):
-        pam = pnd.read_csv('working/clustering/pam_0.csv', index_col=0)
-        columns = set(list(pam.columns))
-        
-        
-        # check that columns and accessions are the same (no less, no more):
-        if columns == accessions:
-            
-            
-            # check the presence of important dictionaries and fasta:
-            if all([
-                os.path.exists('working/clustering/acc_to_seqs.pickle'), 
-                os.path.exists('working/clustering/cluster_to_rep.pickle'), 
-                os.path.exists('working/clustering/cluster_to_seqs.pickle'), 
-                os.path.exists('working/clustering/seq_to_acc.pickle'), 
-                os.path.exists('working/clustering/seq_to_cluster.pickle'), 
-                os.path.exists('working/clustering/representatives.ren.faa')]):
-                
-                
-                # log some message: 
-                logger.info('Found all the needed clustering files already computed. Skipping this step.')
-                return 0
-                
-            
-    return None
-    
-    
 
 def compute_clusters(logger, cores): 
     
@@ -281,7 +247,17 @@ def compute_clusters(logger, cores):
     
     
     # check if it's everything pre-computed
-    response = check_chached(logger)
+    response = check_cached(
+        logger, pam_path='working/clustering/pam.csv', 
+        imp_files=[
+            'working/clustering/acc_to_seqs.pickle',
+            'working/clustering/cluster_to_rep.pickle',
+            'working/clustering/cluster_to_seqs.pickle',
+            'working/clustering/seq_to_acc.pickle',
+            'working/clustering/seq_to_cluster.pickle',
+            'working/clustering/acc_to_suffix.pickle',
+            'working/clustering/representatives.ren.faa',
+            'working/clustering/sequences.csv'])
     if response == 0: return 0
     
     

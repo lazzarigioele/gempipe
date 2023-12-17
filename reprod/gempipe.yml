@@ -33,7 +33,7 @@ dependencies:
   - bedtools=2.31.1=hf5e1c6e_0
   - binutils_impl_linux-64=2.39=he00db2b_1
   - biopython=1.80=py39hb9d737c_0
-  - blast=2.14.1=pl5321h6f7f691_0
+  - blast=2.12.0=hf3cf87c_4
   - blast-legacy=2.2.26=h9ee0642_3
   - bleach=5.0.1=pyhd8ed1ab_0
   - blinker=1.5=pyhd8ed1ab_0

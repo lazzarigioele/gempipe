@@ -52,7 +52,7 @@ def task_annotation(genome, args):
         
     
     # return a row for the dataframe
-    return {'accession': accession, 'completed': True}
+    return [{'accession': accession, 'completed': True}]
 
 
 
@@ -80,7 +80,6 @@ def create_species_to_proteome(logger):
         pickle.dump(species_to_proteome, file)
     logger.debug(f"Saved the species-to-proteome dictionary to file: ./working/proteome/species_to_proteome.pickle.")
     
-
 
 
 def extract_cds(logger, cores):
