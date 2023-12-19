@@ -7,8 +7,8 @@ import subprocess
 from .download import get_genomes
 from .download import get_metadata_table
 from .download import handle_manual_genomes
-from .annotatecds import extract_cds
-from .annotatecds import handle_manual_proteomes
+from .extractcds import extract_cds
+from .extractcds import handle_manual_proteomes
 from .filtergenomes import filter_genomes
 from .clustercds import compute_clusters
 from .rec_masking import recovery_masking
@@ -30,7 +30,7 @@ def recon_command(args, logger):
     os.makedirs('working/logs/', exist_ok=True)
         
         
-    # check is the user required the list of databases: 
+    # check if the user required the list of databases: 
     if args.buscodb == 'show': 
         logger.info("Creating the temporary ./busco_downloads/ directory...")
         command = f"""busco --list-datasets"""

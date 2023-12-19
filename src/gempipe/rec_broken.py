@@ -377,7 +377,7 @@ def update_sequences(logger):
                 contig, strand, start, end)
             new_rows.append({'cds': row['ID'], 'accession': accession, 'aaseq': seq})
     new_rows = pnd.DataFrame.from_records(new_rows)
-    new_rows.set_index('cds', drop=True, verify_integrity=True)
+    new_rows = new_rows.set_index('cds', drop=True, verify_integrity=True)
     sequences_updated = pnd.concat([sequences_updated, new_rows])
     logger.debug(f'{len(sequences_updated)} sequences after the addition of new IDs.')
     
