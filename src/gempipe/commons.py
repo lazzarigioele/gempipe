@@ -2,9 +2,11 @@ import random
 import os
 import pickle
 import glob
+import subprocess
 
 
 import pandas as pnd
+from Bio import SeqIO, SeqRecord, Seq
 
 
 
@@ -215,7 +217,7 @@ def extract_aa_seq_from_genome(db, contig, strand, start, end ):
     if strand == '-': 
         seq = seq.reverse_complement()
 
-
+        
     # trim the sequences to make it multiple of three, otherwise I get the following warning: 
     # BiopythonWarning: Partial codon, len(sequence) not a multiple of three. 
     seq_trimmed = seq[:len(seq) - (len(seq) % 3)]

@@ -346,7 +346,7 @@ def update_sequences(logger):
         for proteome in species_to_proteome[species]:
             basename = os.path.basename(proteome)
             accession, _ = os.path.splitext(basename)
-            accessions.add(accession)
+            accessions.append(accession)
             
     
     # get the sequences to erease:
@@ -373,12 +373,20 @@ def update_sequences(logger):
             start = row['start']
             end = row['end']
             seq, seq_tostop = extract_aa_seq_from_genome(
-                db=f'working/rec_broken/databases/{accession}/{accession}.fna', 
+                f'working/rec_broken/databases/{accession}/{accession}.fna', 
                 contig, strand, start, end)
             new_rows.append({'cds': row['ID'], 'accession': accession, 'aaseq': seq})
     new_rows = pnd.DataFrame.from_records(new_rows)
-    
+    new_rows.set_index('cds', drop=True, verify_integrity=True)
+    sequences_updated = pnd.concat([sequences_updated, new_rows])
     logger.debug(f'{len(sequences_updated)} sequences after the addition of new IDs.')
+    
+    
+    # save the update version:
+    sequences_updated.to_csv('working/rec_broken/sequences.csv')
+    
+    
+    
         
     
             
