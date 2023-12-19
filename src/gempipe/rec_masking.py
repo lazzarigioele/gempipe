@@ -219,11 +219,11 @@ def recovery_masking(logger, cores):
     
     
     # load the assets ot form the args dictionary:
-    pam = pnd.read_csv('working/clustering/pam.csv', index_col=0)
-    sequences_df = pnd.read_csv('working/clustering/sequences.csv', index_col=0)
-    with open('working/clustering/cluster_to_rep.pickle', 'rb') as handler:
+    pam = pnd.read_csv('working/rec_broken/pam.csv', index_col=0)
+    sequences_df = pnd.read_csv('working/rec_broken/sequences.csv', index_col=0)
+    with open('working/rec_broken/cluster_to_rep.pickle', 'rb') as handler:
         cluster_to_rep = pickle.load(handler)
-    with open('working/clustering/acc_to_suffix.pickle', 'rb') as handler:
+    with open('working/rec_broken/acc_to_suffix.pickle', 'rb') as handler:
         acc_to_suffix = pickle.load(handler)
 
 

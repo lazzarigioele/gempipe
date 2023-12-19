@@ -12,6 +12,7 @@ import pandas as pnd
 from .commons import chunkize_items
 from .commons import load_the_worker
 from .commons import gather_results
+from .commons import check_cached
 
 
 
@@ -23,10 +24,7 @@ def task_recbroken(proteome, args):
     accession, _ = os.path.splitext(basename)
     
     
-    ###
-    ### TMP 
-    ### TODO
-    ###
+    # TODO
     if not os.path.exists(f'working/rec_broken/alignments/{accession}.tsv'):
         # perform the blastp 
         command = f'''blastp \
@@ -37,10 +35,10 @@ def task_recbroken(proteome, args):
         '''
         process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         process.wait()
-        
+
     
     # this module will release a new updated pam.
-    # the new pam will be created guing together singular columns.
+    # the new pam will be created gluing together singular columns.
     # columns will be first translated (.T) to be compliant with the .commons lib.
     pam_column = args['pam'].loc[: , [accession]].copy()
     
@@ -70,24 +68,24 @@ def task_recbroken(proteome, args):
     blacklist = set()
 
 
-    # detect proteins broken in two pieces:
+    # group hsps by cluster:
     df_result = []
     groups = alignment.groupby('sseqid').groups
     for cluster in groups.keys():
-        hpss = alignment.iloc[ groups[cluster], ]
+        hsps = alignment.iloc[ groups[cluster], ]
         # if a CDS is repeated for the same cluster, take the best hit.
-        hpss = hpss.drop_duplicates(subset='qseqid', keep='first')
+        hsps = hsps.drop_duplicates(subset='qseqid', keep='first')
         # get the length of the representative seq (it's constant)
-        slen = hpss['slen'].values[0] 
+        slen = hsps['slen'].values[0] 
 
 
         # search for couples having progressive numbers:
-        prognums = list(hpss['prognum'].values)
+        prognums = list(hsps['prognum'].values)
         for i in prognums:
             if i in blacklist: continue
             if i+1 in prognums and i+2 not in prognums and i-1 not in prognums:
                 # get the two pieces of this protein: 
-                good_couple = hpss[hpss['prognum'].isin([i, i+1])]   
+                good_couple = hsps[hsps['prognum'].isin([i, i+1])]   
                 # below we compute several metrics: 
 
                 
@@ -139,51 +137,50 @@ def task_recbroken(proteome, args):
     df_result = pnd.concat(df_result, axis=0)
     df_result = df_result.drop('prognum', axis=1)
     df_result = df_result.reset_index(drop=True)
-    df_result.to_csv(f'working/rec_broken/results/{accession}.tsv', sep='\t')
+    df_result.to_csv(f'working/rec_broken/results/{accession}.csv')
 
     
-    # trace the jumping of protein pieces:
-    with open(f'working/rec_broken/editlogs/{accession}.txt', "w") as w_handler:
+    # parse each couple to trace the jumping of protein pieces:
+    with open(f'working/rec_broken/edits/{accession}.txt', "w") as w_handler:
         groups = df_result.groupby('sseqid').groups
         for cluster in groups.keys():
             couple = df_result.iloc[ groups[cluster], ]
 
 
-            # PHASE 1: update the cell for this clustes.
-
+            # convert the original cell of the gained cluster to set
             ori_cell = pam_column.loc[cluster, accession]
             if type(ori_cell)==float: ori_cell_set = set()  # empty cell
             else: ori_cell_set = set(ori_cell.split(';'))
 
 
+            # get the two pieces (prefix and progressive number)
             cds_ids = couple['qseqid'].to_list()
             cds_prognums = [i.rsplit('_', 1)[1] for i in cds_ids] 
-            prokka_prefix = cds_ids[0].split('_', 1)[0]
+            prefix = cds_ids[0].split('_', 1)[0]
 
 
+            # remove eventual pieces from the gained cluster cell, then add the glued protein
             ori_cell_depleted = ori_cell_set - set(cds_ids)
-            new_cell = set([f'{prokka_prefix}_frag_' + '_'.join(cds_prognums)]).union(ori_cell_depleted)
+            new_cell = set([f'{prefix}_frag_' + '_'.join(cds_prognums)]).union(ori_cell_depleted)
             new_cell = ';'.join(new_cell)
 
             
+            # get the freq of the gained cluster, log the change, and apply to pam
             rel_freq = args['cluster_to_relfreq'][cluster]
             print(f'{cluster} ({rel_freq}%): {ori_cell} --> {new_cell}', file=w_handler)
             pam_column.loc[cluster, accession] = new_cell
 
 
-            # PHASE 2: update the cells of the originally involvold clusters.
-
+            # now update the cells of the two pieces, following the same logic above.
             for cds in cds_ids: 
-                cluster_to_edit = args['seq_to_cluster'][cds]
-                ori_cell2 = pam_column.loc[cluster_to_edit, accession]
+                cluster2 = args['seq_to_cluster'][cds]
+                ori_cell2 = pam_column.loc[cluster2, accession]
                 ori_cell2_set = set() if type(ori_cell2)==float else set(ori_cell2.split(';'))
                 new_cell2 = set(ori_cell2_set) - set(cds_ids) 
                 new_cell2 = ';'.join(new_cell2)
-
-                
-                rel_freq = args['cluster_to_relfreq'][cluster_to_edit]
-                print(f'\t{cluster} ({rel_freq}%): {ori_cell2} --> {new_cell2}', file=w_handler)
-                pam_column.loc[cluster_to_edit, accession] = new_cell2
+                rel_freq2 = args['cluster_to_relfreq'][cluster2]
+                print(f'\t{cluster2} ({rel_freq2}%): {ori_cell2} --> {new_cell2}', file=w_handler)
+                pam_column.loc[cluster2, accession] = new_cell2
 
     
     # return new rows for load_the_worker():
@@ -203,19 +200,20 @@ def recovery_broken(logger, cores):
     
     # create sub-directories without overwriting:
     os.makedirs('working/rec_broken/', exist_ok=True)
-    os.makedirs('working/rec_broken/editlogs/', exist_ok=True)
+    os.makedirs('working/rec_broken/edits/', exist_ok=True)
     os.makedirs('working/rec_broken/database/', exist_ok=True)
     os.makedirs(f'working/rec_broken/alignments/', exist_ok=True)
     os.makedirs('working/rec_broken/results/', exist_ok=True)
     
-    """
+    
     # check if it's everything pre-computed
     response = check_cached(
         logger, pam_path='working/rec_broken/pam.csv',
-        summary_path='working/rec_broken/summary.csv',
-        imp_files = ['working/rec_broken/sequences.csv'])
+        #summary_path='working/rec_broken/summary.csv',
+        #imp_files = ['working/rec_broken/sequences.csv'],
+        imp_files = [])
     if response == 0: return 0
-    """
+    
 
     # copy representative sequences (all) and make a database
     shutil.copyfile(f'working/clustering/representatives.ren.faa', f'working/rec_broken/database/representatives.ren.faa') 
@@ -230,7 +228,7 @@ def recovery_broken(logger, cores):
         seq_to_cluster = pickle.load(handler)
     
     
-    # get cluster to relative frequencies dict: 
+    # calculate the frequency of each cluster: 
     # with the following binary expression, eventual '_stop' are included.
     cluster_to_absfreq = pam.applymap(lambda x: 1 if (type(x) != float and x != '') else 0 ).sum(axis=1)
     cluster_to_relfreq = round(cluster_to_absfreq / len(pam.columns) * 100, 1)
@@ -275,11 +273,13 @@ def recovery_broken(logger, cores):
     globalpool.join() 
     
     
-    """
-    # get the updated pam:
-    update_pam(logger, pam, module_dir='working/rec_masking')
-    """
+    # get the updated pam, and remove empty rows:
     pam_updated = all_df_combined.T
+    pam_updated = pam_updated.replace({'': None})
+    empty_rows_bool = pam_updated.isnull().all(axis=1)
+    empty_rows_df = pam_updated.loc[empty_rows_bool]
+    logger.debug(f"Removing {len(empty_rows_df)} empty rows.")
+    pam_updated = pam_updated.drop(empty_rows_df.index)
     pam_updated.to_csv('working/rec_broken/pam.csv')
     
     
