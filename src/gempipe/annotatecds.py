@@ -38,6 +38,31 @@ def task_annotation(genome, args):
         process.wait()
         
         
+    # convert gff files to dataframe: 
+    coords_df = []
+    with open(f'working/proteomes/{accession}.gff', 'r') as r_handler: 
+        file = r_handler.read()
+        file = file.split('##FASTA', 1)[0] # not interested in contigs
+        for line in file.split('\n'):
+            if line.startswith('#'): continue
+            if line=='': continue
+            row = line.split('\t')
+            row_dict = {key: value for key, value in zip(['contig', 'col2', 'col3', 'start', 'end', 'col6', 'strand', 'col8', 'attributes'], row)}
+            # extract attributes from col9:
+            for attribute in row_dict['attributes'].split(';'):
+                attribute_id, attribute_value = attribute.split('=', 1)
+                row_dict[attribute_id] = attribute_value
+            # add the accession column:
+            row_dict['accession'] = accession
+            coords_df.append(row_dict)
+    coords_df = pnd.DataFrame.from_records(coords_df)
+    
+    
+    # format the dataframe and save
+    coords_df = coords_df[['ID', 'accession', 'contig', 'strand', 'start', 'end']]
+    coords_df.to_csv(f'working/coordinates/{accession}.csv')
+        
+        
     # remove useless files:
     os.remove(f'working/proteomes/{accession}.err')
     os.remove(f'working/proteomes/{accession}.ffn')
@@ -49,6 +74,7 @@ def task_annotation(genome, args):
     os.remove(f'working/proteomes/{accession}.tbl')
     os.remove(f'working/proteomes/{accession}.tsv')
     os.remove(f'working/proteomes/{accession}.txt')
+    os.remove(f'working/proteomes/{accession}.gff')
         
     
     # return a row for the dataframe
@@ -80,6 +106,50 @@ def create_species_to_proteome(logger):
         pickle.dump(species_to_proteome, file)
     logger.debug(f"Saved the species-to-proteome dictionary to file: ./working/proteome/species_to_proteome.pickle.")
     
+    
+    
+def create_seq_to_coords(logger):
+    
+    
+    # load the previously created species_to_proteome: 
+    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+        species_to_proteome = pickle.load(handler)
+
+    
+    # create a list of accessions to parse: 
+    accessions = set()
+    for species in species_to_proteome.keys(): 
+        for proteome in species_to_proteome[species]:
+            basename = os.path.basename(proteome)
+            accession, _ = os.path.splitext(basename)
+            accessions.add(accession)
+            
+    
+    # quick check of the available dict to save time:
+    if os.path.exists(f'working/coordinates/seq_to_coords.pickle'):
+        accessions_available = set()
+        with open('working/coordinates/seq_to_coords.pickle', 'rb') as handler:
+            seq_to_coords = pickle.load(handler)
+        for attribs in seq_to_coords.values():
+            accessions_available.add(attribs['accession'])
+        if accessions == accessions_available:
+            logger.debug(f"Found a good sequence-to-coordinates dictionary file already available.")
+            return
+    
+        
+    # create the dict seq-to-coords
+    seq_to_coords = {}
+    for accession in accessions: 
+        coords_df = pnd.read_csv(f'working/coordinates/{accession}.csv')
+        for index, row in coords_df.iterrows(): 
+            seq_to_coords[row['ID']] = {'accession': row['accession'], 'contig': row['contig'], 'strand': row['strand'], 'start': row['start'], 'end': row['end']}
+    
+    
+    # save the dictionary to disk: 
+    with open('working/coordinates/seq_to_coords.pickle', 'wb') as file:
+        pickle.dump(seq_to_coords, file)
+    logger.debug(f"Saved the sequence-to-coordinates dictionary to file: ./working/coordinates/seq_to_coords.pickle.")
+    
 
 
 def extract_cds(logger, cores):
@@ -88,6 +158,7 @@ def extract_cds(logger, cores):
     # create sub-directory without overwriting:
     logger.info("Extracting the CDSs from the genomes...")
     os.makedirs('working/proteomes/', exist_ok=True)
+    os.makedirs('working/coordinates/', exist_ok=True)
 
 
     # load the previously created species_to_genome: 
@@ -108,10 +179,12 @@ def extract_cds(logger, cores):
         basename = os.path.basename(genome)
         accession, _ = os.path.splitext(basename)
         already_computed.append(os.path.exists(f'working/proteomes/{accession}.faa'))
+        already_computed.append(os.path.exists(f'working/coordinates/{accession}.csv'))
     if all(already_computed):
         logger.info("Found all the proteomes already stored in your ./working/ directory: skipping this step.")
-        # save the species_to_proteome dictionary to disk:
+        # save the species_to_proteome and seq_to_coords dicts
         create_species_to_proteome(logger)
+        create_seq_to_coords(logger)
         return 0
     
 
@@ -146,8 +219,9 @@ def extract_cds(logger, cores):
     globalpool.join()  
     
     
-    # save the species_to_proteome dictionary to disk.
+    # save the species_to_proteome and seq_to_coords dicts
     create_species_to_proteome(logger)
+    create_seq_to_coords(logger)
     
     
     return 0

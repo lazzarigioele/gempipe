@@ -106,7 +106,6 @@ def recon_command(args, logger):
         response = recovery_broken(logger, args.cores)
         if response == 1: return 1
         
-        """
         # Recovery 2: search missing genes after masking the genome 
         response = recovery_masking(logger, args.cores)
         if response == 1: return 1 
@@ -114,7 +113,7 @@ def recon_command(args, logger):
         # Recovery 3: search for overlapping genes
         response = recovery_overlap(logger, args.cores)
         if response == 1: return 1
-        """
+
         
         
     # warning if starting from proteomes

@@ -16,6 +16,7 @@ from .commons import load_the_worker
 from .commons import gather_results
 from .commons import check_cached
 from .commons import update_pam
+from .commons import extract_aa_seq_from_genome
 
 
 
@@ -28,25 +29,7 @@ def genome_masking(genome):
     accession, _ = os.path.splitext(basename)
 
 
-    # convert the gff file to dataframe: 
-    df_gff = []
-    with open(f'working/proteomes/{accession}.gff', 'r') as r_handler: 
-        file = r_handler.read()
-        file = file.split('##FASTA', 1)[0] # not interested in contigs
-        for line in file.split('\n'):
-            if line.startswith('#'): continue
-            if line=='': continue
-            row = line.split('\t')
-            df_gff.append({key: value for key, value in zip(['contig', 'col2', 'col3', 'start', 'end', 'col6', 'strand', 'col8', 'attributes'], row)})
-    df_gff = pnd.DataFrame.from_records(df_gff)
-    
-    
-    # load the coodinates of each gene to a dictionary keyed by contig:
-    contig_to_gff = {}
-    for index, row in df_gff.iterrows(): 
-        if row['contig'] not in contig_to_gff.keys():
-            contig_to_gff[row['contig']] = set()
-        contig_to_gff[row['contig']].add((int(row['start']), int(row['end'])))
+    ### TODO
         
     
     # parse each genome:
@@ -145,33 +128,18 @@ def task_recmasking(genome, args):
 
 
             # retrieve the sequence from the genome:
-            start_pos = int(row['sstart'])
-            end_pos = int(row['send'])
+            start = int(row['sstart'])
+            end = int(row['send'])
             contig = row["sseqid"]
             #contig = contig.split('|')[1]   #split() because blast but some obscure formatting, eg: gb|NIGV01000003.1| for NIGV01000003.1.
-            other_strand = False
-            if start_pos > end_pos: # if on the other strand, invert the positions. 
-                other_strand = True
-                start_pos, end_pos = end_pos, start_pos
-            command = f'''blastdbcmd -db working/rec_masking/databases/{accession}/{accession}.masked.fna -entry "{contig}" -range "{start_pos}-{end_pos}" -outfmt "%s"'''
-            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-            process.wait()
-            curr_stream = process.stdout.read()
-            curr_stream = curr_stream.decode('utf8')  # See https://stackoverflow.com/q/41918836
-            curr_stream = curr_stream.rstrip()  # remove end of line
-            curr_seq = Seq.Seq(curr_stream)
-            if other_strand: 
-                curr_seq = curr_seq.reverse_complement()
-            
-            
-            # trim the sequences to make it multiple of three, otherwise I get the following warning: 
-            # BiopythonWarning: Partial codon, len(sequence) not a multiple of three. 
-            curr_seq_trimmed = curr_seq[:len(curr_seq) - (len(curr_seq) % 3)]
-            
-            
-            # translate to stop:
-            curr_seq_translated = curr_seq_trimmed.translate()
-            curr_seq_translated_tostop = curr_seq_trimmed.translate(to_stop=True)
+            strand = '+'
+            if start > end: # if on the other strand, invert the positions. 
+                strand = '-'
+                start, end = end, start
+            curr_seq_translated, curr_seq_translated_tostop = \
+                extract_aa_seq_from_genome(
+                    f'working/rec_masking/databases/{accession}/{accession}.masked.fna',
+                    contig, strand, start, end) # TODO
             if len(curr_seq_translated_tostop) / len(curr_seq_translated) < 0.95 :
                 refound_gid = refound_gid + '_stop'
 
@@ -272,7 +240,7 @@ def recovery_masking(logger, cores):
     
     
     # update the pam and get the summary:
-    update_pam(logger, pam, module_dir='working/rec_masking')
+    update_pam(logger, module_dir='working/rec_masking', pam=pam)
     
     
     return 0

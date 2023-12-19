@@ -1,6 +1,7 @@
 import random
 import os
 import pickle
+import glob
 
 
 import pandas as pnd
@@ -123,11 +124,43 @@ def check_cached(logger, pam_path, imp_files, summary_path=None):
 
 
 
-def update_pam(logger, pam, module_dir):
+def create_summary(logger, module_dir):
+    
+    
+    # parse each results file: 
+    summary = []
+    for file in glob.glob(f'{module_dir}/results/*.csv'):
+        accession = file.rsplit('/', 1)[1].replace('.csv', '')
+        with open(file, 'r') as r_handler: 
+            if r_handler.read() == '""\n':  # if the result csv for this accession is empty: 
+                refound_summary.append({'accession': accession, 'n_refound': 0, 'n_frag': 0, 'n_stop': 0})
+                continue
+                
+                
+        # populate the summary: 
+        result = pnd.read_csv(file, sep=',', index_col=0)
+        summary.append({
+            'accession': accession, 
+            'n_refound': len(result[result['ID'].str.contains('_refound')]), 
+            'n_frag': len(result[result['ID'].str.contains('_frag')]), 
+            'n_stop': len(result[result['ID'].str.contains('_stop')]),
+        })
+
+        
+    # write the summary to disk
+    summary = pnd.DataFrame.from_records(summary)
+    summary = summary.set_index('accession', drop=True, verify_integrity=True)
+    summary.to_csv(f'{module_dir}/summary.csv')
+    
+    
+    return 0
+
+
+
+def update_pam(logger, module_dir, pam):
     
     
     # define important objects:
-    summary = []
     cnt_newgenes = 0
     pam_update = pam.copy()
     
@@ -137,19 +170,11 @@ def update_pam(logger, pam, module_dir):
         accession = file.rsplit('/', 1)[1].replace('.csv', '')
         with open(file, 'r') as r_handler: 
             if r_handler.read() == '""\n':  # if the result csv for this accession is empty: 
-                refound_summary.append({'accession': accession, 'n_refound': 0, 'n_stop': 0})
                 continue
-                
-                
         # populate the summary: 
         result = pnd.read_csv(file, sep=',', index_col=0)
-        summary.append({
-            'accession': accession, 
-            'n_refound': len(result[result['gid'].str.contains('_refound')]), 
-            'n_stop': len(result[result['gid'].str.contains('_stop')]),
-        })
 
-        
+
         # update the PAM: 
         for cluster in set(result['cluster'].to_list()): 
             new_genes = result[result['cluster']==cluster]['gid'].to_list()
@@ -158,10 +183,7 @@ def update_pam(logger, pam, module_dir):
             pam_update.loc[cluster, accession] = cell
             
         
-    # write the summary and update PAM to disk
-    summary = pnd.DataFrame.from_records(summary)
-    summary = summary.set_index('accession', drop=True, verify_integrity=True)
-    summary.to_csv(f'{module_dir}/summary.csv')
+    # write the updated PAM to disk
     pam_update.to_csv(f'{module_dir}/pam.csv')
     
     
@@ -170,3 +192,38 @@ def update_pam(logger, pam, module_dir):
     
     
     return 0
+
+
+
+def extract_aa_seq_from_genome(db, contig, strand, start, end ):
+    
+    
+    # execute the command
+    command = f'''blastdbcmd -db {db} -entry "{contig}" -range "{start}-{end}" -outfmt "%s"'''
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    process.wait()
+    
+    
+    # read the output from stdout
+    curr_stream = process.stdout.read()
+    curr_stream = curr_stream.decode('utf8')  # See https://stackoverflow.com/q/41918836
+    curr_stream = curr_stream.rstrip()  # remove end of line
+    
+    
+    # reverse complement if on the negative strand
+    seq = Seq.Seq(curr_stream)
+    if strand == '-': 
+        seq = seq.reverse_complement()
+
+
+    # trim the sequences to make it multiple of three, otherwise I get the following warning: 
+    # BiopythonWarning: Partial codon, len(sequence) not a multiple of three. 
+    seq_trimmed = seq[:len(seq) - (len(seq) % 3)]
+
+
+    # translate to stop:
+    seq_translated = seq_trimmed.translate()
+    seq_translated_tostop = seq_trimmed.translate(to_stop=True)
+    
+    
+    return seq_translated, seq_translated_tostop
