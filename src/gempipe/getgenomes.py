@@ -71,7 +71,7 @@ def create_genomes_dictionary(logger):
     
 
 
-def get_genomes(logger): 
+def get_genomes(logger, taxids, cores): 
     
     
     # execute the download
@@ -166,7 +166,7 @@ def download_genomes(logger, taxids, cores):
     
           
     # download from ncbi: 
-    get_genomes(logger)
+    get_genomes(logger, taxids, cores)
 
     
     # create the metadata table and the genomes dictionary

@@ -19,38 +19,8 @@ from .commons import get_blast_header
 
 
 
-def task_recbroken(genome, args):
-    
-    
-    # get the accession and proteome file:
-    basename = os.path.basename(genome)
-    accession, _ = os.path.splitext(basename)
-    proteome = f'working/proteomes/{accession}.faa'
-    
-    
-    # create a database for later extraction of recovered sequences: 
-    os.makedirs(f'working/rec_broken/databases/{accession}/', exist_ok=True)
-    shutil.copyfile(genome, f'working/rec_broken/databases/{accession}/{accession}.fna')  # just the content, not the permissions.
-    command = f"""makeblastdb -in working/rec_broken/databases/{accession}/{accession}.fna -dbtype nucl -parse_seqids""" # '-parse_seqids' is required for 'blastdbcmd'.
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    process.wait()
-    
-    
-    # perform the blastp: prteins on representatives:  
-    command = f'''blastp \
-        -query {proteome} \
-        -db working/rec_broken/representatives/representatives.ren.faa \
-        -out working/rec_broken/alignments/{accession}.tsv \
-        -outfmt "6 {get_blast_header()}"
-    '''
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    process.wait()
 
-    
-    # this module will release a new updated pam.
-    # the new pam will be created gluing together singular columns.
-    # columns will be first translated (.T) to be compliant with the .commons lib.
-    pam_column = args['pam'].loc[: , [accession]].copy()
+def alignment_to_couples(accession, cluster_to_relfreq, seq_to_cluster): 
     
     
     # read the alignment with extra columns: 
@@ -117,9 +87,9 @@ def task_recbroken(genome, args):
                 rqlen2 = good_couple['qlen'].values[1] / slen * 100
 
                 # get the relative frequencies:
-                relfreq_cluster = args['cluster_to_relfreq'][cluster]
-                relfreq_piece1 = args['cluster_to_relfreq'][args['seq_to_cluster'][good_couple['qseqid'].values[0]]]
-                relfreq_piece2 = args['cluster_to_relfreq'][args['seq_to_cluster'][good_couple['qseqid'].values[1]]]
+                relfreq_cluster = cluster_to_relfreq[cluster]
+                relfreq_piece1 = cluster_to_relfreq[seq_to_cluster[good_couple['qseqid'].values[0]]]
+                relfreq_piece2 = cluster_to_relfreq[seq_to_cluster[good_couple['qseqid'].values[1]]]
 
                 
                 # if this couple respect the thresholds: 
@@ -144,7 +114,20 @@ def task_recbroken(genome, args):
     df_couples = df_couples.drop('prognum', axis=1)
     df_couples = df_couples.reset_index(drop=True)
     df_couples.to_csv(f'working/rec_broken/couples/{accession}.csv')
+    
+    
+    return df_couples
 
+
+    
+def get_updated_column(pam, accession, df_couples, cluster_to_relfreq, seq_to_cluster):
+    
+    
+    # this module will release a new updated pam.
+    # the new pam will be created gluing together singular columns.
+    # columns will be first translated (.T) to be compliant with the .commons lib.
+    pam_column = pam.loc[: , [accession]].copy()
+    
     
     # parse each couple to trace the jumping of protein pieces:
     with open(f'working/rec_broken/edits/{accession}.txt', "w") as w_handler:
@@ -172,31 +155,78 @@ def task_recbroken(genome, args):
 
             
             # get the freq of the gained cluster, log the change, and apply to pam
-            rel_freq = args['cluster_to_relfreq'][cluster]
+            rel_freq = cluster_to_relfreq[cluster]
             print(f'{cluster} ({rel_freq}%): {ori_cell} --> {new_cell}', file=w_handler)
             pam_column.loc[cluster, accession] = new_cell
 
 
             # now update the cells of the two pieces, following the same logic above.
             for cds in cds_ids: 
-                cluster2 = args['seq_to_cluster'][cds]
+                cluster2 = seq_to_cluster[cds]
                 ori_cell2 = pam_column.loc[cluster2, accession]
                 ori_cell2_set = set() if type(ori_cell2)==float else set(ori_cell2.split(';'))
                 new_cell2 = set(ori_cell2_set) - set(cds_ids) 
                 new_cell2 = ';'.join(new_cell2)
-                rel_freq2 = args['cluster_to_relfreq'][cluster2]
+                rel_freq2 = cluster_to_relfreq[cluster2]
                 print(f'\t{cluster2} ({rel_freq2}%): {ori_cell2} --> {new_cell2}', file=w_handler)
                 pam_column.loc[cluster2, accession] = new_cell2
+    
+    
+    return pam_column[accession]
+
+
+
+def task_recbroken(genome, args):
+    
+    
+    # retrive the arguments:
+    pam = args['pam']
+    cluster_to_relfreq = args['cluster_to_relfreq']
+    seq_to_cluster = args['seq_to_cluster']
+    
+    
+    # get the accession and proteome file:
+    basename = os.path.basename(genome)
+    accession, _ = os.path.splitext(basename)
+    proteome = f'working/proteomes/{accession}.faa'
+    
+    
+    # create a database for later extraction of recovered sequences: 
+    os.makedirs(f'working/rec_broken/databases/{accession}/', exist_ok=True)
+    shutil.copyfile(genome, f'working/rec_broken/databases/{accession}/{accession}.fna')  # just the content, not the permissions.
+    command = f"""makeblastdb -in working/rec_broken/databases/{accession}/{accession}.fna -dbtype nucl -parse_seqids""" # '-parse_seqids' is required for 'blastdbcmd'.
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    process.wait()
+    
+    
+    # perform the blastp: prteins on representatives:  
+    command = f'''blastp \
+        -query {proteome} \
+        -db working/rec_broken/representatives/representatives.ren.faa \
+        -out working/rec_broken/alignments/{accession}.tsv \
+        -outfmt "6 {get_blast_header()}"
+    '''
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    process.wait()
+
+
+    # parse the alignment to get the good couples.
+    df_couples = alignment_to_couples(accession, cluster_to_relfreq, seq_to_cluster)
+    
+    
+    # parse the good couples to update the pam column:
+    pam_column = get_updated_column(pam, accession, df_couples, cluster_to_relfreq, seq_to_cluster)
 
     
     # return new rows for load_the_worker():
-    row = pam_column[accession].to_dict()
+    row = pam_column.to_dict()
     row['accession'] = accession
     return [row]
     
     
 
-def populate_results(logger):
+def populate_results_df(logger):
+    
     
     # load the previously created dictionaries: 
     with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
@@ -270,6 +300,8 @@ def populate_results(logger):
                 results_df.append({'ID': new_seq_id, 'accession': couple_accession, 'contig': couple_contig, 'strand': couple_strand, 'start': couple_start, 'end': couple_end})
             results_df = pnd.DataFrame.from_records(results_df)
             results_df.to_csv(f'working/rec_broken/results/{accession}.csv')
+    
+    
     return 0
     
     
@@ -282,7 +314,7 @@ def update_seq_to_coords(logger):
         species_to_proteome = pickle.load(handler)
         
     
-    # get the good accessions:
+    # get the good accessions (passing the quality filters):
     good_accessions = []
     for species in species_to_proteome.keys(): 
         for proteome in species_to_proteome[species]:
@@ -291,34 +323,38 @@ def update_seq_to_coords(logger):
             good_accessions.append(accession)
     
     
-    # parse the couples/ log files to get the seqs to erease:
+    # parse the couples/log files to get the seqs ID to erease:
     to_erease = []
     for accession in good_accessions: 
         df_couples = pnd.read_csv(f'working/rec_broken/couples/{accession}.csv', index_col=0)
         to_erease = to_erease + df_couples['qseqid'].to_list()
     
         
-    # create an update seq_to_coords dict, removing seqs: 
+    # create an updateed seq_to_coords dict: 
     with open('working/coordinates/seq_to_coords.pickle', 'rb') as handler:
         seq_to_coords = pickle.load(handler)
+    logger.debug(f'rec_broken: seq_to_coords: starting from {len(seq_to_coords.values())} sequences.')
     seq_to_coords_update = {}
+    
+    
+    # remove seqs from the updated dictionary:
     for seq in seq_to_coords.keys(): 
         attribs = seq_to_coords[seq] 
         if attribs['accession'] not in good_accessions: 
-            continue
+            continue  # remove all seq IDs belonging to accessions not passing the quality filter. 
         if seq in to_erease: 
-            continue
+            continue  # remove seq IDs belonging to the good couples discovered by this module. 
         seq_to_coords_update[seq] = attribs
-    logger.debug(f'{len(seq_to_coords_update.values())} sequencies remaining, starting from {len(seq_to_coords.values())}.')
+    logger.debug(f'rec_broken: seq_to_coords: {len(seq_to_coords_update.values())} after removing filtered accessions and frag couples.')
 
         
-    # now add the new seqs: 
+    # now add the new seqs (recovered by this module): 
     for accession in good_accessions: 
         results_df = pnd.read_csv(f'working/rec_broken/results/{accession}.csv', index_col=0)
         for index, row in results_df.iterrows():
             seq_to_coords_update[row['ID']] = {'accession': row['accession'], 'contig': row['contig'], 'strand': row['strand'], 'start': row['start'], 'end': row['end']}
-    logger.debug(f'{len(seq_to_coords_update.values())} sequences after the addition of new IDs.')
-    
+    logger.debug(f'rec_broken: seq_to_coords: {len(seq_to_coords_update.values())} sequences after the addition of new IDs.')
+
     
     # save the update dictionary: 
     with open('working/rec_broken/seq_to_coords.pickle', 'wb') as file:
@@ -343,18 +379,19 @@ def update_sequences(logger):
             accessions.append(accession)
             
     
-    # get the sequences to erease:
+    # parse the couples/log files to get the seqs ID to erease:
     to_erease = []
     for accession in accessions: 
         df_couples = pnd.read_csv(f'working/rec_broken/couples/{accession}.csv', index_col=0)
         to_erease = to_erease + df_couples['qseqid'].to_list()
             
             
-    # create an updated df, removeing the seqs to erease:
+    # create an updated df, removing the seqs to erease:
     sequences = pnd.read_csv('working/clustering/sequences.csv' , index_col=0)
+    logger.debug(f'rec_broken: sequences dataframe: starting from {len(sequences)} sequences.')
     sequences_updated = sequences.copy()
     sequences_updated = sequences_updated.drop(to_erease)
-    logger.debug(f'{len(sequences_updated)} sequencies remaining, starting from {len(sequences)}.')
+    logger.debug(f'rec_broken: sequences dataframe: {len(sequences_updated)} after removing frag couples.')
     
     
     # now add the new seqs
@@ -373,7 +410,8 @@ def update_sequences(logger):
     new_rows = pnd.DataFrame.from_records(new_rows)
     new_rows = new_rows.set_index('cds', drop=True, verify_integrity=True)
     sequences_updated = pnd.concat([sequences_updated, new_rows])
-    logger.debug(f'{len(sequences_updated)} sequences after the addition of new IDs.')
+    logger.debug(f'rec_broken: seq_to_coords: {len(sequences_updated)} sequences after the addition of new IDs.')
+
     
     
     # save the update version:
@@ -398,16 +436,15 @@ def recovery_broken(logger, cores):
     os.makedirs('working/rec_broken/results/', exist_ok=True)
     
     
-    # TODO
-    """
     # check if it's everything pre-computed
     response = check_cached(
         logger, pam_path='working/rec_broken/pam.csv',
-        #summary_path='working/rec_broken/summary.csv',
-        #imp_files = ['working/rec_broken/sequences.csv'],
-        imp_files = [])
-    if response == 0: return 0
-    """
+        summary_path='working/rec_broken/summary.csv',
+        imp_files = [
+            'working/rec_broken/sequences.csv',
+            'working/rec_broken/seq_to_coords.pickle',])
+    if response == 0: 
+        return 0
     
 
     # copy representative sequences (all) and make a database
@@ -469,15 +506,25 @@ def recovery_broken(logger, cores):
     pam_updated = pam_updated.replace({'': None})
     empty_rows_bool = pam_updated.isnull().all(axis=1)
     empty_rows_df = pam_updated.loc[empty_rows_bool]
-    logger.debug(f"First recovering step resulted in {len(empty_rows_df)} devoided clusters.")
+    logger.debug(f"rec_broken: ended up with {len(empty_rows_df)} devoided clusters.")
     pam_updated = pam_updated.drop(empty_rows_df.index)
     pam_updated.to_csv('working/rec_broken/pam.csv')
     
     
-    # other tasks
-    populate_results(logger)
+    # get the results dataframe following conventions
+    response = populate_results_df(logger)
+    if response == 1: return 1
+
+    
+    # update the squence to coordinates dict (removing filtered genomes, and protein frags)
     update_seq_to_coords(logger)
+    
+    
+    # update the sequences dataframe (removing protein frags)
     update_sequences(logger)
+    
+    
+    # create a summary for this module reading the results dataframes: 
     create_summary(logger, module_dir='working/rec_broken/')
     
 

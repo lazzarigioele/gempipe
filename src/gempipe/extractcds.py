@@ -207,11 +207,7 @@ def extract_cds(logger, cores):
             itertools.repeat(task_annotation),
             itertools.repeat({}),
         ), chunksize = 1)
-    all_df_combined = gather_results(results)
-    
-    
-    # save tabular results:
-    all_df_combined.to_csv('working/logs/mptab_annotatecds.csv')
+    all_df_combined = gather_results(results)  # all_df_combined can be ignored.
     
     
     # empty the globalpool

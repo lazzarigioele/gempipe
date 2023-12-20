@@ -265,7 +265,7 @@ def compute_clusters(logger, cores):
             'working/clustering/seq_to_acc.pickle',
             'working/clustering/seq_to_cluster.pickle',
             'working/clustering/acc_to_suffix.pickle',
-            'working/clustering/cluster_to_relfreq',
+            'working/clustering/cluster_to_relfreq.pickle',
             'working/clustering/representatives.ren.faa',
             'working/clustering/sequences.csv'])
     if response == 0: return 0
