@@ -4,9 +4,8 @@ import subprocess
 
 
 
-from .download import get_genomes
-from .download import get_metadata_table
-from .download import handle_manual_genomes
+from .getgenomes import download_genomes
+from .getgenomes import handle_manual_genomes
 from .extractcds import extract_cds
 from .extractcds import handle_manual_proteomes
 from .filtergenomes import filter_genomes
@@ -70,12 +69,8 @@ def recon_command(args, logger):
     
     elif args.taxids != '-':
         # download the genomes according to the specified taxids: 
-        response = get_genomes(logger, args.taxids, args.cores)
-        if response == 1: return 1
-    
-        # get the metadata table:
-        response = get_metadata_table(logger)
-        if response == 1: return 1
+        response = download_genomes(logger, args.taxids, args.cores)
+        if response == 1: return 1 
     
         # extract the CDSs from the genomes:
         response = extract_cds(logger, args.cores)

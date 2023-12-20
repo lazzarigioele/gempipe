@@ -385,17 +385,7 @@ def update_sequences(logger):
     # save the update version:
     sequences_updated.to_csv('working/rec_broken/sequences.csv')
     
-    
-    
-        
-    
-            
 
-            
-            
-    
-        
-        
 
 def recovery_broken(logger, cores):
     
