@@ -233,6 +233,15 @@ def create_pam(logger):
         acc_to_suffix[acc] = suffix
     with open('working/clustering/acc_to_suffix.pickle', 'wb') as handler:
         pickle.dump(acc_to_suffix, handler)
+        
+        
+    # create the cluster to relative frequency dictionary: 
+    # with the following binary expression, eventual '_stop' are included.
+    cluster_to_absfreq = pam.applymap(lambda x: 1 if (type(x) != float and x != '') else 0 ).sum(axis=1)
+    cluster_to_relfreq = round(cluster_to_absfreq / len(pam.columns) * 100, 1)
+    cluster_to_relfreq = cluster_to_relfreq.to_dict()
+    with open('working/clustering/cluster_to_relfreq.pickle', 'wb') as handler:
+        pickle.dump(cluster_to_relfreq, handler)
     
     
     return 0
@@ -256,6 +265,7 @@ def compute_clusters(logger, cores):
             'working/clustering/seq_to_acc.pickle',
             'working/clustering/seq_to_cluster.pickle',
             'working/clustering/acc_to_suffix.pickle',
+            'working/clustering/cluster_to_relfreq',
             'working/clustering/representatives.ren.faa',
             'working/clustering/sequences.csv'])
     if response == 0: return 0

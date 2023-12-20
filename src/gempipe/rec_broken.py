@@ -330,8 +330,7 @@ def update_seq_to_coords(logger):
         pickle.dump(seq_to_coords_update, file)
         
         
-        
-        
+
 def update_sequences(logger): 
     
     
@@ -425,12 +424,10 @@ def recovery_broken(logger, cores):
     
     # load the assets to form the args dictionary:
     pam = pnd.read_csv('working/clustering/pam.csv', index_col=0)
+    with open('working/clustering/cluster_to_relfreq.pickle', 'rb') as handler:
+        cluster_to_relfreq = pickle.load(handler)
     with open('working/clustering/seq_to_cluster.pickle', 'rb') as handler:
         seq_to_cluster = pickle.load(handler)
-    # calculate the frequency of each cluster: 
-    # with the following binary expression, eventual '_stop' are included.
-    cluster_to_absfreq = pam.applymap(lambda x: 1 if (type(x) != float and x != '') else 0 ).sum(axis=1)
-    cluster_to_relfreq = round(cluster_to_absfreq / len(pam.columns) * 100, 1)
     
     
     # load the previously created species_to_proteome: 
@@ -477,7 +474,7 @@ def recovery_broken(logger, cores):
     pam_updated = pam_updated.replace({'': None})
     empty_rows_bool = pam_updated.isnull().all(axis=1)
     empty_rows_df = pam_updated.loc[empty_rows_bool]
-    logger.debug(f"Removing {len(empty_rows_df)} empty rows.")
+    logger.debug(f"First recovering step resulted in {len(empty_rows_df)} devoided clusters.")
     pam_updated = pam_updated.drop(empty_rows_df.index)
     pam_updated.to_csv('working/rec_broken/pam.csv')
     
