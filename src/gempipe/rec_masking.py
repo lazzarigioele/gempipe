@@ -75,7 +75,7 @@ def task_recmasking(genome, args):
     with open(f'working/rec_masking/queries/{accession}.query.faa', 'w') as w_handler: 
         for cluster in args['pam'].index:
             cell = args['pam'].loc[cluster, accession]
-            if type(cell) == float: 
+            if type(cell) == float:  # include only empty clusters
                 rep = args['cluster_to_rep'][cluster]
                 seq = Seq.Seq(args['sequences_df'].loc[rep, 'aaseq'])
                 sr = SeqRecord.SeqRecord(seq, id=cluster, description='')
@@ -184,15 +184,16 @@ def recovery_masking(logger, cores):
         logger, pam_path='working/rec_masking/pam.csv',
         summary_path='working/rec_masking/summary.csv',
         imp_files = ['working/rec_masking/sequences.csv'])
-    if response == 0: return 0
+    if response == 0: 
+        return 0
     
     
-    # load the assets ot form the args dictionary:
+    # load the assets to form the args dictionary:
     pam = pnd.read_csv('working/rec_broken/pam.csv', index_col=0)
     sequences_df = pnd.read_csv('working/rec_broken/sequences.csv', index_col=0)
-    with open('working/rec_broken/cluster_to_rep.pickle', 'rb') as handler:
+    with open('working/clustering/cluster_to_rep.pickle', 'rb') as handler:
         cluster_to_rep = pickle.load(handler)
-    with open('working/rec_broken/acc_to_suffix.pickle', 'rb') as handler:
+    with open('working/clustering/acc_to_suffix.pickle', 'rb') as handler:
         acc_to_suffix = pickle.load(handler)
 
 
@@ -224,7 +225,7 @@ def recovery_masking(logger, cores):
             itertools.repeat(['cds', 'accession', 'aaseq']), 
             itertools.repeat('cds'), 
             itertools.repeat(logger), 
-            itertools.repeat(task_recmasking),
+            itertools.repeat(task_recmasking),  # will return a new sequences dataframe (to be concat).
             itertools.repeat({'pam': pam, 'cluster_to_rep': cluster_to_rep, 'sequences_df': sequences_df, 'acc_to_suffix': acc_to_suffix,}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
