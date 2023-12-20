@@ -17,6 +17,7 @@ from .commons import gather_results
 from .commons import check_cached
 from .commons import update_pam
 from .commons import extract_aa_seq_from_genome
+from .commons import get_blast_header
 
 
 
@@ -101,7 +102,7 @@ def task_recmasking(genome, args):
         -query working/rec_masking/queries/{accession}.query.faa \
         -db working/rec_masking/databases/{accession}/{accession}.masked.fna \
         -out working/rec_masking/alignments/{accession}.tsv \
-        -outfmt "6 qseqid sseqid pident ppos length qlen slen qstart qend sstart send evalue bitscore qcovhsp"
+        -outfmt "6 {get_blast_header()}"
     '''
     process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     process.wait()
@@ -111,7 +112,7 @@ def task_recmasking(genome, args):
     cnt_good_genes = 0
     new_rows = []
     df_result = []
-    colnames = 'qseqid sseqid pident ppos length qlen slen qstart qend sstart send evalue bitscore qcovhsp'.split(' ')
+    colnames = f'{get_blast_header()}'.split(' ')
     alignment = pnd.read_csv(f'working/rec_masking/alignments/{accession}.tsv', sep='\t', names=colnames )
     cluster_to_indexes = alignment.groupby(['qseqid']).groups
     for cluster in cluster_to_indexes.keys():

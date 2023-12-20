@@ -15,19 +15,20 @@ from .commons import gather_results
 from .commons import check_cached
 from .commons import create_summary
 from .commons import extract_aa_seq_from_genome
+from .commons import get_blast_header
 
 
 
 def task_recbroken(genome, args):
     
     
-    # get the basename without extension:
+    # get the accession and proteome file:
     basename = os.path.basename(genome)
     accession, _ = os.path.splitext(basename)
     proteome = f'working/proteomes/{accession}.faa'
     
     
-    # create a database for later extraction of the sequences: 
+    # create a database for later extraction of recovered sequences: 
     os.makedirs(f'working/rec_broken/databases/{accession}/', exist_ok=True)
     shutil.copyfile(genome, f'working/rec_broken/databases/{accession}/{accession}.fna')  # just the content, not the permissions.
     command = f"""makeblastdb -in working/rec_broken/databases/{accession}/{accession}.fna -dbtype nucl -parse_seqids""" # '-parse_seqids' is required for 'blastdbcmd'.
@@ -35,17 +36,15 @@ def task_recbroken(genome, args):
     process.wait()
     
     
-    # TODO
-    if not os.path.exists(f'working/rec_broken/alignments/{accession}.tsv'):
-        # perform the blastp 
-        command = f'''blastp \
-            -query {proteome} \
-            -db working/rec_broken/representatives/representatives.ren.faa \
-            -out working/rec_broken/alignments/{accession}.tsv \
-            -outfmt "6 qseqid sseqid pident ppos length qlen slen qstart qend sstart send evalue bitscore qcovhsp"
-        '''
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        process.wait()
+    # perform the blastp: prteins on representatives:  
+    command = f'''blastp \
+        -query {proteome} \
+        -db working/rec_broken/representatives/representatives.ren.faa \
+        -out working/rec_broken/alignments/{accession}.tsv \
+        -outfmt "6 {get_blast_header()}"
+    '''
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    process.wait()
 
     
     # this module will release a new updated pam.
@@ -55,7 +54,7 @@ def task_recbroken(genome, args):
     
     
     # read the alignment with extra columns: 
-    colnames = 'qseqid sseqid pident ppos length qlen slen qstart qend sstart send evalue bitscore qcovhsp'.split(' ')
+    colnames = f'{get_blast_header()}'.split(' ')
     alignment = pnd.read_csv(f'working/rec_broken/alignments/{accession}.tsv', sep='\t', names=colnames )
     alignment['qcov'] = round((alignment['qend'] -  alignment['qstart'] +1)/ alignment['qlen'] * 100, 1)
     alignment['scov'] = round((alignment['send'] -  alignment['sstart'] +1)/ alignment['slen'] * 100, 1)
@@ -103,23 +102,19 @@ def task_recbroken(genome, args):
                 # overall coverage % (include the gap between the two pieces):
                 overall_cov = ( max(good_couple['send']) - min(good_couple['sstart']) +1 ) / slen * 100
 
-
                 # superimposition % between the two pieces: 
                 if min(good_couple['send']) >= max(good_couple['sstart']):
                     sup = ( min(good_couple['send']) - max(good_couple['sstart']) +1 ) / slen * 100
                 else: sup = 0
-
 
                 # compute the gap % between the two pieces:
                 if min(good_couple['send']) < max(good_couple['sstart']):
                     gap = ( max(good_couple['sstart']) - min(good_couple['send']) -1 ) / slen * 100
                 else: gap = 0
 
-
                 # compute the query len relative to the subject (constant)
                 rqlen1 = good_couple['qlen'].values[0] / slen * 100
                 rqlen2 = good_couple['qlen'].values[1] / slen * 100
-
 
                 # get the relative frequencies:
                 relfreq_cluster = args['cluster_to_relfreq'][cluster]
@@ -458,7 +453,7 @@ def recovery_broken(logger, cores):
             itertools.repeat(['accession'] + list(pam.T.columns)), 
             itertools.repeat('accession'), 
             itertools.repeat(logger), 
-            itertools.repeat(task_recbroken),
+            itertools.repeat(task_recbroken),  # will return a new updated pam.
             itertools.repeat({'pam': pam, 'cluster_to_relfreq': cluster_to_relfreq, 'seq_to_cluster': seq_to_cluster, }),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
