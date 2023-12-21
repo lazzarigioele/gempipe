@@ -137,7 +137,7 @@ def create_summary(logger, module_dir):
         accession = file.rsplit('/', 1)[1].replace('.csv', '')
         with open(file, 'r') as r_handler: 
             if r_handler.read() == '""\n':  # if the result csv for this accession is empty: 
-                refound_summary.append({'accession': accession, 'n_refound': 0, 'n_frag': 0, 'n_stop': 0})
+                refound_summary.append({'accession': accession, 'n_refound': 0, 'n_frag': 0, 'n_overlap': 0, 'n_stop': 0})
                 continue
                 
                 
@@ -147,6 +147,7 @@ def create_summary(logger, module_dir):
             'accession': accession, 
             'n_refound': len(result[result['ID'].str.contains('_refound')]), 
             'n_frag': len(result[result['ID'].str.contains('_frag')]), 
+            'n_overlap': len(result[result['ID'].str.contains('_overlap')]), 
             'n_stop': len(result[result['ID'].str.contains('_stop')]),
         })
 

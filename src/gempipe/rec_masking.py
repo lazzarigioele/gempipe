@@ -150,6 +150,8 @@ def task_recmasking(genome, args):
     # read the alignment: 
     colnames = f'{get_blast_header()}'.split(' ')
     alignment = pnd.read_csv(f'working/rec_masking/alignments/{accession}.tsv', sep='\t', names=colnames )
+    alignment['qcov'] = round((alignment['qend'] -  alignment['qstart'] +1)/ alignment['qlen'] * 100, 1)
+    alignment['scov'] = round((alignment['send'] -  alignment['sstart'] +1)/ alignment['slen'] * 100, 1)
     
     
     # instantiate key objects: 
@@ -168,7 +170,7 @@ def task_recmasking(genome, args):
         
         
         # filter using the same thresholds of cd-hit
-        alignment_cluster = alignment_cluster[(alignment_cluster['qcovhsp'] >= 70) & (alignment_cluster['pident'] >= 90)]
+        alignment_cluster = alignment_cluster[(alignment_cluster['pident'] >= 90) & (alignment_cluster['qcov'] >= 70)]
         
         
         # parse each good hsp: 
