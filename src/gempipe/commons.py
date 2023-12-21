@@ -103,8 +103,10 @@ def check_cached(logger, pam_path, imp_files, summary_path=None):
         
         # search for the optional summary:
         if summary_path != None:
-            summary = pnd.read_csv(summary_path, index_col=0)
-            rows = set(list(summary.index))
+            if os.path.exists(summary_path): 
+                summary = pnd.read_csv(summary_path, index_col=0)
+                rows = set(list(summary.index))
+            else: return None
         else: rows = columns
             
             
@@ -179,7 +181,7 @@ def update_pam(logger, module_dir, pam):
 
         # update the PAM: 
         for cluster in set(result['cluster'].to_list()): 
-            new_genes = result[result['cluster']==cluster]['gid'].to_list()
+            new_genes = result[result['cluster']==cluster]['ID'].to_list()
             cnt_newgenes += len(new_genes)
             cell = ';'.join(new_genes)
             pam_update.loc[cluster, accession] = cell

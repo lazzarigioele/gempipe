@@ -297,7 +297,11 @@ def populate_results_df(logger):
                 
                 
                 # write the results dataframe
-                results_df.append({'ID': new_seq_id, 'accession': couple_accession, 'contig': couple_contig, 'strand': couple_strand, 'start': couple_start, 'end': couple_end})
+                results_df.append({
+                    'ID': new_seq_id, 'cluster': cluster, 
+                    'accession': couple_accession, 'contig': couple_contig, 'strand': couple_strand, 
+                    'start': couple_start, 'end': couple_end
+                })
             results_df = pnd.DataFrame.from_records(results_df)
             results_df.to_csv(f'working/rec_broken/results/{accession}.csv')
     
@@ -387,11 +391,11 @@ def update_sequences(logger):
             
             
     # create an updated df, removing the seqs to erease:
-    sequences = pnd.read_csv('working/clustering/sequences.csv' , index_col=0)
-    logger.debug(f'rec_broken: sequences dataframe: starting from {len(sequences)} sequences.')
-    sequences_updated = sequences.copy()
-    sequences_updated = sequences_updated.drop(to_erease)
-    logger.debug(f'rec_broken: sequences dataframe: {len(sequences_updated)} after removing frag couples.')
+    sequences_df = pnd.read_csv('working/clustering/sequences.csv' , index_col=0)
+    logger.debug(f'rec_broken: sequences dataframe: starting from {len(sequences_df)} sequences.')
+    sequences_df_updated = sequences_df.copy()
+    sequences_df_updated = sequences_df_updated.drop(to_erease)
+    logger.debug(f'rec_broken: sequences dataframe: {len(sequences_df_updated)} after removing frag couples.')
     
     
     # now add the new seqs
@@ -409,13 +413,13 @@ def update_sequences(logger):
             new_rows.append({'cds': row['ID'], 'accession': accession, 'aaseq': seq})
     new_rows = pnd.DataFrame.from_records(new_rows)
     new_rows = new_rows.set_index('cds', drop=True, verify_integrity=True)
-    sequences_updated = pnd.concat([sequences_updated, new_rows])
-    logger.debug(f'rec_broken: seq_to_coords: {len(sequences_updated)} sequences after the addition of new IDs.')
+    sequences_df_updated = pnd.concat([sequences_df_updated, new_rows])
+    logger.debug(f'rec_broken: seq_to_coords: {len(sequences_df_updated)} sequences after the addition of new IDs.')
 
     
     
     # save the update version:
-    sequences_updated.to_csv('working/rec_broken/sequences.csv')
+    sequences_df_updated.to_csv('working/rec_broken/sequences.csv')
     
 
 

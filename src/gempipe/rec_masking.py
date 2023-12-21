@@ -15,6 +15,7 @@ from .commons import chunkize_items
 from .commons import load_the_worker
 from .commons import gather_results
 from .commons import check_cached
+from .commons import create_summary
 from .commons import update_pam
 from .commons import extract_aa_seq_from_genome
 from .commons import get_blast_header
@@ -22,16 +23,50 @@ from .commons import get_blast_header
 
 
 
-def genome_masking(genome):
+def update_seq_to_coords(logger): 
     
+    
+    # load the previously created species_to_proteome: 
+    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+        species_to_proteome = pickle.load(handler)
+        
+    
+    # get the accessions (passing the quality filters):
+    accessions = []
+    for species in species_to_proteome.keys(): 
+        for proteome in species_to_proteome[species]:
+            basename = os.path.basename(proteome)
+            accession, _ = os.path.splitext(basename)
+            accessions.append(accession)
+    
+
+    # create an updateed seq_to_coords dict: 
+    with open('working/rec_broken/seq_to_coords.pickle', 'rb') as handler:
+        seq_to_coords_update = pickle.load(handler)
+    logger.debug(f'rec_masking: seq_to_coords: starting from {len(seq_to_coords_update.values())} sequences.')
+
+        
+    # now add the new seqs (recovered by this module): 
+    for accession in accessions: 
+        results_df = pnd.read_csv(f'working/rec_masking/results/{accession}.csv', index_col=0)
+        for index, row in results_df.iterrows():
+            seq_to_coords_update[row['ID']] = {'accession': row['accession'], 'contig': row['contig'], 'strand': row['strand'], 'start': row['start'], 'end': row['end']}
+    logger.debug(f'rec_masking: seq_to_coords: {len(seq_to_coords_update.values())} sequences after the addition of new IDs.')
+
+    
+    # save the update dictionary: 
+    with open('working/rec_masking/seq_to_coords.pickle', 'wb') as file:
+        pickle.dump(seq_to_coords_update, file)
+
+
+
+def genome_masking(genome, seq_to_coords):
+
     
     # get the basename without extension:
     basename = os.path.basename(genome)
     accession, _ = os.path.splitext(basename)
 
-
-    ### TODO
-        
     
     # parse each genome:
     sr_list = []
@@ -43,12 +78,13 @@ def genome_masking(genome):
             
             
             # mask the contig from its genes: 
-            if contig in contig_to_gff.keys():  # a contig may have no CDS.
-                for gene_coords in contig_to_gff[contig]: 
-                    start, end = gene_coords[0], gene_coords[1]
-                    cds_len = end - start  # in this case, 'end' is always greater then 'start'. 
-                    gene_masked = Seq.Seq(''.join(['N' for i in range(cds_len)]))
-                    seq_masked = seq_masked[:start] + gene_masked + seq_masked[end:]
+            for seq in seq_to_coords.keys(): 
+                if seq_to_coords[seq]['accession'] == accession:
+                    if seq_to_coords[seq]['contig'] == contig: 
+                        start, end = seq_to_coords[seq]['start'], seq_to_coords[seq]['end']
+                        cds_len = end - start  # in this case, 'end' is always greater then 'start'.
+                        gene_masked = Seq.Seq(''.join(['N' for i in range(cds_len)]))
+                        seq_masked = seq_masked[:start] + gene_masked + seq_masked[end:]
                     
             
             # save the masked squences: 
@@ -56,13 +92,18 @@ def genome_masking(genome):
             sr_list.append(sr)
     with open(f'working/rec_masking/masked_assemblies/{accession}.masked.fna', 'w') as w_handler:
         count = SeqIO.write(sr_list, w_handler, "fasta")
-        
-    
-    return 0
 
 
 
 def task_recmasking(genome, args):
+    
+    
+    # retrive the arguments:
+    pam = args['pam']
+    cluster_to_rep = args['cluster_to_rep']
+    sequences_df = args['sequences_df']
+    acc_to_suffix = args['acc_to_suffix']
+    seq_to_coords = args['seq_to_coords']
     
     
     # get the basename without extension:
@@ -73,26 +114,24 @@ def task_recmasking(genome, args):
     # create a query file for each genome: 
     sr_list = []
     with open(f'working/rec_masking/queries/{accession}.query.faa', 'w') as w_handler: 
-        for cluster in args['pam'].index:
-            cell = args['pam'].loc[cluster, accession]
+        for cluster in pam.index:
+            cell = pam.loc[cluster, accession]
             if type(cell) == float:  # include only empty clusters
-                rep = args['cluster_to_rep'][cluster]
-                seq = Seq.Seq(args['sequences_df'].loc[rep, 'aaseq'])
+                rep = cluster_to_rep[cluster]
+                seq = Seq.Seq(sequences_df.loc[rep, 'aaseq'])
                 sr = SeqRecord.SeqRecord(seq, id=cluster, description='')
                 sr_list.append(sr) 
         count = SeqIO.write(sr_list, w_handler, "fasta")
 
 
     # mask the genome from its genes:
-    response = genome_masking(genome)
+    response = genome_masking(genome, seq_to_coords)
 
 
     # create a blast database for the genome:
     os.makedirs(f'working/rec_masking/databases/{accession}/', exist_ok=True)
-    # shutil.copy is specified to copy permission bits, while shutil.copyfile is just to copy the file contents.
-    shutil.copyfile(f'working/rec_masking/masked_assemblies/{accession}.masked.fna', f'working/rec_masking/databases/{accession}/{accession}.masked.fna')  
-    # '-parse_seqids' is required for later use of 'blastdbcmd'.
-    command = f"""makeblastdb -in working/rec_masking/databases/{accession}/{accession}.masked.fna -dbtype nucl -parse_seqids"""
+    shutil.copyfile(f'working/rec_masking/masked_assemblies/{accession}.masked.fna', f'working/rec_masking/databases/{accession}/{accession}.masked.fna')  # just the content, not the permissions.
+    command = f"""makeblastdb -in working/rec_masking/databases/{accession}/{accession}.masked.fna -dbtype nucl -parse_seqids"""  # '-parse_seqids' is required for 'blastdbcmd'.
     process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     process.wait()
 
@@ -108,12 +147,19 @@ def task_recmasking(genome, args):
     process.wait()
 
 
-    # select the best hits: 
-    cnt_good_genes = 0
-    new_rows = []
-    df_result = []
+    # read the alignment: 
     colnames = f'{get_blast_header()}'.split(' ')
     alignment = pnd.read_csv(f'working/rec_masking/alignments/{accession}.tsv', sep='\t', names=colnames )
+    
+    
+    # instantiate key objects: 
+    cnt_good_genes = 0
+    new_rows = []  # new rows for the sequences_df
+    df_result = []  # using the common formatting
+    alignment_filtered = []  # future dataframe (blast tbl + seq ID)
+    
+    
+    # group the hsps by cluster:
     cluster_to_indexes = alignment.groupby(['qseqid']).groups
     for cluster in cluster_to_indexes.keys():
         # isolate results for this cluster: 
@@ -123,16 +169,19 @@ def task_recmasking(genome, args):
         
         # filter using the same thresholds of cd-hit
         alignment_cluster = alignment_cluster[(alignment_cluster['qcovhsp'] >= 70) & (alignment_cluster['pident'] >= 90)]
+        
+        
+        # parse each good hsp: 
         for index, row in alignment_cluster.iterrows():
             cnt_good_genes += 1 
-            refound_gid = f"{args['acc_to_suffix'][accession]}_refound_{cnt_good_genes}"
+            refound_gid = f"{acc_to_suffix[accession]}_refound_{cnt_good_genes}"
 
 
             # retrieve the sequence from the genome:
             start = int(row['sstart'])
             end = int(row['send'])
             contig = row["sseqid"]
-            #contig = contig.split('|')[1]   #split() because blast but some obscure formatting, eg: gb|NIGV01000003.1| for NIGV01000003.1.
+            contig = contig.split('|')[1]   #split() because blast but some obscure formatting, eg: gb|NIGV01000003.1| for NIGV01000003.1.
             strand = '+'
             if start > end: # if on the other strand, invert the positions. 
                 strand = '-'
@@ -140,25 +189,43 @@ def task_recmasking(genome, args):
             curr_seq_translated, curr_seq_translated_tostop = \
                 extract_aa_seq_from_genome(
                     f'working/rec_masking/databases/{accession}/{accession}.masked.fna',
-                    contig, strand, start, end) # TODO
+                    contig, strand, start, end) 
+            
+            
+            # if premature stop, sign the ID
             if len(curr_seq_translated_tostop) / len(curr_seq_translated) < 0.95 :
                 refound_gid = refound_gid + '_stop'
 
 
-            # finally save all results:
+            # populate the results dataframe:
             df_result.append({
-                'gid': refound_gid, 'cluster': cluster, 
-                'accession': accession, 'contig': row['sseqid'], 
-                'start': row['sstart'], 'end': row['send'],
-                'coverage': row['qcovhsp'], 'pident': row['pident'], 'ppos': row['ppos'],
-                'evalue': row['evalue'], 'bitscore': row['bitscore'], 
+                'ID': refound_gid, 'cluster': cluster, 
+                'accession': accession, 'contig': contig, 'strand': strand, 
+                'start': start, 'end': end,
             })
-            new_rows.append({'cds': refound_gid, 'accession': accession, 'aaseq': str(curr_seq_translated_tostop)})
+            
+            
+            # populate the alignment_filtered dataframe
+            align_filt_row = row.to_dict()
+            align_filt_row['ID'] = refound_gid
+            alignment_filtered.append(align_filt_row)
+            
+            
+            # populate the sequences dataframe
+            new_rows.append({'cds': refound_gid, 'accession': accession, 'aaseq': str(curr_seq_translated)})
 
 
+    # save the filtered hsps for this genome:
+    alignment_filtered = pnd.DataFrame.from_records(alignment_filtered)
+    alignment_filtered.to_csv(f'working/rec_masking/alignments_filtered/{accession}.csv')
+    
+            
     # save results for this genome:
     df_result = pnd.DataFrame.from_records(df_result)
     df_result.to_csv(f'working/rec_masking/results/{accession}.csv')
+    
+    
+    # return new rows for the sequences_df
     return new_rows
 
 
@@ -176,6 +243,7 @@ def recovery_masking(logger, cores):
     os.makedirs('working/rec_masking/masked_assemblies/', exist_ok=True)
     os.makedirs('working/rec_masking/databases/', exist_ok=True)
     os.makedirs(f'working/rec_masking/alignments/', exist_ok=True)
+    os.makedirs(f'working/rec_masking/alignments_filtered/', exist_ok=True)
     os.makedirs('working/rec_masking/results/', exist_ok=True)
     
     
@@ -183,7 +251,9 @@ def recovery_masking(logger, cores):
     response = check_cached(
         logger, pam_path='working/rec_masking/pam.csv',
         summary_path='working/rec_masking/summary.csv',
-        imp_files = ['working/rec_masking/sequences.csv'])
+        imp_files = [
+            'working/rec_masking/sequences.csv',
+            'working/rec_masking/seq_to_coords.pickle',])
     if response == 0: 
         return 0
     
@@ -195,6 +265,8 @@ def recovery_masking(logger, cores):
         cluster_to_rep = pickle.load(handler)
     with open('working/clustering/acc_to_suffix.pickle', 'rb') as handler:
         acc_to_suffix = pickle.load(handler)
+    with open('working/rec_broken/seq_to_coords.pickle', 'rb') as handler:
+        seq_to_coords = pickle.load(handler)
 
 
     # load the previously created species_to_genome: 
@@ -226,23 +298,31 @@ def recovery_masking(logger, cores):
             itertools.repeat('cds'), 
             itertools.repeat(logger), 
             itertools.repeat(task_recmasking),  # will return a new sequences dataframe (to be concat).
-            itertools.repeat({'pam': pam, 'cluster_to_rep': cluster_to_rep, 'sequences_df': sequences_df, 'acc_to_suffix': acc_to_suffix,}),
+            itertools.repeat({'pam': pam, 'cluster_to_rep': cluster_to_rep, 'sequences_df': sequences_df, 'acc_to_suffix': acc_to_suffix, 'seq_to_coords': seq_to_coords}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
     
     
     # save tabular results:
-    sequences_df = pnd.concat([sequences_df, all_df_combined], axis=0)
-    sequences_df.to_csv('working/rec_masking/sequences.csv')
+    sequences_df_updated = pnd.concat([sequences_df, all_df_combined], axis=0)
+    sequences_df_updated.to_csv('working/rec_masking/sequences.csv')
     
     
     # empty the globalpool
     globalpool.close() # prevent the addition of new tasks.
-    globalpool.join()  
+    globalpool.join() 
     
     
-    # update the pam and get the summary:
+    # update the pam:
     update_pam(logger, module_dir='working/rec_masking', pam=pam)
+    
+    
+    # update the seq to coordinates dictionary
+    update_seq_to_coords(logger)
+    
+    
+    # create the summary:
+    create_summary(logger, module_dir='working/rec_masking')
     
     
     return 0
