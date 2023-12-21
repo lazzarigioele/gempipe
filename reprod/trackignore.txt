@@ -9,3 +9,7 @@ docs/gempipe/*.html
 
 working/
 testing/
+
+
+pam.csv
+draft_panmodel.json

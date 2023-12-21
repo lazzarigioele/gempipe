@@ -40,7 +40,7 @@ def create_combined(logger):
 
         # open the proteome and read its CDSs
         cnt_prots = 0
-        with open(proteome) as cds_handler:
+        with open(proteome, 'r') as cds_handler:
             for seqrecord in SeqIO.parse(cds_handler, "fasta"):
                 seqid = seqrecord.id
                 seq = seqrecord.seq

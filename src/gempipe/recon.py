@@ -13,6 +13,7 @@ from .clustercds import compute_clusters
 from .rec_masking import recovery_masking
 from .rec_broken import recovery_broken
 from .rec_overlap import recovery_overlap
+from .funcannot import func_annot
 
 
 
@@ -96,7 +97,7 @@ def recon_command(args, logger):
 
     ### PART 3. Gene recovery.
     
-    if args.genomes != '-' or args.taxids != '-': 
+    if args.proteomes == '-': 
         # Recovery 1: search for proteins broken in two
         response = recovery_broken(logger, args.cores)
         if response == 1: return 1
@@ -108,6 +109,19 @@ def recon_command(args, logger):
         # Recovery 3: search for overlapping genes
         response = recovery_overlap(logger, args.cores)
         if response == 1: return 1
+    
+    
+    
+    ### PART 4. Reconstruction of the reaction network.
+    
+    # define the final PAM in the current directory: 
+    if args.proteomes == '-':
+        shutil.copyfile('working/rec_overlap/pam.csv', './pam.csv')
+    else: shutil.copyfile('working/clustering/pam.csv', './pam.csv')
+    
+    # perform functional annotation
+    response = func_annot(logger, args.cores)
+    if response == 1: return 1
         
         
         
