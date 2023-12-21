@@ -14,6 +14,7 @@ from .rec_masking import recovery_masking
 from .rec_broken import recovery_broken
 from .rec_overlap import recovery_overlap
 from .funcannot import func_annot
+from .networkrec import network_rec
 
 
 
@@ -97,6 +98,9 @@ def recon_command(args, logger):
 
     ### PART 3. Gene recovery.
     
+    if args.proteomes != '-':  # warning if starting from proteomes
+        logger.warning("gempipe gives its best when starting from genomes. Starting from proteomes will skip the gene recovery modules.")
+    
     if args.proteomes == '-': 
         # Recovery 1: search for proteins broken in two
         response = recovery_broken(logger, args.cores)
@@ -122,10 +126,12 @@ def recon_command(args, logger):
     # perform functional annotation
     response = func_annot(logger, args.cores)
     if response == 1: return 1
+
+    # perform the reaction network reconstruction
+    response = network_rec(logger, args.cores, args.staining)
+    if response == 1: return 1
         
         
         
-    # warning if starting from proteomes
-    if args.proteomes != '-': 
-        logger.warning("gempipe gives its best when starting from genomes. Starting from proteomes will skip the gene recovery modules.")
+    
     
