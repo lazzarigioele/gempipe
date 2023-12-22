@@ -15,6 +15,7 @@ from .rec_broken import recovery_broken
 from .rec_overlap import recovery_overlap
 from .funcannot import func_annot
 from .networkrec import network_rec
+from .reciprocalhits import perform_brh
 
 
 
@@ -116,7 +117,7 @@ def recon_command(args, logger):
     
     
     
-    ### PART 4. Reconstruction of the reaction network.
+    ### PART 4. Reconstruction of the reference-free reaction network.
     
     # define the final PAM in the current directory: 
     if args.proteomes == '-':
@@ -133,6 +134,15 @@ def recon_command(args, logger):
 
     # define the final draft pan-model in the current directory: 
     shutil.copyfile(f'working/panmodel/draft_panmodel_{args.identity}_{args.coverage}.json', './draft_panmodel.json')
+    
+    
+    
+    # PART 5. Eventual reference-based reconstruction.
+    
+    if args.ref_model != '-' and args.ref_proteome != '-':
+        
+        # compute the best reciprocal hits for all the strains:
+        response = perform_brh(logger, args.cores, args.ref_proteome)
     
         
         

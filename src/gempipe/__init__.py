@@ -46,6 +46,8 @@ def main():
     recon_parser.add_argument("--N50", metavar='', type=int, default=50000, help="Minimum N50 allowed per genome.")
     recon_parser.add_argument("--identity", metavar='', type=int, default=30, help="Minimum percentage amino acidic sequence identity to use when aligning against the BiGG gene database.")
     recon_parser.add_argument("--coverage", metavar='', type=int, default=70, help="Minimum percentage coverage to use when aligning against the BiGG gene database.")
+    recon_parser.add_argument("-rm", "--ref_model", metavar='', type=str, default='-', help="Model to be used as reference.")
+    recon_parser.add_argument("-rp", "--ref_proteome", metavar='', type=str, default='-', help="Proteome to be used as reference.")
 
     
     # subparser for the 'derive' command
@@ -121,3 +123,7 @@ def main():
         
 if __name__ == "__main__":
     main()
+    
+    # some command line examples to test the pipeline
+    # gempipe recon -t 252393,68334 -b enterobacterales_odb10 --ncontigs 2000 --N50 5000 --buscoM 10% -c 8
+    # gempipe recon -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 8 -rm testing/from_medoza/iLP728.xml -rp testing/from_medoza/protein_fasta.faa
