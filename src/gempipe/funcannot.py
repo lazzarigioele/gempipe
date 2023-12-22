@@ -27,9 +27,9 @@ def func_annot(logger, cores):
     # check if all the output where already computed: 
     clusters = list(pam.index)
     if os.path.exists('working/annotation/pan.emapper.annotations'):
-        if os.path.exists('working/annotation/input.faa'):
+        if os.path.exists('working/annotation/representatives.faa'):
             seq_ids = [] 
-            with open('working/annotation/input.faa', 'r') as r_handler:
+            with open('working/annotation/representatives.faa', 'r') as r_handler:
                 for seqrecord in SeqIO.parse(r_handler, "fasta"):
                     seq_ids.append(seqrecord.id)
             if set(seq_ids) == set(clusters):
@@ -52,7 +52,7 @@ def func_annot(logger, cores):
         aaseq = Seq.Seq(sequences_df.loc[rep, 'aaseq'])
         sr = SeqRecord.SeqRecord(aaseq, id=cluster, description=f'({rep})')
         sr_list.append(sr)
-    with open(f'working/annotation/input.faa', 'w') as w_handler:
+    with open(f'working/annotation/representatives.faa', 'w') as w_handler:
         count = SeqIO.write(sr_list, w_handler, "fasta")
         
         
@@ -76,7 +76,7 @@ def func_annot(logger, cores):
             --cpu {cores} \
             --override \
             --data_dir working/annotation/db/ \
-            -i working/annotation/input.faa \
+            -i working/annotation/representatives.faa \
             -m diamond \
             --itype proteins \
             --trans_table 11 \

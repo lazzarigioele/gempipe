@@ -239,4 +239,4 @@ def get_blast_header():
     
     
     # to standardize all the blast subprocesses
-    return "qseqid sseqid pident ppos length qlen slen qstart qend sstart send evalue bitscore qcovhsp"
+    return "qseqid sseqid pident ppos length qlen slen qstart qend sstart send evalue bitscore qcovhsp scovhsp"

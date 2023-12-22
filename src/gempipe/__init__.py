@@ -44,6 +44,8 @@ def main():
     recon_parser.add_argument("--buscoM", metavar='', type=str, default='2%', help="Maximum number of missing Busco's single copy orthologs (absolute or percentage).")
     recon_parser.add_argument("--ncontigs", metavar='', type=int, default=200, help="Maximum number of contigs allowed per genome.")
     recon_parser.add_argument("--N50", metavar='', type=int, default=50000, help="Minimum N50 allowed per genome.")
+    recon_parser.add_argument("--identity", metavar='', type=int, default=30, help="Minimum percentage amino acidic sequence identity to use when aligning against the BiGG gene database.")
+    recon_parser.add_argument("--coverage", metavar='', type=int, default=70, help="Minimum percentage coverage to use when aligning against the BiGG gene database.")
 
     
     # subparser for the 'derive' command

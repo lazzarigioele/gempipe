@@ -128,8 +128,12 @@ def recon_command(args, logger):
     if response == 1: return 1
 
     # perform the reaction network reconstruction
-    response = network_rec(logger, args.cores, args.staining)
+    response = network_rec(logger, args.cores, args.staining, args.identity, args.coverage)
     if response == 1: return 1
+
+    # define the final draft pan-model in the current directory: 
+    shutil.copyfile(f'working/panmodel/draft_panmodel_{args.identity}_{args.coverage}.json', './draft_panmodel.json')
+    
         
         
         
