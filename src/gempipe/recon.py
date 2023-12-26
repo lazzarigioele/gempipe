@@ -17,6 +17,7 @@ from .funcannot import func_annot
 from .networkrec import network_rec
 from .reciprocalhits import perform_brh
 from .reciprocalhits import convert_reference
+from .refexpansion import ref_expansion
 
 
 
@@ -31,6 +32,12 @@ def recon_command(args, logger):
             shutil.rmtree('working/')  
     os.makedirs('working/', exist_ok=True)
     os.makedirs('working/logs/', exist_ok=True)
+    
+    
+    # create the main output directory: 
+    outdir = args.outdir
+    if outdir.endswith('/') == False: outdir = outdir + '/'
+    os.makedirs(outdir, exist_ok=True)
         
         
     # check if the user required the list of databases: 
@@ -122,20 +129,16 @@ def recon_command(args, logger):
     
     # define the final PAM in the current directory: 
     if args.proteomes == '-':
-        shutil.copyfile('working/rec_overlap/pam.csv', './pam.csv')
-    else: shutil.copyfile('working/clustering/pam.csv', './pam.csv')
+        shutil.copyfile('working/rec_overlap/pam.csv', outdir + 'pam.csv')
+    else: shutil.copyfile('working/clustering/pam.csv', outdir + 'pam.csv')
     
     # perform functional annotation
-    response = func_annot(logger, args.cores)
+    response = func_annot(logger, args.cores, outdir)
     if response == 1: return 1
 
     # perform the reaction network reconstruction
     response = network_rec(logger, args.cores, args.staining, args.identity, args.coverage)
     if response == 1: return 1
-
-    # define the final draft pan-model in the current directory: 
-    shutil.copyfile(f'working/panmodel/draft_panmodel_{args.identity}_{args.coverage}.json', './draft_panmodel.json')
-    
     
     
     # PART 5. Eventual reference-based reconstruction.
@@ -149,6 +152,16 @@ def recon_command(args, logger):
         # convert the reference model's genes to clusters: 
         response = convert_reference(logger, args.ref_model, args.ref_proteome)
         if response == 1: return 1
+    
+        # expand the reference model with new reactions coming from the reference-free recon.
+        response = ref_expansion(logger, args.identity, args.coverage)
+        if response == 1: return 1
+    
+    
+    
+    # define the final draft pan-model in the current directory: 
+    shutil.copyfile(f'working/panmodel/draft_panmodel_{args.identity}_{args.coverage}.json', outdir + 'draft_panmodel.json')
+    
     
         
         

@@ -48,6 +48,8 @@ def main():
     recon_parser.add_argument("--coverage", metavar='', type=int, default=70, help="Minimum percentage coverage to use when aligning against the BiGG gene database.")
     recon_parser.add_argument("-rm", "--ref_model", metavar='', type=str, default='-', help="Model to be used as reference.")
     recon_parser.add_argument("-rp", "--ref_proteome", metavar='', type=str, default='-', help="Proteome to be used as reference.")
+    recon_parser.add_argument("-o", "--outdir", metavar='', type=str, default='./', help="Main output directory (will be created if not existing).")
+    
 
     
     # subparser for the 'derive' command
@@ -55,7 +57,8 @@ def main():
     derive_parser.add_argument("-h", "--help", action="help", help="Show this help message and exit.")
     derive_parser.add_argument("-v", "--version", action="version", version=f"v{importlib.metadata.metadata('gempipe')['Version']}", help="Show version number and exit.")
     derive_parser.add_argument("-c", "--cores", metavar='', type=int, help="How many parallel processes to use.")
-   
+    derive_parser.add_argument("-o", "--outdir", metavar='', type=str, default='./', help="Main output directory (will be created if not existing).")
+    
 
     # check the inputted subcommand, automatic sys.exit(1) if a bad subprogram was specied. 
     args = parser.parse_args()

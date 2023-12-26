@@ -8,7 +8,7 @@ from Bio import SeqIO, SeqRecord, Seq
 
 
 
-def func_annot(logger, cores): 
+def func_annot(logger, cores, outdir): 
     
     
     # create subdirs without overwriting
@@ -21,7 +21,7 @@ def func_annot(logger, cores):
     
     
     # load the final PAM: 
-    pam = pnd.read_csv('./pam.csv', index_col=0)
+    pam = pnd.read_csv(outdir + 'pam.csv', index_col=0)
     
     
     # check if all the output where already computed: 
