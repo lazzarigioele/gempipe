@@ -40,16 +40,17 @@ def func_annot(logger, cores):
     
     
     # load the sequences resources: 
-    sequences_df = pnd.read_csv('working/clustering/sequences.csv', index_col=0)
     with open('working/clustering/cluster_to_rep.pickle', 'rb') as handler:
         cluster_to_rep = pickle.load(handler)
+    with open('working/clustering/rep_to_aaseq.pickle', 'rb') as handler:
+        rep_to_aaseq = pickle.load(handler)
         
         
     # parse the pam to create a single input fasta files with representative sequences: 
     sr_list = []
     for cluster in pam.index:
         rep = cluster_to_rep[cluster]
-        aaseq = Seq.Seq(sequences_df.loc[rep, 'aaseq'])
+        aaseq = Seq.Seq(cluster_to_rep[rep])
         sr = SeqRecord.SeqRecord(aaseq, id=cluster, description=f'({rep})')
         sr_list.append(sr)
     with open(f'working/annotation/representatives.faa', 'w') as w_handler:

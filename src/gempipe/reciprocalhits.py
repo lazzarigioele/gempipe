@@ -1,102 +1,275 @@
+import os
+import pickle
+import multiprocessing
+import itertools
+import shutil
+import subprocess
 
 
-def task_brh(genome, args):
+import pandas as pnd
+import cobra
+from cobra.util.solver import linear_reaction_coefficients
+from Bio import SeqIO, SeqRecord, Seq
+
+
+from .commons import get_blast_header
+from .commons import chunkize_items
+from .commons import load_the_worker
+from .commons import gather_results
+
+
+
+def task_brh(proteome, args):
+    
     
     # retrive the arguments:
-    #pam = args['pam']
-    #sequences_df = args['sequences_df']
-    #acc_to_suffix = args['acc_to_suffix']
-    #cluster_to_rep = args['cluster_to_rep']
+    ref_proteome = args['ref_proteome']
     
     
     # get the basename without extension:
-    basename = os.path.basename(genome)
+    basename = os.path.basename(proteome)
     accession, _ = os.path.splitext(basename)
     
     
     # create subdir without overwriting: 
-    os.makedirs(f'manual_brh/{accession}/', exist_ok=True)
+    os.makedirs(f'working/brh/{accession}/', exist_ok=True)
+    os.makedirs(f'working/brh/{accession}/dbs/reference/', exist_ok=True)
+    os.makedirs(f'working/brh/{accession}/dbs/{accession}/', exist_ok=True)
             
     
-    # create blast databases: 
-
-    os.makedirs(f'manual_brh/{accession}/dbs/reference/', exist_ok=True)
-    # shutil.copy is specified to copy permission bits, while shutil.copyfile is just to copy the file contents.
-    shutil.copyfile(f'from_mendoza/protein_fasta.faa', f'manual_brh/{accession}/dbs/reference/protein_fasta.faa')  
-    # '-parse_seqids' is required for later use of 'blastdbcmd'.
-    command = f"""makeblastdb -in manual_brh/{accession}/dbs/reference/protein_fasta.faa -dbtype prot"""
+    # create blast database for reference: 
+    shutil.copyfile(ref_proteome, f'working/brh/{accession}/dbs/reference/ref_proteome.faa')  # just the content, not the permissions.  
+    command = f"""makeblastdb -in working/brh/{accession}/dbs/reference/ref_proteome.faa -dbtype prot"""
     process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     process.wait()
 
-    os.makedirs(f'manual_brh/{accession}/dbs/{accession}/', exist_ok=True)
-    # shutil.copy is specified to copy permission bits, while shutil.copyfile is just to copy the file contents.
-    shutil.copyfile(f'prodigal/prokka/{accession}/{accession}.faa', f'manual_brh/{accession}/dbs/{accession}/{accession}.faa')  
-    # '-parse_seqids' is required for later use of 'blastdbcmd'.
-    command = f"""makeblastdb -in manual_brh/{accession}/dbs/{accession}/{accession}.faa -dbtype prot"""
+    
+    # create blast database for current strain:
+    shutil.copyfile(proteome, f'working/brh/{accession}/dbs/{accession}/{accession}.faa')  # just the content, not the permissions.    
+    command = f"""makeblastdb -in working/brh/{accession}/dbs/{accession}/{accession}.faa -dbtype prot"""
     process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     process.wait()
+    
 
-    # STEP 2: perform 2 blastp
-
+    # perform blastp for reference-on-accession: 
     command = f'''blastp \
-        -query manual_brh/{accession}/dbs/reference/protein_fasta.faa \
-        -db manual_brh/{accession}/dbs/{accession}/{accession}.faa \
-        -out manual_brh/{accession}/align_ref_vs_acc.tsv \
-        -outfmt "6 qseqid sseqid pident ppos length sstart send qcovs evalue bitscore"
+        -query working/brh/{accession}/dbs/reference/ref_proteome.faa \
+        -db working/brh/{accession}/dbs/{accession}/{accession}.faa \
+        -out working/brh/{accession}/align_ref_vs_acc.tsv \
+        -outfmt "6 {get_blast_header()}"
     '''
     process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     process.wait()
 
+
+    # perform blastp for accession-on-reference: 
     command = f'''blastp \
-        -query manual_brh/{accession}/dbs/{accession}/{accession}.faa \
-        -db manual_brh/{accession}/dbs/reference/protein_fasta.faa \
-        -out manual_brh/{accession}/align_acc_vs_ref.tsv \
-        -outfmt "6 qseqid sseqid pident ppos length sstart send qcovs evalue bitscore"
+        -query working/brh/{accession}/dbs/{accession}/{accession}.faa \
+        -db working/brh/{accession}/dbs/reference/ref_proteome.faa \
+        -out working/brh/{accession}/align_acc_vs_ref.tsv \
+        -outfmt "6 {get_blast_header()}"
     '''
     process = subprocess.Popen(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     process.wait()
 
-    shutil.rmtree(f'manual_brh/{accession}/dbs/') # erease to save space. 
 
+    # read both the alignments:
+    header = f"{get_blast_header()}".split(' ')
+    align_ref_vs_acc = pnd.read_csv(f'working/brh/{accession}/align_ref_vs_acc.tsv', names=header, sep='\t')
+    align_ref_vs_acc['qcov'] = round((align_ref_vs_acc['qend'] -  align_ref_vs_acc['qstart'] +1)/ align_ref_vs_acc['qlen'] * 100, 1)
+    align_acc_vs_ref = pnd.read_csv(f'working/brh/{accession}/align_acc_vs_ref.tsv', names=header, sep='\t')
+    align_acc_vs_ref['qcov'] = round((align_acc_vs_ref['qend'] -  align_acc_vs_ref['qstart'] +1)/ align_acc_vs_ref['qlen'] * 100, 1)
+    
 
-    header = "qseqid sseqid pident ppos length sstart send qcovs evalue bitscore".split(' ')
-    align_ref_vs_acc = pnd.read_csv(f'manual_brh/{accession}/align_ref_vs_acc.tsv', names=header, sep='\t')
-    align_acc_vs_ref = pnd.read_csv(f'manual_brh/{accession}/align_acc_vs_ref.tsv', names=header, sep='\t')
-
-
-    df = []
+    # parse the alignments
+    results_df = [] 
     for cds in align_acc_vs_ref['qseqid'].unique():
 
+        
+        # acc_vs_ref
         curr_hsps = align_acc_vs_ref[align_acc_vs_ref['qseqid'] == cds]
-        curr_hsps_filt = curr_hsps[(curr_hsps['qcovs'] >= 70) & (curr_hsps['evalue'] <= 1e-5)]
+        curr_hsps_filt = curr_hsps[(curr_hsps['qcov'] >= 70) & (curr_hsps['evalue'] <= 1e-5)]
         curr_hsps_filt_sort = curr_hsps_filt.sort_values(by='evalue', ascending=True)
         curr_hsps_filt_sort.reset_index(inplace=True, drop=True)
         try: best_hit = curr_hsps_filt_sort.loc[0, 'sseqid']
         except: 
-            df.append({'cds': cds, 'ref': None, 'reciprocal': 'NA'})
+            results_df.append({'cds': cds, 'ref': None, 'reciprocal': 'NA'})
             continue
 
 
+        # ref_vs_acc
         curr_hsps2 = align_ref_vs_acc[align_ref_vs_acc['qseqid'] == best_hit]
-        curr_hsps_filt2 = curr_hsps2[(curr_hsps2['qcovs'] >= 70) & (curr_hsps2['evalue'] <= 1e-5)]
+        curr_hsps_filt2 = curr_hsps2[(curr_hsps2['qcov'] >= 70) & (curr_hsps2['evalue'] <= 1e-5)]
         curr_hsps_filt_sort2 = curr_hsps_filt2.sort_values(by='evalue', ascending=True)
         curr_hsps_filt_sort2.reset_index(inplace=True, drop=True)
         try: best_hit2 = curr_hsps_filt_sort2.loc[0, 'sseqid']
         except: 
-            df.append({'cds': cds, 'ref': best_hit, 'reciprocal': 'NA'})
+            results_df.append({'cds': cds, 'ref': best_hit, 'reciprocal': 'NA'})
             continue
 
+        
+        # annotate if bi-directional or mono-directional
+        if cds == best_hit2: results_df.append({'cds': cds, 'ref': best_hit, 'reciprocal': '<=>'})
+        else: results_df.append({'cds': cds, 'ref': best_hit, 'reciprocal': '=>'})
 
-        if cds == best_hit2: df.append({'cds': cds, 'ref': best_hit, 'reciprocal': '<=>'})
-        else: df.append({'cds': cds, 'ref': best_hit, 'reciprocal': '=>'})
 
-
-
-    df = pnd.DataFrame.from_records(df)
-    df.to_csv(f'manual_brh/{accession}/results.csv', sep='\t')
+    # save results to disk
+    results_df = pnd.DataFrame.from_records(results_df)
+    results_df.to_csv(f'working/brh/{accession}.csv')
+    
+    
+    # save disk space removeing databases: 
+    shutil.rmtree(f'working/brh/{accession}/') 
+    
+    
+    # return a row for the dataframe
+    return [{'accession': accession, 'completed': True}]
     
 
 
+def create_refgid_to_clusters(): 
+    
+    
+    # load the previously created doctionaries: 
+    with open('working/genomes/species_to_genome.pickle', 'rb') as handler:
+        species_to_genome = pickle.load(handler)
+    with open('working/clustering/seq_to_cluster.pickle', 'rb') as handler:
+        seq_to_cluster = pickle.load(handler)
+    
+    
+    # parse each filtered genome: 
+    refgid_to_clusters = {}
+    for species in species_to_genome.keys():
+        for genome in species_to_genome[species]: 
+            basename = os.path.basename(genome)
+            accession, _ = os.path.splitext(basename)
+    
+            
+            # read the brh results for this genome: 
+            df_result = pnd.read_csv(f'working/brh/{accession}.csv', index_col=0)
+            df_result = df_result.set_index('cds', drop=True, verify_integrity=True)
+            
+            
+            # get only the reciprocal hits: 
+            df_brh = df_result[df_result['reciprocal'] == '<=>']
+            
+            
+            # populate the dictionary: 
+            for cds, row in df_brh.iterrows(): 
+                if row['ref'] not in refgid_to_clusters.keys(): 
+                    refgid_to_clusters[row['ref']] = set()
+                refgid_to_clusters[row['ref']].add(seq_to_cluster[cds])
+
+
+    # save the dictionary: 
+    with open('working/brh/refgid_to_clusters.pickle', 'wb') as handler:
+        pickle.dump(refgid_to_clusters, handler)
+        
+        
+        
+def translate_refmodel(logger, ref_model, ref_proteome): 
+    
+    
+    # set up the cobra solver
+    cobra_config = cobra.Configuration()
+    cobra_config.solver = "glpk_exact"
+
+    
+    # load the model according to the file type
+    logger.info("Loading the provided reference model...")
+    if ref_model.endswith('.json'): 
+        ref_model = cobra.io.load_json_model(ref_model)
+    elif ref_model.endswith('.sbml'): 
+        ref_model = cobra.io.read_sbml_model(ref_model)
+    elif ref_model.endswith('.xml'): 
+        ref_model = cobra.io.read_sbml_model(ref_model)
+    else:
+        logger.error(ref_model + ": extension not recognized.")
+        return 1 
+    logger.info(f"Done, {' '.join(['G:', str(len(ref_model.genes)), '|', 'R:', str(len(ref_model.reactions)), '|', 'M:', str(len(ref_model.metabolites))])}.")
+    
+    
+    # print the preloaded objective reaction
+    objs = list(linear_reaction_coefficients(ref_model).keys())
+    if len(objs) > 1: logger.warning("More than 1 objective reactions were set up. Showing the first.")
+    logger.info(f"The following objective was set up: {objs[0].id}.")
+    
+    
+    # save the reference model in a standard format
+    logger.debug("Saving a copy of the reference model in JSON format...")
+    cobra.io.save_json_model(ref_model, 'working/brh/ref_model.json')
+    
+    
+    # create a copy, later translated
+    logger.info("Converting reference model's gene notation to clusters...")
+    ref_model_t = ref_model.copy()
+
+    
+    # get the modeled genes: 
+    modeled_gids = set([g.id for g in ref_model.genes])
+
+
+    # sometimes the reference proteome contains less genes respect to those modeled.
+    # we remove the reference genes missing from the proteome: 
+    gids_in_proteome = set()
+    with open(ref_proteome, 'r') as r_handler:                  
+        for seqrecord in SeqIO.parse(r_handler, "fasta"):
+            gid = seqrecord.id
+            gids_in_proteome.add(gid)
+    # remove non-modeled genes: 
+    if len(modeled_gids - gids_in_proteome) > 0:
+        to_remove = list(modeled_gids - gids_in_proteome)
+        logger.info(f"The following genes will be removed from the reference model, as they do not appear in the reference proteome: {list(modeled_gids - gids_in_proteome)}.") 
+        cobra.manipulation.remove_genes(ref_model_t, to_remove, remove_reactions=True)
+
+
+    # load the refgid_to_clusters dictionary (1-to-many)
+    with open('working/brh/refgid_to_clusters.pickle', 'rb') as handler:
+        refgid_to_clusters = pickle.load(handler)
+
+                
+    # finally rename the genes: 
+    for r in ref_model_t.reactions:
+        if any([gid in r.gene_reaction_rule for gid in gids_in_proteome]): 
+            gpr = r.gene_reaction_rule
+            # force each gid to be surrounded by spaces: 
+            gpr = ' ' + gpr.replace('(', ' ( ').replace(')', ' ) ') + ' '
+
+            
+            # translate this GPR
+            for gid in refgid_to_clusters.keys():
+                if f' {gid} ' in gpr:  
+                    gpr = gpr.replace(f' {gid} ', f' ({" or ".join(refgid_to_clusters[gid])}) ')
+
+                    
+            # remove spaces between parenthesis
+            gpr = gpr.replace(' ( ', '(').replace(' ) ', ')')
+            # remove spaces at the extremes: 
+            gpr = gpr[1: -1]
+            
+            
+            # New genes are introduced. Parethesis at the extremes are removed if not necessary. 
+            r.gene_reaction_rule = gpr
+            r.update_genes_from_gpr()
+
+
+    # now remove the reference genes:
+    to_remove = [g for g in ref_model_t.genes if g.id in gids_in_proteome]
+    cobra.manipulation.delete.remove_genes(ref_model_t, to_remove, remove_reactions=True)
+    logger.info(f"Done, {' '.join(['G:', str(len(ref_model_t.genes)), '|', 'R:', str(len(ref_model_t.reactions)), '|', 'M:', str(len(ref_model_t.metabolites))])}.")
+    
+    
+    # save the reference model in a standard format
+    logger.debug("Saving a copy of the converted reference model in JSON format...")
+    cobra.io.save_json_model(ref_model_t, 'working/brh/ref_model_t.json')
+    
+    
+    return 0
+    
+    
+    
+          
+    
 
 def perform_brh(logger, cores, ref_proteome): 
     
@@ -109,42 +282,31 @@ def perform_brh(logger, cores, ref_proteome):
     os.makedirs('working/brh/', exist_ok=True)
 
     
-    # TODO
-    """
-    # check if it's everything pre-computed
-    response = check_cached(
-        logger, pam_path='working/rec_overlap/pam.csv',
-        summary_path='working/rec_overlap/summary.csv',
-        imp_files = [
-            'working/rec_overlap/sequences.csv',
-            'working/rec_overlap/seq_to_coords.pickle',])
-    if response == 0: 
-        return 0
-    """
-    
-    
-    # TODO
-    """
-    # load the assets to form the args dictionary:
-    pam = pnd.read_csv('working/rec_masking/pam.csv', index_col=0)
-    sequences_df = pnd.read_csv('working/rec_masking/sequences.csv', index_col=0)
-    with open('working/clustering/acc_to_suffix.pickle', 'rb') as handler:
-        acc_to_suffix = pickle.load(handler)
-    with open('working/clustering/cluster_to_rep.pickle', 'rb') as handler:
-        cluster_to_rep = pickle.load(handler)
-    """
-        
-        
     # load the previously created species_to_genome: 
-    with open('working/genomes/species_to_genome.pickle', 'rb') as handler:
-        species_to_genome = pickle.load(handler)
+    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+        species_to_proteome = pickle.load(handler)
     
+
+    # check if it's everything pre-computed
+    results_presence = []
+    for species in species_to_proteome.keys(): 
+        for proteome in species_to_proteome[species]:
+            basename = os.path.basename(proteome)
+            accession, _ = os.path.splitext(basename)
+            results_presence.append(os.path.exists(f'working/brh/{accession}.csv'))
+    if all(results_presence): 
+        # log some message: 
+        logger.info('Found all the needed files already computed. Skipping this step.')
+        # signal to skip this module:
+        return 0
+        
     
+
     # create items for parallelization: 
     items = []
-    for species in species_to_genome.keys(): 
-        for genome in species_to_genome[species]: 
-            items.append(genome)
+    for species in species_to_proteome.keys(): 
+        for proteome in species_to_proteome[species]: 
+            items.append(proteome)
     
 
     # randomize and divide in chunks: 
@@ -160,20 +322,48 @@ def perform_brh(logger, cores, ref_proteome):
         load_the_worker, 
         zip(chunks, 
             range(cores), 
-            itertools.repeat(['cds', 'accession', 'aaseq']), 
-            itertools.repeat('cds'), 
+            itertools.repeat(['accession', 'completed']), 
+            itertools.repeat('accession'), 
             itertools.repeat(logger), 
-            itertools.repeat(task_brh),  # ...TODO
-            itertools.repeat({'pam': pam, 'sequences_df': sequences_df, 'acc_to_suffix': acc_to_suffix, 'cluster_to_rep': cluster_to_rep}),
+            itertools.repeat(task_brh), 
+            itertools.repeat({'ref_proteome': ref_proteome}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
-    
-    
-    # TODO
-    # save tabular results:
-    all_df_combined
     
     
     # empty the globalpool
     globalpool.close() # prevent the addition of new tasks.
     globalpool.join() 
+    
+    
+    return 0
+
+
+
+def convert_reference(logger, ref_model, ref_proteome):
+    
+    
+    # some log messages:
+    logger.info("Translating the reference model's genes to clusters...")
+    
+    
+    # check if it's everything pre-computed
+    if os.path.exists(f'working/brh/ref_model.json'):
+        if os.path.exists(f'working/brh/ref_model_t.json'):
+            if os.path.exists(f'working/brh/refgid_to_clusters.pickle'):
+                logger.info('Found all the needed files already computed. Skipping this step.')
+                # signal to skip this module:
+                return 0
+
+    
+    # create a dictionary ref_seq-to-clusters, parsing the BRHs. 
+    create_refgid_to_clusters()
+    
+    
+    # get a opy of the ref_model, and translate its genes to clusters notation. 
+    response = translate_refmodel(logger, ref_model, ref_proteome)
+    if response == 1: return 1
+    
+    
+    return 0
+    

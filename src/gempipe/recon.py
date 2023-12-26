@@ -16,6 +16,7 @@ from .rec_overlap import recovery_overlap
 from .funcannot import func_annot
 from .networkrec import network_rec
 from .reciprocalhits import perform_brh
+from .reciprocalhits import convert_reference
 
 
 
@@ -143,6 +144,11 @@ def recon_command(args, logger):
         
         # compute the best reciprocal hits for all the strains:
         response = perform_brh(logger, args.cores, args.ref_proteome)
+        if response == 1: return 1
+        
+        # convert the reference model's genes to clusters: 
+        response = convert_reference(logger, args.ref_model, args.ref_proteome)
+        if response == 1: return 1
     
         
         

@@ -223,8 +223,8 @@ def handle_manual_genomes(logger, genomes):
     for species in species_to_genome.keys():
         copied_files = []
         for file in species_to_genome[species]:
-            shutil.copy(file, 'working/genomes/')
             basename = os.path.basename(file)
+            shutil.copyfile(file, 'working/genomes/' + basename)  # just the content, not the permissions. 
             copied_files.append('working/genomes/' + basename)
         species_to_genome[species] = copied_files
     logger.debug(f"Input genomes copied to ./working/genomes/.")
