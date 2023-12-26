@@ -63,7 +63,7 @@ def task_recoverlap(genome, args):
     
     # retrive the arguments:
     pam = args['pam']
-    sequences_df = args['sequences_df']
+    rep_to_aaseq = args['rep_to_aaseq']
     acc_to_suffix = args['acc_to_suffix']
     cluster_to_rep = args['cluster_to_rep']
     
@@ -80,7 +80,7 @@ def task_recoverlap(genome, args):
             cell = pam.loc[cluster, accession]
             if type(cell) == float:  # include only empty clusters
                 rep = cluster_to_rep[cluster]
-                seq = Seq.Seq(sequences_df.loc[rep, 'aaseq'])
+                seq = Seq.Seq(rep_to_aaseq[rep])
                 sr = SeqRecord.SeqRecord(seq, id=cluster, description='')
                 sr_list.append(sr) 
         count = SeqIO.write(sr_list, w_handler, "fasta")
@@ -272,11 +272,12 @@ def recovery_overlap(logger, cores):
     
     # load the assets to form the args dictionary:
     pam = pnd.read_csv('working/rec_masking/pam.csv', index_col=0)
-    sequences_df = pnd.read_csv('working/rec_masking/sequences.csv', index_col=0)
     with open('working/clustering/acc_to_suffix.pickle', 'rb') as handler:
         acc_to_suffix = pickle.load(handler)
     with open('working/clustering/cluster_to_rep.pickle', 'rb') as handler:
         cluster_to_rep = pickle.load(handler)
+    with open('working/clustering/rep_to_aaseq.pickle', 'rb') as handler:
+        rep_to_aaseq = pickle.load(handler)
         
         
     # load the previously created species_to_genome: 
@@ -308,12 +309,13 @@ def recovery_overlap(logger, cores):
             itertools.repeat('cds'), 
             itertools.repeat(logger), 
             itertools.repeat(task_recoverlap),  # will return a new sequences dataframe (to be concat).
-            itertools.repeat({'pam': pam, 'sequences_df': sequences_df, 'acc_to_suffix': acc_to_suffix, 'cluster_to_rep': cluster_to_rep}),
+            itertools.repeat({'pam': pam, 'rep_to_aaseq': rep_to_aaseq, 'acc_to_suffix': acc_to_suffix, 'cluster_to_rep': cluster_to_rep}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
     
     
     # save tabular results:
+    sequences_df = pnd.read_csv('working/rec_masking/sequences.csv', index_col=0)
     sequences_df_updated = pnd.concat([sequences_df, all_df_combined], axis=0)
     sequences_df_updated.to_csv('working/rec_overlap/sequences.csv')
     

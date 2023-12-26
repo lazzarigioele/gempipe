@@ -181,6 +181,11 @@ def download_genomes(logger, taxids, cores):
 def handle_manual_genomes(logger, genomes):
     
     
+    # create a sub-directory without overwriting
+    os.makedirs('working/genomes/', exist_ok=True)
+    os.makedirs('working/tables/', exist_ok=True)
+    
+    
     # create a species-to-genome dictionary
     species_to_genome = {}
     logger.debug(f"Checking the formatting of the provided -g/-genomes attribute...") 

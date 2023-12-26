@@ -125,5 +125,5 @@ if __name__ == "__main__":
     main()
     
     # some command line examples to test the pipeline
-    # gempipe recon -t 252393,68334 -b enterobacterales_odb10 --ncontigs 2000 --N50 5000 --buscoM 10% -c 8
-    # gempipe recon -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 8 -rm testing/from_medoza/iLP728.xml -rp testing/from_medoza/protein_fasta.faa
+    # gempipe recon -s neg -t 252393,68334 -b enterobacterales_odb10 --ncontigs 2000 --N50 5000 --buscoM 10% -c 8
+    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 8 -rm testing/from_medoza/iLP728.xml -rp testing/from_medoza/protein_fasta.faa

@@ -161,6 +161,18 @@ def perform_clustering(logger, cores):
         seq_to_acc = pickle.load(handler)
         
         
+    # create the dictionary rep-to-aaseq:
+    rep_to_aaseq = {}
+    with open('working/clustering/representatives.faa', 'r') as r_handler: 
+        for seqrecord in SeqIO.parse(r_handler, "fasta"):
+            seq = seqrecord.seq # <class 'Bio.Seq.Seq'>
+            seqid = seqrecord.id
+            rep_to_aaseq[seqid] = str(seq)
+    with open('working/clustering/rep_to_aaseq.pickle', 'wb') as handler:
+        pickle.dump(rep_to_aaseq, handler)
+    
+        
+        
     # rename the representative sequences:
     with open('working/clustering/representatives.ren.faa', 'w') as w_handler:
         sr_list = []
@@ -266,6 +278,7 @@ def compute_clusters(logger, cores):
             'working/clustering/seq_to_cluster.pickle',
             'working/clustering/acc_to_suffix.pickle',
             'working/clustering/cluster_to_relfreq.pickle',
+            'working/clustering/rep_to_aaseq.pickle',
             'working/clustering/representatives.ren.faa',
             'working/clustering/sequences.csv'])
     if response == 0: return 0
