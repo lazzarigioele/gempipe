@@ -23,8 +23,8 @@ def compute_bmetrics(logger, cores, buscodb):
         
     
     # check if the metrics were already computed: 
-    if os.path.exists('working/tables/bmetrics.csv'):
-        bmetrics_df = pnd.read_csv('working/tables/bmetrics.csv', index_col=0)
+    if os.path.exists('working/filtering/bmetrics.csv'):
+        bmetrics_df = pnd.read_csv('working/filtering/bmetrics.csv', index_col=0)
         presence_list = []
         for species in species_to_proteome.keys(): 
             for proteome in species_to_proteome[species]:
@@ -33,7 +33,7 @@ def compute_bmetrics(logger, cores, buscodb):
                 accession, _ = os.path.splitext(basename)
                 presence_list.append(accession in bmetrics_df['accession'].to_list())
         if all(presence_list): 
-            logger.info("Found all the needed biological metrics already computed. Skipping this step.")
+            logger.info("Found all the needed files already computed. Skipping this step.")
             return 0
     
     
@@ -94,9 +94,9 @@ def compute_bmetrics(logger, cores, buscodb):
             'n_markers': jsonout['results']['n_markers']
         })
     bmetrics_df = pnd.DataFrame.from_records(bmetrics_df)
-    os.makedirs('working/tables/', exist_ok=True)
-    bmetrics_df.to_csv('working/tables/bmetrics.csv')
-    logger.debug("Biological metrics saved to ./working/tables/bmetrics.csv.")
+    os.makedirs('working/filtering/', exist_ok=True)
+    bmetrics_df.to_csv('working/filtering/bmetrics.csv')
+    logger.debug("Biological metrics saved to ./working/filtering/bmetrics.csv.")
     
     
     # cleaning the workspace from useless files: 
@@ -119,6 +119,21 @@ def compute_tmetrics(logger, cores):
     # load the previously created species_to_genome: 
     with open('working/genomes/species_to_genome.pickle', 'rb') as handler:
         species_to_genome = pickle.load(handler)
+        
+        
+    # check if the metrics were already computed: 
+    if os.path.exists('working/filtering/tmetrics.csv'):
+        tmetrics_df = pnd.read_csv('working/filtering/tmetrics.csv', index_col=0)
+        presence_list = []
+        for species in species_to_genome.keys(): 
+            for genome in species_to_genome[species]:
+                # get the basename without extension:
+                basename = os.path.basename(genome)
+                accession, _ = os.path.splitext(basename)
+                presence_list.append(accession in tmetrics_df['accession'].to_list())
+        if all(presence_list): 
+            logger.info("Found all the needed files already computed. Skipping this step.")
+            return 0
 
         
     # create the list of genomes to evaluate: 
@@ -135,18 +150,18 @@ def compute_tmetrics(logger, cores):
             --basename \
             --all \
             --threads {cores} \
-            --out-file working/tables/tmetrics.csv \
+            --out-file working/filtering/tmetrics.csv \
             {' '.join(genome_files)}"""
         process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
         process.wait()
         
         
     # format the table:
-    tmetrics_df = pnd.read_csv('working/tables/tmetrics.csv', sep='\t')
+    tmetrics_df = pnd.read_csv('working/filtering/tmetrics.csv', sep='\t')
     tmetrics_df = tmetrics_df.rename(columns={'file': 'accession', 'num_seqs': 'ncontigs'})
     tmetrics_df['accession'] = tmetrics_df['accession'].apply(lambda x: os.path.splitext(x)[0])
-    tmetrics_df.to_csv('working/tables/tmetrics.csv')
-    logger.debug("Technical metrics saved to ./working/tables/tmetrics.csv.")
+    tmetrics_df.to_csv('working/filtering/tmetrics.csv')
+    logger.debug("Technical metrics saved to ./working/filtering/tmetrics.csv.")
                 
                 
     # logger message:
@@ -172,8 +187,8 @@ def filter_genomes(logger, cores, buscodb, buscoM, ncontigs, N50):
     
     
     # read the metrics tables
-    bmetrics_df = pnd.read_csv('working/tables/bmetrics.csv', index_col=0)
-    tmetrics_df = pnd.read_csv('working/tables/tmetrics.csv', index_col=0)
+    bmetrics_df = pnd.read_csv('working/filtering/bmetrics.csv', index_col=0)
+    tmetrics_df = pnd.read_csv('working/filtering/tmetrics.csv', index_col=0)
     
     
     # get the number of Busco's scingle-copy orthologs: 

@@ -1,7 +1,7 @@
 import os
 
 
-
+import pandas as pnd
 import cobra
 
 
@@ -91,6 +91,21 @@ def get_glued_gpr(r, ref_r):
     else: 
         return f'({ref_r.gene_reaction_rule}) or ({r.gene_reaction_rule})'
 
+    
+    
+def search_first_synonym(r, ref_model, remove_h=False ): 
+    
+    
+    # check if the reference contains an equal reaction based on reactants and products mids. 
+    for ref_r in ref_model.reactions:
+        found_synonym = check_same_mids(r, ref_r, remove_h)
+        if found_synonym: 
+            return ref_r
+
+        
+    return None
+    # pay attention if ATPM / NGAM is returned !
+    
 
 
 def ref_expansion(logger, identity, coverage): 
@@ -116,53 +131,78 @@ def ref_expansion(logger, identity, coverage):
     
     
     # begin the addition of new reactions to the ref_model, to form the final draft pan-model.
-    draft_panmodel_exp = ref_model.copy()
     reference_rids = [r.id for r in ref_model.reactions]
-    for r in draft_panmodel.reactions: 
+    results_df = []  # summarizing all the additions
+    for r in draft_panmodel.reactions:
         gpr = r.gene_reaction_rule
         
         
+        # define key objects: 
         same_rid = False
         same_mids = False
         same_fc = False
         same_gids = False
-        new_gpr = r.gene_reaction_rule
+        ref_gpr = '-'
+        final_gpr = '-'
+        synonym = '-'
         
         
         # check if this rid is already modeled: 
         same_rid = r.id in reference_rids
         if same_rid:
+            # get the reference reaction and gpr:
             ref_r = ref_model.reactions.get_by_id(r.id)
-            ref_gpr = ref_r.gene_reaction_rule
             
+            
+        else: # this rid is not modeled yet
+            # search for synonyms in ref_model and take the first:
+            ref_r = search_first_synonym(r, ref_model, remove_h=True)
+            if ref_r != None: 
+                synonym = ref_r.id
+        
+        
+        # manage the reference reaction if any:
+        if ref_r != None:
+            ref_gpr = ref_r.gene_reaction_rule
             
             
             # check if reactants and products are the same: 
             same_mids = check_same_mids(r, ref_r, remove_h=True)
             if same_mids: 
-                
-                
                 # check if also formula and charge correspond: 
                 same_fc = check_same_fc(r, ref_model, remove_h=True)
                 
                 
-            # check if the gpr is the same:
+            # check if the gpr is the same, and define final gpr: 
             same_gids = check_same_gids(r, ref_r)
             if not same_gids: 
+                # if different, glue together the two gprs, and update the reference:  
+                final_gpr = get_glued_gpr(r, ref_r)
+                ref_r.gene_reaction_rule = gpr
+                ref_r.update_genes_from_gpr()
+            else: # if same gene set, just keep the definition from the reference 
+                final_gpr = ref_gpr
                 
                 
-                # glue together the two gprs: 
-                new_gpr = get_glued_gpr(r, ref_r)
-            
-            
         
-        if same_rid and same_mids and not same_gids and ref_gpr=='': 
-            logger.debug(f"{r.id}: same_rid {same_rid}, same_mids {same_mids}, same_fc {same_fc}, same_gids {same_gids}, gpr {gpr}, ref_gpr {ref_gpr}, new_gpr {new_gpr}")
-            print(r.reaction)
-            print(ref_r.reaction)
+            
+            
+            
+            
+        new_row = {
+            'rid': r.id, 'same_rid': same_rid, 'synonym': synonym,
+            'same_mids': same_mids, 'same_fc': same_fc, 
+            'same_gids': same_gids, 'gpr': gpr, 'ref_gpr': ref_gpr, 'final_gpr': final_gpr}
+        results_df.append(new_row)
     
     
+    # save results dataframe to disk
+    results_df = pnd.DataFrame.from_records(results_df)
+    results_df.to_csv('working/expansion/results.csv')
     
+    
+    # log some message
+    draft_panmodel_exp = ref_model  # after the expansion
     logger.info(f"Done, {' '.join(['G:', str(len(draft_panmodel_exp.genes)), '|', 'R:', str(len(draft_panmodel_exp.reactions)), '|', 'M:', str(len(draft_panmodel_exp.metabolites))])}.")
     
     

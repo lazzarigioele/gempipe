@@ -15,7 +15,7 @@ def get_metadata_table(logger):
     
     # read the raw metadata: 
     logger.info("Creating the metadata table for your genomes...") 
-    metadata = pnd.read_csv("working/tables/raw_ncbi.csv", index_col=0)
+    metadata = pnd.read_csv("working/genomes/raw_ncbi.csv", index_col=0)
     
     
     # this table has 2 rows for each genome, one if the '_assembly_stats.txt' row.
@@ -41,9 +41,8 @@ def get_metadata_table(logger):
     
     
     # save the metadata table to disk:
-    os.makedirs('working/tables/', exist_ok=True)
-    metadata.to_csv("working/tables/genomes.csv")
-    logger.info("Metadata table saved in ./working/tables/genomes.csv.") 
+    metadata.to_csv("working/genomes/genomes.csv")
+    logger.info("Metadata table saved in ./working/genomes/genomes.csv.") 
     
 
 
@@ -51,7 +50,7 @@ def create_genomes_dictionary(logger):
     
     
     # read the metadata table
-    metadata = pnd.read_csv("working/tables/genomes.csv", index_col=0)
+    metadata = pnd.read_csv("working/genomes/genomes.csv", index_col=0)
     
     
     # create species-to-genome dictionary:
@@ -79,7 +78,7 @@ def get_genomes(logger, taxids, cores):
     with open('working/logs/stdout_download.txt', 'w') as stdout, open('working/logs/stderr_download.txt', 'w') as stderr: 
         command = f"""ncbi-genome-download \
             --no-cache \
-            --metadata-table working/tables/raw_ncbi.txt \
+            --metadata-table working/genomes/raw_ncbi.txt \
             --retries 100 --parallel 10 \
             --output-folder working/genomes/ \
             --species-taxids {taxids} \
@@ -92,9 +91,9 @@ def get_genomes(logger, taxids, cores):
     
     
     # format the metadata
-    metadata = pnd.read_csv("working/tables/raw_ncbi.txt", sep='\t')
-    metadata.to_csv("working/tables/raw_ncbi.csv")
-    os.remove("working/tables/raw_ncbi.txt")
+    metadata = pnd.read_csv("working/genomes/raw_ncbi.txt", sep='\t')
+    metadata.to_csv("working/genomes/raw_ncbi.csv")
+    os.remove("working/genomes/raw_ncbi.txt")
     
     
     # moving the genomes to the right directory
@@ -120,7 +119,7 @@ def check_already_downloaded():
     
     # get the available files: 
     found_genomes = glob.glob('working/genomes/*.fna')
-    found_metadata = os.path.exists('working/tables/raw_ncbi.csv')
+    found_metadata = os.path.exists('working/genomes/raw_ncbi.csv')
     if len(found_genomes) > 0 and found_metadata:
         
         
@@ -133,7 +132,7 @@ def check_already_downloaded():
             
             
         # load the metadata table:
-        metadata = pnd.read_csv("working/tables/raw_ncbi.csv", index_col=0)
+        metadata = pnd.read_csv("working/genomes/raw_ncbi.csv", index_col=0)
         if set(accessions) == set(metadata['assembly_accession'].to_list()):
             return True
         
@@ -147,7 +146,6 @@ def download_genomes(logger, taxids, cores):
     
     # create a sub-directory without overwriting
     os.makedirs('working/genomes/', exist_ok=True)
-    os.makedirs('working/tables/', exist_ok=True)
     
     
     # check the presence of already availables genomes:
@@ -183,7 +181,6 @@ def handle_manual_genomes(logger, genomes):
     
     # create a sub-directory without overwriting
     os.makedirs('working/genomes/', exist_ok=True)
-    os.makedirs('working/tables/', exist_ok=True)
     
     
     # create a species-to-genome dictionary

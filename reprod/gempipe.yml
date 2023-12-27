@@ -562,6 +562,4 @@ dependencies:
   - zlib=1.2.13=h166bdaf_4
   - zstandard=0.19.0=py39h29414ee_1
   - zstd=1.5.2=h6239696_4
-  - pip:
-      - gempipe==0.0.9
 prefix: /opt/conda

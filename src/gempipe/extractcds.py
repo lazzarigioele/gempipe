@@ -181,7 +181,7 @@ def extract_cds(logger, cores):
         already_computed.append(os.path.exists(f'working/proteomes/{accession}.faa'))
         already_computed.append(os.path.exists(f'working/coordinates/{accession}.csv'))
     if all(already_computed):
-        logger.info("Found all the proteomes already stored in your ./working/ directory: skipping this step.")
+        logger.info("Found all the needed files already computed. Skipping this step.")
         # save the species_to_proteome and seq_to_coords dicts
         create_species_to_proteome(logger)
         create_seq_to_coords(logger)
