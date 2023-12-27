@@ -89,7 +89,7 @@ def get_glued_gpr(r, ref_r):
     elif len(ref_gids) == 0:
         return r.gene_reaction_rule
     else: 
-        return f'({ref_r.gene_reaction_rule}) or ({r.gene_reaction_rule})'
+        return f'({r.gene_reaction_rule}) or ({ref_r.gene_reaction_rule})'
 
     
     
@@ -106,7 +106,85 @@ def search_first_synonym(r, ref_model, remove_h=False ):
     return None
     # pay attention if ATPM / NGAM is returned !
     
+    
+    
+def get_detailed_reaction(r): 
+    
+    
+    # make esplicit formula and charge after each metabolite
+    reaction = r.reaction
+    reaction = ' ' + reaction + ' '  # force each mid to be surrounded by spaces
+    for m in r.metabolites:
+        reaction = reaction.replace(f' {m.id} ', f' {m.id}[{m.formula},{m.charge}] ')
+    reaction = reaction[1:-1]  # remove extreme spaces
+    
+    
+    # include balancing information
+    if r.check_mass_balance() != {}:
+        reaction = '[[UNB]] ' + reaction
+    
+    return reaction 
+    
 
+
+def add_new_reaction(r, ref_model, addedms_logger):
+    
+    
+    # Notes for manual correction of fatty-acid-ACP formulas: 
+    # Take as example hexACP: 
+    # C 390 H 613 O 143 N 96 P 1 S 3    (-1) <--- proposed
+    # C 6 H 11 O X     (0) <--- desired 
+    # C 384 H 602 O 142 N 96 P 1 S 3     <--- to subtract
+    
+    
+    # get metabolites already modeled
+    reference_mids = set([m.id for m in ref_model.metabolites])
+    
+    
+    # first add missing metabolites:
+    for m in r.metabolites: 
+        if m.id not in reference_mids: 
+            
+            
+            # create a new metabolite copying the attributes. 
+            new_m = cobra.Metabolite(m.id)
+            new_m.name = m.name
+            
+            # define formula and charge (here some manual corrections can be made)
+            new_m.formula = m.formula
+            new_m.charge = m.charge
+            
+            # actually add the metabolite
+            ref_model.add_metabolites([new_m])
+            new_m = ref_model.metabolites.get_by_id(m.id)
+            
+            # set compartment:
+            new_m.compartment = new_m.id.rsplit('_', 1)[-1]   
+            
+            print(f'id="{new_m.id}"\tformula="{new_m.formula}"\tcharge="{new_m.charge}"\tname="{new_m.name}"', file=addedms_logger)
+            
+    
+    # now add missing reaction: 
+    # first create a new empty reaction
+    new_r = cobra.Reaction(r.id)
+    new_r.name = r.name
+    
+    # actually add the reaction
+    ref_model.add_reactions([new_r])
+    new_r = ref_model.reactions.get_by_id(r.id)
+    
+    # define the reaction (here some manual curations can be made)
+    new_r_reaction = r.reaction
+    new_r.build_reaction_from_string(new_r_reaction) 
+    
+    # set bounds
+    new_r.bounds = r.bounds
+    
+    # copy GPR: 
+    new_r.gene_reaction_rule = r.gene_reaction_rule 
+    new_r.update_genes_from_gpr()
+    
+    
 
 def ref_expansion(logger, identity, coverage): 
     
@@ -133,15 +211,21 @@ def ref_expansion(logger, identity, coverage):
     # begin the addition of new reactions to the ref_model, to form the final draft pan-model.
     reference_rids = [r.id for r in ref_model.reactions]
     results_df = []  # summarizing all the additions
+    addedms_logger = open('working/expansion/added_metabolites.txt', 'w')
     for r in draft_panmodel.reactions:
+        if r.id == 'Growth': continue  # using reference biomass definition
         gpr = r.gene_reaction_rule
+        reaction = get_detailed_reaction(r)
         
         
         # define key objects: 
+        action = '-'
         same_rid = False
         same_mids = False
         same_fc = False
         same_gids = False
+        ref_reaction = '-'
+        final_reaction = '-'
         ref_gpr = '-'
         final_gpr = '-'
         synonym = '-'
@@ -164,6 +248,7 @@ def ref_expansion(logger, identity, coverage):
         # manage the reference reaction if any:
         if ref_r != None:
             ref_gpr = ref_r.gene_reaction_rule
+            ref_reaction = get_detailed_reaction(ref_r)
             
             
             # check if reactants and products are the same: 
@@ -177,26 +262,33 @@ def ref_expansion(logger, identity, coverage):
             same_gids = check_same_gids(r, ref_r)
             if not same_gids: 
                 # if different, glue together the two gprs, and update the reference:  
+                action = 'update_gpr'
                 final_gpr = get_glued_gpr(r, ref_r)
                 ref_r.gene_reaction_rule = gpr
                 ref_r.update_genes_from_gpr()
             else: # if same gene set, just keep the definition from the reference 
+                action = 'ignore'
                 final_gpr = ref_gpr
+                             
                 
-                
+        else:  # new reaction to be included:
+            action = 'add'
+            add_new_reaction(r, ref_model, addedms_logger)
+            new_r = ref_model.reactions.get_by_id(r.id)
+            final_reaction = get_detailed_reaction(new_r)
+         
         
-            
-            
-            
-            
+        # populate the results dataframe: 
         new_row = {
-            'rid': r.id, 'same_rid': same_rid, 'synonym': synonym,
-            'same_mids': same_mids, 'same_fc': same_fc, 
-            'same_gids': same_gids, 'gpr': gpr, 'ref_gpr': ref_gpr, 'final_gpr': final_gpr}
+            'rid': r.id, 'action': action, 
+            'reaction': reaction, 'same_rid': same_rid, 'synonym': synonym, 'ref_reaction': ref_reaction,
+            'same_mids': same_mids, 'same_fc': same_fc, 'final_reaction': final_reaction, 
+            'same_gids': same_gids, 'gpr': gpr, 'ref_gpr': ref_gpr, 'final_gpr': final_gpr, }
         results_df.append(new_row)
     
     
     # save results dataframe to disk
+    addedms_logger.close()
     results_df = pnd.DataFrame.from_records(results_df)
     results_df.to_csv('working/expansion/results.csv')
     
@@ -206,9 +298,18 @@ def ref_expansion(logger, identity, coverage):
     logger.info(f"Done, {' '.join(['G:', str(len(draft_panmodel_exp.genes)), '|', 'R:', str(len(draft_panmodel_exp.reactions)), '|', 'M:', str(len(draft_panmodel_exp.metabolites))])}.")
     
     
+    # count how many unbalanced reactions remained
+    unbalanced = results_df[results_df['rid'].str.startswith('EX_')==False]
+    unbalanced = results_df[(results_df['final_reaction'].str.startswith('[[UNB]] ')) | (results_df['ref_reaction'].str.startswith('[[UNB]] '))]
+    logger.info(f"Terminated with {len(unbalanced)} unbalanced reactions.")
+    
+    
     # finally save the new draft panmodel
     cobra.io.save_json_model(draft_panmodel_exp, 'working/expansion/draft_panmodel.json')
     logger.debug("New draft pan-model saved to 'working/expansion/draft_panmodel.json'.")
     
     
     return 0
+
+    #  G: 975 | R: 771 | M: 662.
+    #  G: 1241 | R: 1447 | M: 1204. 258 unbalanced
