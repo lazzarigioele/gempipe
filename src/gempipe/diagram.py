@@ -18,7 +18,7 @@ class Pipeflow:
         <style> #outcellbox {{display: flex; justify-content: center; width: 100%; height: {height}px; background-color: #ffffff;}} </style>
         <style> #outcellbox svg {{width: 100%; height: 100%;}} </style>
         <div class="mermaid-{self.uid}" id="outcellbox"></div>
-        <script scr="https://github.com/bumbu/svg-pan-zoom/raw/3.6.1/src/svg-pan-zoom.js"></script>
+        <script src="https://github.com/bumbu/svg-pan-zoom/raw/3.6.1/src/svg-pan-zoom.js"></script>
         <script type="module">
             import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/+esm';
             const graphDefinition = \'___diagram___\';
