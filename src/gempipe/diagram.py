@@ -13,17 +13,20 @@ class Pipeflow:
         diagram = diagram.replace("'", '"')
         return diagram
 
-    def render(self):
-        style = '<style> .flex-container {display: flex; justify-content: center; align-items: center;} </style>'
+    def render(self, height=500, panzoom='true'):
         html = f"""
-        {style}
-        <div class="mermaid-{self.uid} flex-container"></div>
+        <style> #outcellbox {{display: flex; justify-content: center; width: 100%; height: {height}px; background-color: #ffffff;}} </style>
+        <style> #outcellbox svg {{width: 100%; height: 100%;}} </style>
+        <div class="mermaid-{self.uid}" id="outcellbox"></div>
+        <script scr="https://github.com/bumbu/svg-pan-zoom/raw/3.6.1/src/svg-pan-zoom.js"></script>
         <script type="module">
-            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.1.0/+esm'
+            import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/+esm';
             const graphDefinition = \'___diagram___\';
             const element = document.querySelector('.mermaid-{self.uid}');
             const {{ svg }} = await mermaid.render('graphDiv-{self.uid}', graphDefinition);
             element.innerHTML = svg;
+            var panZoomEnabler = svgPanZoom('#graphDiv-{self.uid}', 
+                {{controlIconsEnabled: {panzoom}, panEnabled: {panzoom}, zoomEnabled: {panzoom}, dblClickZoomEnabled: false}});
         </script>
         """
         html = html.replace("___diagram___", self.diagram)
