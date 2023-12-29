@@ -1,18 +1,30 @@
 import uuid
+
+
 from IPython.display import display, HTML
 
 
+
 class Flowchart:
+    
+    
+    
     def __init__(self, diagram):
+        
         self.diagram = self.process_diagram(diagram)
         self.uid = uuid.uuid4()
 
+        
+        
     def process_diagram(self, diagram):
+        
         diagram = diagram.replace("\n", "\\n")
         diagram = diagram.lstrip("\\n")
         diagram = diagram.replace("'", '"')
         return diagram
 
+    
+    
     def render(self, height=500, panzoom=True):
         
         panzoom_directive = 'data-zoom-on-wheel data-pan-on-drag' if panzoom else ''

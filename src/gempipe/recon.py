@@ -143,18 +143,18 @@ def recon_command(args, logger):
     
     # PART 5. Eventual reference-based reconstruction.
     
-    if args.ref_model != '-' and args.ref_proteome != '-':
+    if args.refmodel != '-' and args.refproteome != '-':
         
         # compute the best reciprocal hits for all the strains:
-        response = perform_brh(logger, args.cores, args.ref_proteome)
+        response = perform_brh(logger, args.cores, args.refproteome)
         if response == 1: return 1
         
         # convert the reference model's genes to clusters: 
-        response = convert_reference(logger, args.ref_model, args.ref_proteome)
+        response = convert_reference(logger, args.refmodel, args.refproteome)
         if response == 1: return 1
     
         # expand the reference model with new reactions coming from the reference-free recon.
-        response = ref_expansion(logger, args.identity, args.coverage)
+        response = ref_expansion(logger, args.refmodel, args.mancor, args.identity, args.coverage)
         if response == 1: return 1
     
     

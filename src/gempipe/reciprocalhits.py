@@ -127,7 +127,7 @@ def task_brh(proteome, args):
     
 
 
-def create_refgid_to_clusters(): 
+def create_refgid_to_clusters(refmodel_basename): 
     
     
     # load the previously created doctionaries: 
@@ -162,12 +162,12 @@ def create_refgid_to_clusters():
 
 
     # save the dictionary: 
-    with open('working/brh/refgid_to_clusters.pickle', 'wb') as handler:
+    with open(f'working/brh/{refmodel_basename}.refgid_to_clusters.pickle', 'wb') as handler:
         pickle.dump(refgid_to_clusters, handler)
         
         
         
-def translate_refmodel(logger, ref_model, ref_proteome): 
+def translate_refmodel(logger, refmodel, ref_proteome): 
     
     
     # set up the cobra solver
@@ -177,36 +177,37 @@ def translate_refmodel(logger, ref_model, ref_proteome):
     
     # load the model according to the file type
     logger.info("Loading the provided reference model...")
-    if ref_model.endswith('.json'): 
-        ref_model = cobra.io.load_json_model(ref_model)
-    elif ref_model.endswith('.sbml'): 
-        ref_model = cobra.io.read_sbml_model(ref_model)
-    elif ref_model.endswith('.xml'): 
-        ref_model = cobra.io.read_sbml_model(ref_model)
+    refmodel_basename = os.path.basename(refmodel)
+    if refmodel.endswith('.json'): 
+        refmodel = cobra.io.load_json_model(refmodel)
+    elif refmodel.endswith('.sbml'): 
+        refmodel = cobra.io.read_sbml_model(refmodel)
+    elif refmodel.endswith('.xml'): 
+        refmodel = cobra.io.read_sbml_model(refmodel)
     else:
-        logger.error(ref_model + ": extension not recognized.")
+        logger.error(refmodel + ": extension not recognized.")
         return 1 
-    logger.info(f"Done, {' '.join(['G:', str(len(ref_model.genes)), '|', 'R:', str(len(ref_model.reactions)), '|', 'M:', str(len(ref_model.metabolites))])}.")
+    logger.info(f"Done, {' '.join(['G:', str(len(refmodel.genes)), '|', 'R:', str(len(refmodel.reactions)), '|', 'M:', str(len(refmodel.metabolites))])}.")
     
     
     # print the preloaded objective reaction
-    objs = list(linear_reaction_coefficients(ref_model).keys())
+    objs = list(linear_reaction_coefficients(refmodel).keys())
     if len(objs) > 1: logger.warning("More than 1 objective reactions were set up. Showing the first.")
     logger.info(f"The following objective was set up: {objs[0].id}.")
     
     
     # save the reference model in a standard format
     logger.debug("Saving a copy of the reference model in JSON format...")
-    cobra.io.save_json_model(ref_model, 'working/brh/ref_model.json')
+    cobra.io.save_json_model(refmodel, f'working/brh/{refmodel_basename}.refmodel_original.json') # ext can be repeated.
     
     
     # create a copy, later translated
     logger.info("Converting reference model's gene notation to clusters...")
-    ref_model_t = ref_model.copy()
+    refmodel_t = refmodel.copy()
 
     
     # get the modeled genes: 
-    modeled_gids = set([g.id for g in ref_model.genes])
+    modeled_gids = set([g.id for g in refmodel.genes])
 
 
     # sometimes the reference proteome contains less genes respect to those modeled.
@@ -220,16 +221,16 @@ def translate_refmodel(logger, ref_model, ref_proteome):
     if len(modeled_gids - gids_in_proteome) > 0:
         to_remove = list(modeled_gids - gids_in_proteome)
         logger.info(f"The following genes will be removed from the reference model, as they do not appear in the reference proteome: {list(modeled_gids - gids_in_proteome)}.") 
-        cobra.manipulation.remove_genes(ref_model_t, to_remove, remove_reactions=True)
+        cobra.manipulation.remove_genes(refmodel_t, to_remove, remove_reactions=True)
 
 
     # load the refgid_to_clusters dictionary (1-to-many)
-    with open('working/brh/refgid_to_clusters.pickle', 'rb') as handler:
+    with open(f'working/brh/{refmodel_basename}.refgid_to_clusters.pickle', 'rb') as handler:
         refgid_to_clusters = pickle.load(handler)
 
                 
     # finally rename the genes: 
-    for r in ref_model_t.reactions:
+    for r in refmodel_t.reactions:
         if any([gid in r.gene_reaction_rule for gid in gids_in_proteome]): 
             gpr = r.gene_reaction_rule
             # force each gid to be surrounded by spaces: 
@@ -254,21 +255,18 @@ def translate_refmodel(logger, ref_model, ref_proteome):
 
 
     # now remove the reference genes:
-    to_remove = [g for g in ref_model_t.genes if g.id in gids_in_proteome]
-    cobra.manipulation.delete.remove_genes(ref_model_t, to_remove, remove_reactions=True)
-    logger.info(f"Done, {' '.join(['G:', str(len(ref_model_t.genes)), '|', 'R:', str(len(ref_model_t.reactions)), '|', 'M:', str(len(ref_model_t.metabolites))])}.")
+    to_remove = [g for g in refmodel_t.genes if g.id in gids_in_proteome]
+    cobra.manipulation.delete.remove_genes(refmodel_t, to_remove, remove_reactions=True)
+    logger.info(f"Done, {' '.join(['G:', str(len(refmodel_t.genes)), '|', 'R:', str(len(refmodel_t.reactions)), '|', 'M:', str(len(refmodel_t.metabolites))])}.")
     
     
     # save the reference model in a standard format
     logger.debug("Saving a copy of the converted reference model in JSON format...")
-    cobra.io.save_json_model(ref_model_t, 'working/brh/ref_model_t.json')
+    cobra.io.save_json_model(refmodel_t, f'working/brh/{refmodel_basename}.refmodel_translated.json')  # ext can be repeated.
     
     
     return 0
     
-    
-    
-          
     
 
 def perform_brh(logger, cores, ref_proteome): 
@@ -276,6 +274,9 @@ def perform_brh(logger, cores, ref_proteome):
     
     # some log messages:
     logger.info("Performing the best reciprocal hits (BRH) alignment against the reference proteome...")
+    if not os.path.exists(ref_proteome): # check the input:
+        logger.error(f"Provided path to the reference proteome (-rp/--ref_proteome) does not exist: {ref_proteome}.")
+        return 1
     
     
     # create sub-directories without overwriting:
@@ -340,28 +341,32 @@ def perform_brh(logger, cores, ref_proteome):
 
 
 
-def convert_reference(logger, ref_model, ref_proteome):
+def convert_reference(logger, refmodel, ref_proteome):
     
     
     # some log messages:
     logger.info("Translating the reference model's genes to clusters...")
+    if not os.path.exists(refmodel): # check the input:
+        logger.error(f"Provided path to the reference model (-rm/--ref_model) does not exist: {refmodel}.")
+        return 1
     
     
     # check if it's everything pre-computed
-    if os.path.exists(f'working/brh/ref_model.json'):
-        if os.path.exists(f'working/brh/ref_model_t.json'):
-            if os.path.exists(f'working/brh/refgid_to_clusters.pickle'):
+    refmodel_basename = os.path.basename(refmodel)
+    if os.path.exists(f'working/brh/{refmodel_basename}.refmodel_original.json'):
+        if os.path.exists(f'working/brh/{refmodel_basename}.refmodel_translated.json'):
+            if os.path.exists(f'working/brh/{refmodel_basename}.refgid_to_clusters.pickle'):
                 logger.info('Found all the needed files already computed. Skipping this step.')
                 # signal to skip this module:
                 return 0
 
     
     # create a dictionary ref_seq-to-clusters, parsing the BRHs. 
-    create_refgid_to_clusters()
+    create_refgid_to_clusters(refmodel_basename)
     
     
-    # get a opy of the ref_model, and translate its genes to clusters notation. 
-    response = translate_refmodel(logger, ref_model, ref_proteome)
+    # get a opy of the refmodel, and translate its genes to clusters notation. 
+    response = translate_refmodel(logger, refmodel, ref_proteome)
     if response == 1: return 1
     
     

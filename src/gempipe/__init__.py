@@ -49,10 +49,10 @@ def main():
     recon_parser.add_argument("--N50", metavar='', type=int, default=50000, help="Minimum N50 allowed per genome.")
     recon_parser.add_argument("--identity", metavar='', type=int, default=30, help="Minimum percentage amino acidic sequence identity to use when aligning against the BiGG gene database.")
     recon_parser.add_argument("--coverage", metavar='', type=int, default=70, help="Minimum percentage coverage to use when aligning against the BiGG gene database.")
-    recon_parser.add_argument("-rm", "--ref_model", metavar='', type=str, default='-', help="Model to be used as reference.")
-    recon_parser.add_argument("-rp", "--ref_proteome", metavar='', type=str, default='-', help="Proteome to be used as reference.")
+    recon_parser.add_argument("-rm", "--refmodel", metavar='', type=str, default='-', help="Model to be used as reference.")
+    recon_parser.add_argument("-rp", "--refproteome", metavar='', type=str, default='-', help="Proteome to be used as reference.")
     recon_parser.add_argument("-o", "--outdir", metavar='', type=str, default='./', help="Main output directory (will be created if not existing).")
-    
+    recon_parser.add_argument("-m", "--mancor", metavar='', type=str, default='-', help="Manual corrections to apply during the reference expansion.")
 
     
     # subparser for the 'derive' command
@@ -132,5 +132,15 @@ if __name__ == "__main__":
     
     # some command line examples to test the pipeline
     # gempipe recon -s neg -t 252393,68334 -b enterobacterales_odb10 --ncontigs 2000 --N50 5000 --buscoM 10% -c 8
+    
+    # official plantarum without manual correactions
     # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 8 -rm testing/from_mendoza/iLP728.xml -rp testing/from_mendoza/protein_fasta.faa
+    
+    # improved plantarum wihtout manual corrections
     # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 8 -rm testing/from_mendoza/iLP728_improved.json -rp testing/from_mendoza/protein_fasta.faa
+    
+    # offical plantarum with manual corrections 
+    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 8 -rm testing/from_mendoza/iLP728.xml -rp testing/from_mendoza/protein_fasta.faa -m testing/mancor.txt
+    
+    # improved plantarum with manual corrections
+    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 8 -rm testing/from_mendoza/iLP728_improved.json -rp testing/from_mendoza/protein_fasta.faa -m testing/mancor.txt

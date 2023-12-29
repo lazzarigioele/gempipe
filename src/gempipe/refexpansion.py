@@ -34,7 +34,7 @@ def check_same_mids(r, ref_r, remove_h=False):
     
     
     
-def check_same_fc(r, ref_model, remove_h=False):
+def check_same_fc(r, refmodel, remove_h=False):
 
     
     # parse each metabolite of this reaction
@@ -49,7 +49,7 @@ def check_same_fc(r, ref_model, remove_h=False):
         
         
         # check if same molecular formula and charge: 
-        ref_m = ref_model.metabolites.get_by_id(m.id)
+        ref_m = refmodel.metabolites.get_by_id(m.id)
         if (m.formula == ref_m.formula) and (m.charge == ref_m.charge):
             comparison.append(True)
         else: 
@@ -93,11 +93,11 @@ def get_glued_gpr(r, ref_r):
 
     
     
-def search_first_synonym(r, ref_model, remove_h=False ): 
+def search_first_synonym(r, refmodel, remove_h=False ): 
     
     
     # check if the reference contains an equal reaction based on reactants and products mids. 
-    for ref_r in ref_model.reactions:
+    for ref_r in refmodel.reactions:
         found_synonym = check_same_mids(r, ref_r, remove_h)
         if found_synonym: 
             return ref_r
@@ -127,7 +127,12 @@ def get_detailed_reaction(r):
     
 
 
-def add_new_reaction(r, ref_model, addedms_logger):
+def add_new_reaction(r, refmodel, addedms_logger, mancor):
+    
+    
+    # don't edit the model if r.id appears in blacklist:
+    if r.id in mancor['blacklist']:
+        return 'blacklist'  # action for the dataframe
     
     
     # Notes for manual correction of fatty-acid-ACP formulas: 
@@ -138,7 +143,7 @@ def add_new_reaction(r, ref_model, addedms_logger):
     
     
     # get metabolites already modeled
-    reference_mids = set([m.id for m in ref_model.metabolites])
+    reference_mids = set([m.id for m in refmodel.metabolites])
     
     
     # first add missing metabolites:
@@ -151,12 +156,13 @@ def add_new_reaction(r, ref_model, addedms_logger):
             new_m.name = m.name
             
             # define formula and charge (here some manual corrections can be made)
-            new_m.formula = m.formula
-            new_m.charge = m.charge
+            pure_mid = m.id.rsplit('_', 1)[0]
+            new_m.formula = m.formula if pure_mid not in mancor['formulas'].keys() else mancor['formulas'][pure_mid]
+            new_m.charge = m.charge if pure_mid not in mancor['charges'].keys() else mancor['charges'][pure_mid]
             
             # actually add the metabolite
-            ref_model.add_metabolites([new_m])
-            new_m = ref_model.metabolites.get_by_id(m.id)
+            refmodel.add_metabolites([new_m])
+            new_m = refmodel.metabolites.get_by_id(m.id)
             
             # set compartment:
             new_m.compartment = new_m.id.rsplit('_', 1)[-1]   
@@ -170,11 +176,11 @@ def add_new_reaction(r, ref_model, addedms_logger):
     new_r.name = r.name
     
     # actually add the reaction
-    ref_model.add_reactions([new_r])
-    new_r = ref_model.reactions.get_by_id(r.id)
+    refmodel.add_reactions([new_r])
+    new_r = refmodel.reactions.get_by_id(r.id)
     
     # define the reaction (here some manual curations can be made)
-    new_r_reaction = r.reaction
+    new_r_reaction = r.reaction if r.reaction not in mancor['reactions'].keys() else mancor['reactions'][r.id]
     new_r.build_reaction_from_string(new_r_reaction) 
     
     # set bounds
@@ -185,8 +191,46 @@ def add_new_reaction(r, ref_model, addedms_logger):
     new_r.update_genes_from_gpr()
     
     
+    return 'add' # action for the dataframe 
+    
+    
 
-def ref_expansion(logger, identity, coverage): 
+def mancor_to_dict(logger, mancor): 
+    
+    
+    # convert the manual corrections file to dict: 
+    resdict = {'formulas': {}, 'charges': {}, 'reactions': {}, 'blacklist': []}
+    with open(mancor, 'r') as file: 
+        for line in file.readlines(): 
+            line = line.strip().rstrip()
+            if line == '': continue
+            if line.startswith('%'): continue  # commented line
+            if line.startswith('formula.'):
+                line = line[len('formula.'):]
+                key, value = line.split(':', 1)
+                resdict['formulas'][key] = value
+            elif line.startswith('charge.'):
+                line = line[len('charge.'):]
+                key, value = line.split(':', 1)
+                value = int(value)
+                resdict['charges'][key] = value
+            elif line.startswith('reaction.'):
+                line = line[len('reaction.'):]
+                key, value = line.split(':', 1)
+                resdict['reactions'][key] = value
+            elif line.startswith('blacklist.'):
+                key = line[len('blacklist.'):]
+                resdict['blacklist'].append(key)
+            else: 
+                logger.error(f"Not recognized key in this line of the manual corrections file (-m/--mancor): {line}")
+                return 1
+
+            
+    return resdict
+    
+    
+    
+def ref_expansion(logger, refmodel, mancor, identity, coverage): 
     
     
     
@@ -201,15 +245,30 @@ def ref_expansion(logger, identity, coverage):
     
     # log some messages
     logger.info("Expanding the reference model with new reactions taken from the reference-free reconstruction...")
-    
+    if mancor != '-': 
+        if not os.path.exists(mancor): # check the input:
+            logger.error(f"Provided path to the manual corrections (-m/--mancor) does not exist: {mancor}.")
+            return 1
+        else:  # convert manual corrections to dictionary
+            response = mancor_to_dict(logger, mancor)
+            if type(response) == int:
+                if response == 1: return 1
+            else: # good corrections file: 
+                mancor = response  # convert the filepath to dict
+                logger.info(  # log some message
+                    f"(using the provided manual corrections: {len(mancor['formulas'].keys())} formula corrections, {len(mancor['charges'].keys())} charge corrections, " + \
+                    f"{len(mancor['reactions'].keys())} reaction corrections, and {len(mancor['blacklist'])} reactions in blacklist.)")
+    else: mancor = {'formulas': {}, 'charges': {}, 'reactions': {}, 'blacklist': []}  # emtpy, easier to handle
+
     
     # load the reference and the reference-free reconstruction.
-    ref_model = cobra.io.load_json_model('working/brh/ref_model_t.json')
+    refmodel_basename = os.path.basename(refmodel)
+    refmodel = cobra.io.load_json_model(f'working/brh/{refmodel_basename}.refmodel_translated.json')
     draft_panmodel = cobra.io.load_json_model(f'working/panmodel/draft_panmodel_{identity}_{coverage}.json')
     
     
-    # begin the addition of new reactions to the ref_model, to form the final draft pan-model.
-    reference_rids = [r.id for r in ref_model.reactions]
+    # begin the addition of new reactions to the refmodel, to form the final draft pan-model.
+    reference_rids = [r.id for r in refmodel.reactions]
     results_df = []  # summarizing all the additions
     addedms_logger = open('working/expansion/added_metabolites.txt', 'w')
     for r in draft_panmodel.reactions:
@@ -220,27 +279,28 @@ def ref_expansion(logger, identity, coverage):
         
         # define key objects: 
         action = '-'
-        same_rid = False
-        same_mids = False
-        same_fc = False
-        same_gids = False
+        rid_found = '-'
+        same_mids = '-'
+        same_fc = '-'
+        same_gids = '-'
         ref_reaction = '-'
         final_reaction = '-'
         ref_gpr = '-'
         final_gpr = '-'
         synonym = '-'
+        bal_suggestions = '-'
         
         
         # check if this rid is already modeled: 
-        same_rid = r.id in reference_rids
-        if same_rid:
+        rid_found = r.id in reference_rids
+        if rid_found:
             # get the reference reaction and gpr:
-            ref_r = ref_model.reactions.get_by_id(r.id)
+            ref_r = refmodel.reactions.get_by_id(r.id)
             
             
         else: # this rid is not modeled yet
-            # search for synonyms in ref_model and take the first:
-            ref_r = search_first_synonym(r, ref_model, remove_h=True)
+            # search for synonyms in refmodel and take the first:
+            ref_r = search_first_synonym(r, refmodel, remove_h=True)
             if ref_r != None: 
                 synonym = ref_r.id
         
@@ -249,13 +309,15 @@ def ref_expansion(logger, identity, coverage):
         if ref_r != None:
             ref_gpr = ref_r.gene_reaction_rule
             ref_reaction = get_detailed_reaction(ref_r)
+            final_reaction = ref_reaction
+            bal_suggestions = str(ref_r.check_mass_balance())
             
             
             # check if reactants and products are the same: 
             same_mids = check_same_mids(r, ref_r, remove_h=True)
             if same_mids: 
                 # check if also formula and charge correspond: 
-                same_fc = check_same_fc(r, ref_model, remove_h=True)
+                same_fc = check_same_fc(r, refmodel, remove_h=True)
                 
                 
             # check if the gpr is the same, and define final gpr: 
@@ -272,17 +334,20 @@ def ref_expansion(logger, identity, coverage):
                              
                 
         else:  # new reaction to be included:
-            action = 'add'
-            add_new_reaction(r, ref_model, addedms_logger)
-            new_r = ref_model.reactions.get_by_id(r.id)
-            final_reaction = get_detailed_reaction(new_r)
+            action = add_new_reaction(r, refmodel, addedms_logger, mancor)
+            if action == 'add':  # not in blacklist 
+                new_r = refmodel.reactions.get_by_id(r.id)
+                final_reaction = get_detailed_reaction(new_r)
+                bal_suggestions = str(new_r.check_mass_balance())
          
         
         # populate the results dataframe: 
+        if bal_suggestions == '{}': bal_suggestions = '-'   # put back to standard formatting
+        if r.id.startswith('EX_'): bal_suggestions = '-'   # non-sense for EX_ reactions
         new_row = {
             'rid': r.id, 'action': action, 
-            'reaction': reaction, 'same_rid': same_rid, 'synonym': synonym, 'ref_reaction': ref_reaction,
-            'same_mids': same_mids, 'same_fc': same_fc, 'final_reaction': final_reaction, 
+            'reaction': reaction, 'rid_found': rid_found, 'synonym': synonym, 'ref_reaction': ref_reaction,
+            'same_mids': same_mids, 'same_fc': same_fc, 'final_reaction': final_reaction, 'bal_suggestions': bal_suggestions,
             'same_gids': same_gids, 'gpr': gpr, 'ref_gpr': ref_gpr, 'final_gpr': final_gpr, }
         results_df.append(new_row)
     
@@ -294,14 +359,14 @@ def ref_expansion(logger, identity, coverage):
     
     
     # log some message
-    draft_panmodel_exp = ref_model  # after the expansion
+    draft_panmodel_exp = refmodel  # after the expansion
     logger.info(f"Done, {' '.join(['G:', str(len(draft_panmodel_exp.genes)), '|', 'R:', str(len(draft_panmodel_exp.reactions)), '|', 'M:', str(len(draft_panmodel_exp.metabolites))])}.")
     
     
     # count how many unbalanced reactions remained
     unbalanced = results_df[results_df['rid'].str.startswith('EX_')==False]
-    unbalanced = results_df[(results_df['final_reaction'].str.startswith('[[UNB]] ')) | (results_df['ref_reaction'].str.startswith('[[UNB]] '))]
-    logger.info(f"Terminated with {len(unbalanced)} unbalanced reactions.")
+    unbalanced = unbalanced[unbalanced['final_reaction'].str.startswith('[[UNB]] ')]
+    logger.info(f"Terminated with {len(unbalanced)} unbalanced reactions (excluding EX_ reactions).")
     
     
     # finally save the new draft panmodel
@@ -313,3 +378,4 @@ def ref_expansion(logger, identity, coverage):
 
     #  G: 975 | R: 771 | M: 662.
     #  G: 1241 | R: 1447 | M: 1204. 258 unbalanced
+    #  G: 1254 | R: 1446 | M: 1204. 258 unbalanced (improved)
