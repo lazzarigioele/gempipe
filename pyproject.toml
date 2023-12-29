@@ -25,6 +25,9 @@ biopython = ">=1.80"
 # eggnog-mapper >= 2.1.7
 # diamond >= 2.0.15 
 
+# suspect fixes:
+# htslib==1.16
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

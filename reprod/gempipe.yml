@@ -116,7 +116,7 @@ dependencies:
   - harfbuzz=6.0.0=h8e241bc_0
   - hmmer=3.1b2=3
   - hpack=4.0.0=pyh9f0ad1d_0
-  - htslib=1.17=h6bc39ce_1
+  - htslib=1.16=h6bc39ce_0
   - httpcore=1.0.2=pyhd8ed1ab_0
   - httpx=0.25.2=pyhd8ed1ab_0
   - hyperframe=6.0.1=pyhd8ed1ab_0
@@ -156,7 +156,7 @@ dependencies:
   - keyring=24.3.0=py39hf3d152e_0
   - keyutils=1.6.1=h166bdaf_0
   - krb5=1.20.1=hf9c8cef_0
-  - lcms2=2.15=hfd0df8a_0
+  - lcms2=2.14=h6ed2654_0
   - ld_impl_linux-64=2.39=hcc3a1bd_1
   - lerc=4.0.0=h27087fc_0
   - libarchive=3.6.2=hc8874e4_0
@@ -165,7 +165,7 @@ dependencies:
   - libcups=2.3.3=h36d4200_3
   - libcurl=7.87.0=h6312ad2_0
   - libdb=6.2.32=h9c3ff4c_0
-  - libdeflate=1.17=h0b41bf4_0
+  - libdeflate=1.13=h166bdaf_0
   - libedit=3.1.20191231=he28a2e2_2
   - libev=4.33=h516909a_1
   - libexpat=2.5.0=hcb278e6_1
@@ -198,7 +198,7 @@ dependencies:
   - libssh2=1.10.0=haa6b8db_3
   - libstdcxx-devel_linux-64=12.2.0=h3b97bd3_19
   - libstdcxx-ng=12.2.0=h46fd767_19
-  - libtiff=4.5.0=h6adf6a1_2
+  - libtiff=4.4.0=h0e0dad5_3
   - libunistring=0.9.10=h7f98852_0
   - libuuid=2.32.1=h7f98852_1000
   - libuv=1.44.2=h166bdaf_0
@@ -444,7 +444,7 @@ dependencies:
   - pytz=2022.7=pyhd8ed1ab_0
   - pyyaml=6.0=py39hb9d737c_5
   - pyzmq=24.0.1=py39headdf64_1
-  - r-base=4.2.2=ha7d60f8_3
+  - r-base=4.2.2=h6b4767f_2
   - r-cli=3.6.2=r42ha503ecb_0
   - r-colorspace=2.1_0=r42h57805ef_1
   - r-crayon=1.5.2=r42hc72bb7e_2
