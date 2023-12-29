@@ -14,10 +14,8 @@ from .derive import derive_command
 
 
 
-from .diagram import Pipeflow
+from .flowchart import Flowchart
 
-
-    
 
 
 def main(): 
