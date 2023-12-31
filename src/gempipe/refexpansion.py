@@ -375,7 +375,3 @@ def ref_expansion(logger, refmodel, mancor, identity, coverage):
     
     
     return 0
-
-    #  G: 975 | R: 771 | M: 662.
-    #  G: 1241 | R: 1447 | M: 1204. 258 unbalanced
-    #  G: 1254 | R: 1446 | M: 1204. 258 unbalanced (improved)
