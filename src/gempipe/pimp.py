@@ -1,11 +1,16 @@
 import pickle
+import cobra
+from importlib import resources
 
 
 __PIMPCACHE__ = None
 
 
-def get_dbs(model):
+def get_annotation_info(model):
     
+    
+    # count how many annotation database for each object type (mets, reacs):
+    # for metabolites: 
     m_annotations = set()
     for m in model.metabolites: 
         for a in m.annotation.keys():
@@ -13,8 +18,10 @@ def get_dbs(model):
     m_len = len(m_annotations)
     m_annotations = sorted(m_annotations)
     m_annotations= ', '.join(m_annotations)
-    logger.info(f"M ({m_len}):   " + str(m_annotations))
+    print(f"M ({m_len}):   " + str(m_annotations))
     
+    
+    # for reactions: 
     r_annotations = set()
     for r in model.reactions: 
         for a in r.annotation.keys():
@@ -22,7 +29,7 @@ def get_dbs(model):
     r_len = len(r_annotations)
     r_annotations = sorted(r_annotations)
     r_annotations= ', '.join(r_annotations)
-    logger.info(f"R ({r_len}):   " + str(r_annotations))
+    print(f"R ({r_len}):   " + str(r_annotations))
     
        
     
@@ -90,12 +97,12 @@ def boost_annotations(logger, x, something_to_others, mrswitch='r', overwrite=Fa
     if mrswitch=='r':  
         mrid = x.id
         # correct for ModelSEED reaction ids: 
-        #if   mrid.startswith('rxn') and mrid[-3]=='_':  # for example "rxn11567_c0"
-        #    mrid = mrid[ : -3]
+        if mrid.startswith('rxn') and mrid[-3]=='_':  # for example "rxn11567_c0"
+            mrid = mrid[ : -3]
     else: mrid = x.id.rsplit('_', 1)[0]  # remove compartment
 
     
-    # extract all the annots provided my mnx for this ID:
+    # extract all the annots provided by mnx for this ID:
     cnt = 0
     if mrid in something_to_others.keys(): 
         full_annots = something_to_others[mrid]
@@ -138,10 +145,6 @@ def boost_annotations(logger, x, something_to_others, mrswitch='r', overwrite=Fa
 
 
 def pimp_my_model(logger, model, fromchilds=False, overwrite=False):
-
-    
-    # load custom-built MNX dictionaries. 
-    logger.debug("Loading MetaNetX prebuilt dicts... ")
     
     
     # autodetect ID system looking for water in cytosol
@@ -165,46 +168,88 @@ def pimp_my_model(logger, model, fromchilds=False, overwrite=False):
     # load the prebuilt dictionary only if this was the first request: 
     global __PIMPCACHE__
     if __PIMPCACHE__ == None:
-        __PIMPCACHE__ = 0  # flag for 'already loaded'
+        __PIMPCACHE__ = {} # flag for 'already loaded'
+        logger.debug("Loading MetaNetX prebuilt dicts... ")
         
         
         if not fromchilds:
-            with resources.path("gempipe.assets", f"{id_sys}_to_other_M.pickle") as asset_path: 
+            with resources.path("gempipe.assets", f"{id_sys}_to_others_M.pickle") as asset_path: 
                 with open(asset_path, 'rb') as handler:
-                    something_to_other_M = pickle.load(handler)
-            with resources.path("gempipe.assets", f"{id_sys}_to_other_R.pickle") as asset_path: 
+                    __PIMPCACHE__['something_to_others_M'] = pickle.load(handler)
+            with resources.path("gempipe.assets", f"{id_sys}_to_others_R.pickle") as asset_path: 
                 with open(asset_path, 'rb') as handler:
-                    something_to_other_R = pickle.load(handler)
+                    __PIMPCACHE__['something_to_others_R'] = pickle.load(handler)
 
 
         else:  # required 'child' annotations: 
-            with resources.path("gempipe.assets", f"{id_sys}_to_other_extended_M.pickle") as asset_path: 
+            with resources.path("gempipe.assets", f"{id_sys}_to_others_extended_M.pickle") as asset_path: 
                 with open(asset_path, 'rb') as handler:
-                    something_to_other_M = pickle.load(handler)
-            with resources.path("gempipe.assets", f"{id_sys}_to_other_extended_R.pickle") as asset_path: 
+                    __PIMPCACHE__['something_to_others_M'] = pickle.load(handler)
+            with resources.path("gempipe.assets", f"{id_sys}_to_others_extended_R.pickle") as asset_path: 
                 with open(asset_path, 'rb') as handler:
-                    something_to_other_R = pickle.load(handler)
+                    __PIMPCACHE__['something_to_others_R'] = pickle.load(handler)
                     
-
-    # counters for logging: 
-    m_cnt = 0
-    r_cnt = 0
     
+    # get what has been loaded:
+    something_to_others_M = __PIMPCACHE__['something_to_others_M']
+    something_to_others_R = __PIMPCACHE__['something_to_others_R']
+        
     
-    logger.info("Annotating metabolites...")   
+    # apply small corrections to meet the Memote/Miriam standards:
+    something_to_others_M = make_memote_compliant(something_to_others_M)
+    something_to_others_R = make_memote_compliant(something_to_others_R)
+                    
+    
+    logger.debug("Annotating metabolites...")   
+    m_cnt = 0  # counter for logger
     for m in model.metabolites:
-        response = boost_annotations(m, something_to_others_M, 'm', overwrite)
+        response = boost_annotations(logger, m, something_to_others_M, 'm', overwrite)
         if response == 1: return 1
         else: m.annotation, cnt = response
         m_cnt = m_cnt + cnt
-    logger.info(f'{m_cnt} new annots added.', flush=True)
+    logger.debug(f'{m_cnt} annots added.')
     
     
-    logger.info("Annotating reactions... ", end='', flush=True)
+    logger.debug("Annotating reactions... ")
+    r_cnt = 0  # counter for logger
     for r in model.reactions:
-        response = boost_annotations(r, something_to_others_R, 'r', overwrite)
+        response = boost_annotations(logger, r, something_to_others_R, 'r', overwrite)
         if response == 1: return 1
         else: r.annotation, cnt = response
         r_cnt = r_cnt + cnt
-    logger.info(f'{r_cnt} new annots added.', flush=True)  
+    logger.debug(f'{r_cnt} annots added.')  
+    
+    
+    return 0
         
+        
+
+def denovo_annotation(logger, outdir):
+    
+    
+    # log some message: 
+    logger.info("Performing denovo model annotation...")
+    
+    
+    # set up the cobra solver
+    cobra_config = cobra.Configuration()
+    cobra_config.solver = "glpk_exact"
+    
+    
+    # load the final draft panmodel
+    draft_panmodel = cobra.io.load_json_model(outdir + 'draft_panmodel.json')
+    
+                
+    # denovo annotation
+    response = pimp_my_model(logger, draft_panmodel, overwrite=True)
+    if response == 1: return 1
+
+    
+    # replace file on disk:
+    cobra.io.save_json_model(draft_panmodel, outdir + 'draft_panmodel.json')
+    
+    
+    return 0 
+    
+    
+    

@@ -332,6 +332,10 @@ def expand_reference(refmodel, draft_panmodel, mancor):
 def ref_expansion(logger, refmodel, mancor, identity, coverage): 
     
     
+    # log some message
+    logger.info("Expanding the reference model with new reactions taken from the reference-free reconstruction...")
+    
+    
     # set up the cobra solver
     cobra_config = cobra.Configuration()
     cobra_config.solver = "glpk_exact"
@@ -351,7 +355,6 @@ def ref_expansion(logger, refmodel, mancor, identity, coverage):
     
     
     # get the manual corrections dictionary:
-    logger.info("Expanding the reference model with new reactions taken from the reference-free reconstruction...")
     if mancor != '-': 
         if not os.path.exists(mancor): # check the input:
             logger.error(f"Provided path to the manual corrections (-m/--mancor) does not exist: {mancor}.")

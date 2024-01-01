@@ -18,7 +18,8 @@ from .networkrec import network_rec
 from .reciprocalhits import perform_brh
 from .reciprocalhits import convert_reference
 from .refexpansion import ref_expansion
-
+from .pimp import denovo_annotation
+from .duplicates import solve_duplicate_m
 
 
 def recon_command(args, logger):
@@ -160,10 +161,21 @@ def recon_command(args, logger):
     
     # define the final draft pan-model in the current directory: 
     if args.refmodel != '-' and args.refproteome != '-':
-        shutil.copyfile('working/expansion/draft_pamodel.json', outdir + 'draft_pamodel.json')
+        shutil.copyfile('working/expansion/draft_panmodel.json', outdir + 'draft_panmodel.json')
     else: shutil.copyfile(f'working/panmodel/draft_panmodel_{args.identity}_{args.coverage}.json', outdir + 'draft_panmodel.json')
     
     
+    # PART 6. Automated curation
+    
+    # perform de-novo annotation with metanetx 4.4 (aka pimp_my_model)
+    response = denovo_annotation(logger, outdir)
+    if response == 1: return 1
+    
+    # solve duplicate metabolites using mnx annotation
+    response = solve_duplicate_m(logger, outdir)
+    if response == 1: return 1
+    
+    # solve duplicate reactions using mnx annotation
         
         
         
