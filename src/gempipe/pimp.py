@@ -24,8 +24,7 @@ def get_dbs(model):
     r_annotations= ', '.join(r_annotations)
     logger.info(f"R ({r_len}):   " + str(r_annotations))
     
-    
-    
+       
     
 def make_memote_compliant(something_to_others):
 

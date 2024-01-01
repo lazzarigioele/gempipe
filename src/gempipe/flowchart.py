@@ -25,19 +25,24 @@ class Flowchart:
 
     
     
-    def render(self, height=500, panzoom=True):
-        
-        panzoom_directive = 'data-zoom-on-wheel data-pan-on-drag' if panzoom else ''
+    def render(self, height=500):
         html = f"""
         <style> #outcellbox {{display: flex; justify-content: center; overflow: hidden; width: 99%; height: {height}px; background-color: #ffffff; border: 1px solid grey;}} </style>
-        <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom-container@0.6.1"></script>
-        <div {panzoom_directive} class="mermaid-{self.uid}" id="outcellbox"></div>  
+        
+        <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+
+        <div class="mermaid-{self.uid}" id="outcellbox"></div> 
         <script type="module">
             import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/+esm';
             const graphDefinition = \'___diagram___\';
             const element = document.querySelector('.mermaid-{self.uid}');
             const {{ svg }} = await mermaid.render('graphDiv-{self.uid}', graphDefinition);
             element.innerHTML = svg;
+            
+            const elem = document.getElementById('graphDiv-{self.uid}');
+            const panzoom = Panzoom(elem, {{maxScale: 50}});
+            panzoom.zoom(2);
+            elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
         </script>
         """
         html = html.replace("___diagram___", self.diagram)

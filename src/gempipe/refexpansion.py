@@ -102,9 +102,9 @@ def search_first_synonym(r, refmodel, remove_h=False ):
         if found_synonym: 
             return ref_r
 
-        
-    return None
+    
     # pay attention if ATPM / NGAM is returned !
+    return None
     
     
     
@@ -202,69 +202,39 @@ def mancor_to_dict(logger, mancor):
     resdict = {'formulas': {}, 'charges': {}, 'reactions': {}, 'blacklist': []}
     with open(mancor, 'r') as file: 
         for line in file.readlines(): 
+            
             line = line.strip().rstrip()
             if line == '': continue
             if line.startswith('%'): continue  # commented line
+            
+            
             if line.startswith('formula.'):
                 line = line[len('formula.'):]
                 key, value = line.split(':', 1)
-                resdict['formulas'][key] = value
+                resdict['formulas'][key] = value  
+                
             elif line.startswith('charge.'):
                 line = line[len('charge.'):]
                 key, value = line.split(':', 1)
                 value = int(value)
                 resdict['charges'][key] = value
+                
             elif line.startswith('reaction.'):
                 line = line[len('reaction.'):]
                 key, value = line.split(':', 1)
-                resdict['reactions'][key] = value
+                resdict['reactions'][key] = value     
+                
             elif line.startswith('blacklist.'):
                 key = line[len('blacklist.'):]
-                resdict['blacklist'].append(key)
+                resdict['blacklist'].append(key)              
+                
             else: 
-                logger.error(f"Not recognized key in this line of the manual corrections file (-m/--mancor): {line}")
+                logger.error(f"Not recognized key in this line of the manual corrections file (-m/--mancor): {line}.")
                 return 1
-
-            
     return resdict
-    
-    
-    
-def ref_expansion(logger, refmodel, mancor, identity, coverage): 
-    
-    
-    
-    # set up the cobra solver
-    cobra_config = cobra.Configuration()
-    cobra_config.solver = "glpk_exact"
-    
-    
-    # create sub-directories without overwriting:
-    os.makedirs('working/expansion/', exist_ok=True)
-    
-    
-    # log some messages
-    logger.info("Expanding the reference model with new reactions taken from the reference-free reconstruction...")
-    if mancor != '-': 
-        if not os.path.exists(mancor): # check the input:
-            logger.error(f"Provided path to the manual corrections (-m/--mancor) does not exist: {mancor}.")
-            return 1
-        else:  # convert manual corrections to dictionary
-            response = mancor_to_dict(logger, mancor)
-            if type(response) == int:
-                if response == 1: return 1
-            else: # good corrections file: 
-                mancor = response  # convert the filepath to dict
-                logger.info(  # log some message
-                    f"(using the provided manual corrections: {len(mancor['formulas'].keys())} formula corrections, {len(mancor['charges'].keys())} charge corrections, " + \
-                    f"{len(mancor['reactions'].keys())} reaction corrections, and {len(mancor['blacklist'])} reactions in blacklist.)")
-    else: mancor = {'formulas': {}, 'charges': {}, 'reactions': {}, 'blacklist': []}  # emtpy, easier to handle
 
-    
-    # load the reference and the reference-free reconstruction.
-    refmodel_basename = os.path.basename(refmodel)
-    refmodel = cobra.io.load_json_model(f'working/brh/{refmodel_basename}.refmodel_translated.json')
-    draft_panmodel = cobra.io.load_json_model(f'working/panmodel/draft_panmodel_{identity}_{coverage}.json')
+ 
+def expand_reference(refmodel, draft_panmodel, mancor): 
     
     
     # begin the addition of new reactions to the refmodel, to form the final draft pan-model.
@@ -356,9 +326,56 @@ def ref_expansion(logger, refmodel, mancor, identity, coverage):
     addedms_logger.close()
     results_df = pnd.DataFrame.from_records(results_df)
     results_df.to_csv('working/expansion/results.csv')
+    return results_df
+
+    
+def ref_expansion(logger, refmodel, mancor, identity, coverage): 
     
     
-    # log some message
+    # set up the cobra solver
+    cobra_config = cobra.Configuration()
+    cobra_config.solver = "glpk_exact"
+    
+    
+    # create sub-directories without overwriting:
+    os.makedirs('working/expansion/', exist_ok=True)
+    
+    
+    # check if the output was already computed
+    if os.path.exists(f'working/expansion/draft_panmodel.json'):
+        if os.path.exists(f'working/expansion/results.csv'):
+            if os.path.exists(f'working/expansion/added_metabolites.txt'):
+                logger.info('Found all the needed files already computed. Skipping this step.')
+                # signal to skip this module:
+                return 0
+    
+    
+    # get the manual corrections dictionary:
+    logger.info("Expanding the reference model with new reactions taken from the reference-free reconstruction...")
+    if mancor != '-': 
+        if not os.path.exists(mancor): # check the input:
+            logger.error(f"Provided path to the manual corrections (-m/--mancor) does not exist: {mancor}.")
+            return 1
+        else:  # convert manual corrections to dictionary
+            response = mancor_to_dict(logger, mancor)
+            if type(response) == int:
+                if response == 1: return 1
+            else: # good corrections file: 
+                mancor = response  # convert the filepath to dict
+                logger.info(  # log some message
+                    f"Using the provided manual corrections ({len(mancor['formulas'].keys())} formula corrections, {len(mancor['charges'].keys())} charge corrections, " + \
+                    f"{len(mancor['reactions'].keys())} reaction corrections, and {len(mancor['blacklist'])} reactions in blacklist)...")
+    else: mancor = {'formulas': {}, 'charges': {}, 'reactions': {}, 'blacklist': []}  # emtpy, easier to handle
+
+    
+    # load the reference and the reference-free reconstruction.
+    refmodel_basename = os.path.basename(refmodel)
+    refmodel = cobra.io.load_json_model(f'working/brh/{refmodel_basename}.refmodel_translated.json')
+    draft_panmodel = cobra.io.load_json_model(f'working/panmodel/draft_panmodel_{identity}_{coverage}.json')
+    
+    
+    # perform the main task
+    results_df = expand_reference(refmodel, draft_panmodel, mancor)
     draft_panmodel_exp = refmodel  # after the expansion
     logger.info(f"Done, {' '.join(['G:', str(len(draft_panmodel_exp.genes)), '|', 'R:', str(len(draft_panmodel_exp.reactions)), '|', 'M:', str(len(draft_panmodel_exp.metabolites))])}.")
     

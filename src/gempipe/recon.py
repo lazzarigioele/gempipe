@@ -158,9 +158,10 @@ def recon_command(args, logger):
         if response == 1: return 1
     
     
-    
     # define the final draft pan-model in the current directory: 
-    shutil.copyfile(f'working/panmodel/draft_panmodel_{args.identity}_{args.coverage}.json', outdir + 'draft_panmodel.json')
+    if args.refmodel != '-' and args.refproteome != '-':
+        shutil.copyfile('working/expansion/draft_pamodel.json', outdir + 'draft_pamodel.json')
+    else: shutil.copyfile(f'working/panmodel/draft_panmodel_{args.identity}_{args.coverage}.json', outdir + 'draft_panmodel.json')
     
     
         

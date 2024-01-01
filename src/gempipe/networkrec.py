@@ -26,7 +26,7 @@ def run_bigg_aligner(logger, cores, identity, coverage):
             command = f"""diamond blastp --threads {cores} \
                 -d {asset_path} \
                 -q working/annotation/representatives.faa \
-                -o working/panmodel/alignment.tsv \
+                -o working/free/alignment.tsv \
                 --ultra-sensitive --top 10 --quiet \
                 --outfmt 6 {get_blast_header()}"""
             process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
@@ -35,7 +35,7 @@ def run_bigg_aligner(logger, cores, identity, coverage):
 
     # read the alignment
     header = get_blast_header().split(' ')
-    alignment = pnd.read_csv('working/panmodel/alignment.tsv', sep='\t', names=header)
+    alignment = pnd.read_csv('working/free/alignment.tsv', sep='\t', names=header)
 
 
     # filter based on alignment quality: 
@@ -410,12 +410,12 @@ def eggnogg_gpr_inflator(logger, panmodel):
     
     
     # create a log subdirectory
-    os.makedirs('working/panmodel/gpr_inflator', exist_ok=True)
+    os.makedirs('working/free/gpr_inflator', exist_ok=True)
     
     
     # w_handler1: gids are divided by the number of alternatives.
     # w_handler2: gids are not divided (all together). 
-    w_handler2 = open(f'working/panmodel/gpr_inflator/gid_to_cluster_all.txt', 'w') 
+    w_handler2 = open(f'working/free/gpr_inflator/gid_to_cluster_all.txt', 'w') 
     
     
     # create a gid to alternatives dictionary, for later use: 
@@ -428,7 +428,7 @@ def eggnogg_gpr_inflator(logger, panmodel):
 
         
         # Number of admitted isoforms with the exact same eggnog-mapper annotation: 
-        w_handler1 = open(f'working/panmodel/gpr_inflator/gid_to_cluster_{admitted_alts}.txt', 'w')
+        w_handler1 = open(f'working/free/gpr_inflator/gid_to_cluster_{admitted_alts}.txt', 'w')
         
 
         # iterate the modeled genes:
@@ -483,7 +483,7 @@ def eggnogg_gpr_inflator(logger, panmodel):
 
     
     # iterate each reaction and edit the GPR accordingly:
-    w_handler = open(f'working/panmodel/gpr_inflator/gpr_updates.txt', 'w')
+    w_handler = open(f'working/free/gpr_inflator/gpr_updates.txt', 'w')
     for r in panmodel_update.reactions: 
 
         
@@ -537,7 +537,7 @@ def network_rec(logger, cores, staining, identity, coverage):
     
     
     # create subdirs without overwriting
-    os.makedirs('working/panmodel/', exist_ok=True)
+    os.makedirs('working/free/', exist_ok=True)
     
     
     # some log messages
@@ -550,10 +550,10 @@ def network_rec(logger, cores, staining, identity, coverage):
     
     
     # check if the needed files are already computed
-    if os.path.exists('working/panmodel/alignment.tsv'):
-        if os.path.exists(f'working/panmodel/draft_panmodel_{identity}_{coverage}.json'): 
-            if os.path.exists(f'working/panmodel/gpr_inflator/gid_to_cluster_all.txt'):
-                if os.path.exists(f'working/panmodel/gpr_inflator/gpr_updates.txt'):
+    if os.path.exists('working/free/alignment.tsv'):
+        if os.path.exists(f'working/free/draft_panmodel_{identity}_{coverage}.json'): 
+            if os.path.exists(f'working/free/gpr_inflator/gid_to_cluster_all.txt'):
+                if os.path.exists(f'working/free/gpr_inflator/gpr_updates.txt'):
                     # log some message: 
                     logger.info('Found all the needed files already computed. Skipping this step.')
                     
@@ -569,7 +569,7 @@ def network_rec(logger, cores, staining, identity, coverage):
     
     
     # save draft pan-model to disk
-    cobra.io.save_json_model(draft_panmodel, f'working/panmodel/draft_panmodel_{identity}_{coverage}.json')
+    cobra.io.save_json_model(draft_panmodel, f'working/free/draft_panmodel_{identity}_{coverage}.json')
     
     
     # some log messages
