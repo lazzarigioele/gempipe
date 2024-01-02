@@ -172,7 +172,7 @@ def recon_command(args, logger):
     if response == 1: return 1
     
     # solve duplicate metabolites using mnx annotation
-    response = solve_duplicate_m(logger, outdir)
+    response = solve_duplicate_m(logger, outdir, args.identity, args.coverage, args.refmodel,)
     if response == 1: return 1
     
     # solve duplicate reactions using mnx annotation
