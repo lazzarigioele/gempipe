@@ -19,7 +19,7 @@ from .reciprocalhits import perform_brh
 from .reciprocalhits import convert_reference
 from .refexpansion import ref_expansion
 from .pimp import denovo_annotation
-from .duplicates import solve_duplicate_m
+from .duplicates import solve_duplicates
 
 
 def recon_command(args, logger):
@@ -171,11 +171,10 @@ def recon_command(args, logger):
     response = denovo_annotation(logger, outdir)
     if response == 1: return 1
     
-    # solve duplicate metabolites using mnx annotation
-    response = solve_duplicate_m(logger, outdir, args.identity, args.coverage, args.refmodel,)
+    # solve duplicate metabolites and reactions using mnx annotation
+    response = solve_duplicates(logger, outdir, args.identity, args.coverage, args.refmodel,)
     if response == 1: return 1
     
-    # solve duplicate reactions using mnx annotation
         
         
         
