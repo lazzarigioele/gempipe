@@ -374,7 +374,7 @@ def ref_expansion(logger, refmodel, mancor, identity, coverage):
     # load the reference and the reference-free reconstruction.
     refmodel_basename = os.path.basename(refmodel)
     refmodel = cobra.io.load_json_model(f'working/brh/{refmodel_basename}.refmodel_translated.json')
-    draft_panmodel = cobra.io.load_json_model(f'working/panmodel/draft_panmodel_{identity}_{coverage}.json')
+    draft_panmodel = cobra.io.load_json_model(f'working/free/draft_panmodel_{identity}_{coverage}.json')
     
     
     # perform the main task

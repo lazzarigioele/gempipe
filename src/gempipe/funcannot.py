@@ -50,7 +50,7 @@ def func_annot(logger, cores, outdir):
     sr_list = []
     for cluster in pam.index:
         rep = cluster_to_rep[cluster]
-        aaseq = Seq.Seq(cluster_to_rep[rep])
+        aaseq = Seq.Seq(rep_to_aaseq[rep])
         sr = SeqRecord.SeqRecord(aaseq, id=cluster, description=f'({rep})')
         sr_list.append(sr)
     with open(f'working/annotation/representatives.faa', 'w') as w_handler:

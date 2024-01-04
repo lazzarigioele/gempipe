@@ -1,0 +1,87 @@
+
+subgraph Part_1[Part 1]
+
+Input_proteomes{{Input_proteomes}} --> Proteomes --> BRH
+Input_genomes{{Input_genomes}} --> initial_Genomes
+Input_taxids{{Input_taxids}} --> NCBI_download --> initial_Genomes{{initial_Genomes}}
+i4{{Ref_proteome}} --> BRH
+i5{{Ref_model}} --> BRH --> transl_Ref_model{{transl_Ref_model}}
+i6{{Exp_setting}} --> Ref_expansion
+
+initial_Genomes --> CDS_prediction --> initial_Proteomes{{initial_Proteomes}} --> Bio_metrics --> Busco(Busco)
+initial_Genomes --> Tech_metrics --> N50(N50) & n_contigs(n_contigs)
+N50 & n_contigs & Busco & initial_Genomes & initial_Proteomes --> Filtering 
+Filtering --> Genomes{{Genomes}} & Proteomes{{Proteomes}}
+
+Genomes & Proteomes --> Masking --> Masked_genomes{{Masked_genomes}}
+Proteomes --> Clustering --> initial_PAM{{initial_PAM}} & initial_Ref_seqs{{initial_Ref_seqs}}
+initial_PAM & initial_Ref_seqs & Proteomes & Genomes & Masked_genomes --> Gene_recovery
+
+subgraph Gene_recovery
+r1[Module_1] --> r2[Module_2] --> r3[Module_3]
+end
+
+Gene_recovery --> PAM{{PAM}} & Ref_seqs{{Ref_seqs}}
+Ref_seqs --> Func_annot --> Gene_functions{{Gene_functions}} --> PruneU
+BiGG_genes{{BiGG_genes}} & Ref_seqs & Universe{{Universe}} --> PruneU --> RF_draft_panmodel{{RF_draft_panmodel}}
+
+RF_draft_panmodel & transl_Ref_model --> Ref_expansion --> draft_panmodel{{draft_panmodel}}
+RF_draft_panmodel -. no ref provided .-> draft_panmodel
+draft_panmodel --> reannotation["reannotation (MNX)"] --> Solve_dup_m --> Solve_dup_r --> dd_draft_panmodel{{dd_draft_panmodel}}
+
+end
+
+
+
+click Input_proteomes href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#starting-from-proteomes" "Link"
+click Input_genomes href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#starting-from-genomes" "Link"
+click Input_taxids href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#starting-from-genomes" "Link"
+
+
+style Part_1 fill:white
+
+
+style Gene_recovery fill:lightyellow
+
+style Input_proteomes fill:lightgreen
+style Input_genomes fill:lightgreen
+style Input_taxids fill:lightgreen
+style i4 fill:lightgreen
+style i5 fill:lightgreen
+style i6 fill:lightgreen
+
+style initial_Genomes fill:lightblue
+style Masked_genomes fill:lightblue   
+style Busco fill:lightsalmon
+style N50 fill:lightsalmon
+style n_contigs fill:lightsalmon
+style Genomes fill:lightblue
+style initial_Proteomes fill:lightblue
+style Proteomes fill:lightblue
+style initial_PAM fill:lightblue
+style initial_Ref_seqs fill:lightblue
+style PAM fill:gold
+style Ref_seqs fill:lightblue
+style BiGG_genes fill:violet
+style Universe fill:violet
+style RF_draft_panmodel fill:lightblue
+style transl_Ref_model fill:lightblue
+style draft_panmodel fill:lightblue
+style dd_draft_panmodel fill:lightblue
+style Gene_functions fill:violet
+
+
+style NCBI_download fill:whitesmoke
+style CDS_prediction fill:whitesmoke
+style Bio_metrics fill:whitesmoke
+style Tech_metrics fill:whitesmoke
+style Clustering fill:whitesmoke
+style Masking fill:whitesmoke
+style r1 fill:whitesmoke
+style r2 fill:whitesmoke
+style r3 fill:whitesmoke
+style BRH fill:whitesmoke
+style PruneU fill:whitesmoke
+style Ref_expansion fill:whitesmoke
+style Func_annot fill:whitesmoke
+

@@ -25,7 +25,7 @@ class Flowchart:
 
     
     
-    def render(self, height=500):
+    def render(self, height=500, zoom=1):
         html = f"""
         <style> #outcellbox {{display: flex; justify-content: center; overflow: hidden; width: 99%; height: {height}px; background-color: #ffffff; border: 1px solid grey;}} </style>
         
@@ -41,7 +41,7 @@ class Flowchart:
             
             const elem = document.getElementById('graphDiv-{self.uid}');
             const panzoom = Panzoom(elem, {{maxScale: 50}});
-            panzoom.zoom(2);
+            panzoom.zoom({zoom});
             elem.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
         </script>
         """

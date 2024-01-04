@@ -1,0 +1,3 @@
+8.7G	./working/annotation/db/eggnog_proteins.dmnd
+266M	./working/annotation/db/eggnog.taxa.db
+39G	./working/annotation/db/eggnog.db

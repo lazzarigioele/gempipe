@@ -1,0 +1,14 @@
+subgraph Part_2[Part 2]
+
+Manual_curation((Manual_curation)) --> panmodel{{panmodel}}
+
+end
+
+dd_draft_panmodel{{dd_draft_panmodel}} --> Manual_curation((Manual_curation))
+
+style Part_2 fill:white
+
+style panmodel fill:gold
+
+style Manual_curation fill:whitesmoke
+style dd_draft_panmodel fill:lightblue
