@@ -1,16 +1,7 @@
 **/.DS_Store
 **/.ipynb_checkpoints
 **/__pycache__
-src/generated/metanetx_4_4/chem_xref.tsv
-src/generated/metanetx_4_4/chem_prop.tsv
-src/generated/metanetx_4_4/reac_xref.tsv
-src/generated/mnx_dicts_M/smiles.pickle
-src/generated/mnx_dicts_M/inchi.pickle
-src/generated/mnx_dicts_M/inchikey.pickle
-src/generated/mnx_dicts_M/crossrefs.pickle
-working/annotation/db/eggnog_proteins.dmnd
-working/annotation/db/eggnog.taxa.db
-working/annotation/db/eggnog.db
+ 
 dist/
 poetry.lock
 

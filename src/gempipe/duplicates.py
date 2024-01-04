@@ -17,6 +17,182 @@ def get_first_occurrence(puremid, model):
     return None
 
 
+    
+def get_translation_dictionary_mnx(model, mrmode='m'): 
+
+    
+    # even MNX is not perfect, for example lald__L and abt__L are clearly different species.
+    to_skip_m = ['MNXM732880']  # 'MNXM732880': {'lald__L', 'abt__L'}
+    to_skip_r = []
+    if   mrmode == 'm': to_skip = to_skip_m
+    elif mrmode == 'r': to_skip = to_skip_r
+    
+    
+    # Dictionary grouping duplicated m/r. Later a 'good' member will be determined for each group. 
+    # Here each group of metabolites could have different f/c.
+    mnx_to_mrids = {}  # future 'to_translate'
+    
+    
+    # iterate through all m/r in this model
+    if   mrmode == 'm': items = model.metabolites
+    elif mrmode == 'r': items = model.reactions
+    for item in items:
+
+        
+        # get the annotations
+        try: # mnxannots can be list of str (if just 1 element)
+            if   mrmode == 'm': mnxannots = item.annotation['metanetx.chemical']
+            elif mrmode == 'r': mnxannots = item.annotation['metanetx.reaction']
+            if type(mnxannots) == str: mnxannots = [mnxannots]
+        except: continue
+        
+        
+        # populate the dict
+        for mnxannot in mnxannots: 
+            if mnxannot in to_skip: 
+                continue
+            if mnxannot not in mnx_to_mrids.keys():
+                mnx_to_mrids[mnxannot] = set()
+            if   mrmode == 'm': mnx_to_mrids[mnxannot].add(item.id.rsplit('_', 1)[0])  # without compartment. 
+            elif mrmode == 'r': 
+                if item.id.startswith("EX_") and len(item.metabolites)==1: 
+                    continue  # by design not interest in EX_ reactions
+                mnx_to_mrids[mnxannot].add(item.id) 
+            
+            
+    # filter to keep only groups with >1 elements.
+    to_translate = {}
+    for mnxannot in mnx_to_mrids.keys(): 
+        if len(mnx_to_mrids[mnxannot]) >= 2:
+            to_translate[mnxannot] = mnx_to_mrids[mnxannot]
+                    
+                    
+    return to_translate
+
+    
+
+def sort_translation_dictionary(to_translate, model, refmodel, reffree, mrmode='m'):
+    
+    
+    # 'to_translate' contains duplicated metabolites divided in groups. 
+    # here, for each group, we select only one 'good' metabolite to maintain. 
+    # Therefore, dictionary 1-to-many will be converted in a 1-to-1. 
+    to_translate_11 = {}
+    
+    
+    # get all mids without compartment
+    if   mrmode == 'm': 
+        mrids_refmodel = set([m.id.rsplit('_', 1)[0] for m in refmodel.metabolites])
+        mrids_reffree = set([m.id.rsplit('_', 1)[0] for m in reffree.metabolites])
+    elif mrmode == 'r': 
+        mrids_refmodel = set([r.id for r in refmodel.reactions])
+        mrids_reffree = set([r.id for r in reffree.reactions])
+    
+    
+    results_df = []
+    for group in to_translate.values():
+        
+        # determine the good metabolite to represent the group:
+        good_mrid = list(group)[0]  # begin with the first
+        for mrid in group:
+            if mrid in mrids_refmodel: 
+                good_mrid = mrid  # give precedence to refmodel
+                break
+                
+                
+        # solve in a 1-to-1 dict
+        for mrid in group:
+            if mrid != good_mrid: 
+                # get formula, charge, and flags:
+                
+                
+                # for metabolties:  
+                if mrmode == 'm':
+                    
+                    # for this metabolite to replace
+                    m = get_first_occurrence(mrid, model)
+                    formula = m.formula
+                    charge = m.charge
+                    in_refmodel = 'RM' if mrid in mrids_refmodel else '--'
+                    in_reffree = 'RF' if mrid in mrids_reffree else '--'
+
+                    # for the replacement metabolite
+                    good_m = get_first_occurrence(good_mrid, model)
+                    good_formula = good_m.formula
+                    good_charge = good_m.charge
+                    good_in_refmodel = 'RM' if good_mrid in mrids_refmodel else '--'
+                    good_in_reffree = 'RF' if good_mrid in mrids_reffree else '--'
+
+
+                    # WARNING: by design, skip if both metabolite are ancoded in the refmodel:
+                    if in_refmodel == 'RM' and good_in_refmodel == 'RM':
+                        continue
+
+
+                    # log the future edits: 
+                    new_row = {
+                        'duplicated': mrid, 'd_formula': formula, 'd_charge': charge, 'd_in_refmodel': in_refmodel, 'd_in_reffree': in_reffree,
+                        '~~>': '~~>',
+                        'replacement': good_mrid, 'r_formula': good_formula, 'r_charge': good_charge, 'r_in_refmodel': good_in_refmodel, 'r_in_reffree': good_in_reffree}
+                    results_df.append(new_row)
+
+
+                    # populate the t-to-1 dictionary
+                    to_translate_11[mrid] = good_mrid
+                
+                
+                # for reactions
+                elif mrmode == 'r': 
+                    
+                    # for this reaction to replace
+                    r = model.reactions.get_by_id(mrid)
+                    in_refmodel = 'RM' if mrid in mrids_refmodel else '--'
+                    in_reffree = 'RF' if mrid in mrids_reffree else '--'
+                    mids_involved = set([m.id for m in r.metabolites if m.id.rsplit('_', 1)[0] != 'h'])  # exclude protons.
+                    gids_involved = set([g.id for g in r.genes])  
+                    
+                    # for the replacement reaction
+                    good_r = model.reactions.get_by_id(good_mrid)
+                    good_in_refmodel = 'RM' if good_mrid in mrids_refmodel else '--'
+                    good_in_reffree = 'RF' if good_mrid in mrids_reffree else '--'
+                    good_mids_involved = set([m.id for m in good_r.metabolites if m.id.rsplit('_', 1)[0] != 'h'])  # exclude protons.
+                    good_gids_involved = set([g.id for g in good_r.genes])  
+                    
+                    
+                    # determine if exaclty same reactants (except for protons).
+                    # WARNING: this way we exclude transporters involved in different compartments
+                    if mids_involved != good_mids_involved:
+                        continue
+                    
+                    
+                    # WARNING: by design, skip if both reactions are ancoded in the refmodel:
+                    if in_refmodel == 'RM' and good_in_refmodel == 'RM':
+                        continue
+                        
+                        
+                    # WARNING: by design, if two equivalment reactions have different gene sets, glue the gprs:
+                    same_geneset = gids_involved == good_gids_involved
+                        
+                        
+                    # log the future edits: 
+                    new_row = {
+                        'duplicated': mrid, 'd_reaction': r.reaction, 'd_gpr': r.gene_reaction_rule, 'd_in_refmodel': in_refmodel, 'd_in_reffree': in_reffree,
+                        '~~>': '~~>',
+                        'replacement': good_mrid, 'r_reaction': good_r.reaction, 'r_gpr': good_r.gene_reaction_rule, 'r_in_refmodel': good_in_refmodel, 'r_in_reffree': good_in_reffree, 'same_geneset': same_geneset}
+                    results_df.append(new_row)
+
+
+                    # populate the t-to-1 dictionary
+                    to_translate_11[mrid] = good_mrid
+                
+                
+    # save tabular results
+    results_df = pnd.DataFrame.from_records(results_df)
+    if   mrmode=='m': results_df.to_csv('working/duplicates/dup_m_edits.csv')  
+    elif mrmode=='r': results_df.to_csv('working/duplicates/dup_r_edits.csv')  
+    return to_translate_11
+
+
 
 def translate_targets(logger, model, to_translate):
     # attemps to rewrite reactions in a model, in a way that duplicate metabolites are solved.
@@ -114,141 +290,6 @@ def translate_targets(logger, model, to_translate):
 
 
 
-def sort_translation_dictionary(to_translate, model, refmodel, reffree):
-    
-    
-    # 'to_translate' contains duplicated metabolites divided in groups. 
-    # here, for each group, we select only one 'good' metabolite to maintain. 
-    # Therefore, dictionary 1-to-many will be converted in a 1-to-1. 
-    to_translate_11 = {}
-    
-    
-    # get all mids without compartment
-    puremids_refmodel = set([m.id.rsplit('_', 1)[0] for m in refmodel.metabolites])
-    puremids_reffree = set([m.id.rsplit('_', 1)[0] for m in reffree.metabolites])
-    
-    
-    results_df = []
-    for group in to_translate.values():
-        
-        # determine the good metabolite to represent the group:
-        good_puremid = list(group)[0]  # begin with the first
-        for puremid in group:
-            if puremid in puremids_refmodel: 
-                good_puremid = puremid  # give precedence to refmodel
-                break
-                
-                
-        # solve in a 1-to-1 dict
-        for puremid in group:
-            if puremid != good_puremid: 
-                # get formula, charge, and flags:
-                
-                
-                # for this metabolite to replace
-                m = get_first_occurrence(puremid, model)
-                formula = m.formula
-                charge = m.charge
-                in_refmodel = 'RM' if puremid in puremids_refmodel else '--'
-                in_reffree = 'RF' if puremid in puremids_reffree else '--'
-                
-                # for the replacement metabolite
-                good_m = get_first_occurrence(good_puremid, model)
-                good_formula = good_m.formula
-                good_charge = good_m.charge
-                good_in_refmodel = 'RM' if good_puremid in puremids_refmodel else '--'
-                good_in_reffree = 'RF' if good_puremid in puremids_reffree else '--'
-                
-                
-                # WARNING: by design, skip if both metabolite are ancoded in the refmodel:
-                if in_refmodel == 'RM' and good_in_refmodel == 'RM':
-                    continue
-                
-                
-                # log the future edits: 
-                new_row = {
-                    'duplicated': puremid, 'd_formula': formula, 'd_charge': charge, 'd_in_refmodel': in_refmodel, 'd_in_reffree': in_reffree,
-                    '~~>': '~~>',
-                    'replacement': good_puremid, 'r_formula': good_formula, 'r_charge': good_charge, 'r_in_refmodel': good_in_refmodel, 'r_in_reffree': good_in_reffree}
-                results_df.append(new_row)
-                
-                
-                # populate the t-to-1 dictionary
-                to_translate_11[puremid] = good_puremid
-                
-                
-    # save tabular results
-    results_df = pnd.DataFrame.from_records(results_df)
-    results_df.to_csv('working/duplicates/dup_m_edits.csv')         
-    return to_translate_11
-
-    
-    
-def get_translation_dictionary_MNX(model): 
-
-    
-    # several notes on mnx: 
-    # 1) some metabolites sometimes need to stay separated, eg nh3 and nh4. 
-    # 2) even MNX is not perfect, for example lald__L and abt__L are clearly different species.
-    # to_skip = ['nh3', 'nh4', 'lald__L' , 'abt__L']
-    to_skip = ['lald__L' , 'abt__L', 'h2co3', 'hco3']
-    
-    
-    # Dictionary grouping duplicated metabolites. The key is just one metabolite of the group. 
-    # Later a 'good' member will be determined for each group. Here each group could have different f/c.
-    to_translate = {}
-
-
-    # get all mids without compartment
-    puremids_model = set([m.id.rsplit('_', 1)[0] for m in model.metabolites])
-
-
-    # put here metabolites already parsed (puremids):
-    parsed = set()
-
-    
-    # iterate through all metabolites in this model
-    for m in model.metabolites:
-
-        # get the mid without compartement: 
-        puremid = m.id.rsplit('_', 1)[0]
-        if puremid in to_skip: continue
-
-        # already parsed the same metabolite (probably from a different compartment):
-        if puremid in parsed:
-            continue
-        parsed.add(puremid)
-
-        # get the annotations
-        try: biggannots = m.annotation['bigg.metabolite']
-        except: continue
-
-        
-        # search if some of the other annotations are present in the model: 
-        for biggid in biggannots: 
-            if biggid != puremid and biggid in puremids_model:
-        
-
-                # already parsed the same metabolite (probably froma different compartment):
-                if biggid in parsed:
-                    continue
-                parsed.add(biggid)
-
-                
-                # extract the corresponding metabolite in the model: 
-                m2 = get_first_occurrence(biggid, model) 
-
-                
-                # populate the dictionary: 
-                if puremid not in to_translate.keys():
-                    to_translate[puremid] = set()
-                    to_translate[puremid].add(puremid) # include the key in the group
-                to_translate[puremid].add(m2.id.rsplit('_', 1)[0])
-                    
-                    
-    return to_translate
-
-
 def parse_disconnected_metabolites(logger, model):
     
     
@@ -260,119 +301,30 @@ def parse_disconnected_metabolites(logger, model):
     model.remove_metabolites(to_remove)
     logger.debug(f"Removed {len(to_remove)} disconnected metabolites: {[m.id for m in to_remove]}.")
 
+
+
+def remove_duplicated_and_set_gpr(model, to_translate): 
     
-def check_duplicate_r_MNX(model, curated): 
-    """
-    Solve duplicate reactions based on their MNX annotation. 
-    """
     
-    # reactions (rids) contained in the curated model. 
-    curated_rids = [r.id for r in curated.reactions]
-
-    
-    # PART A) build a dictionary keyed by MNX id, containing the 
-    # corresponing set of duplicated reactions.
-    mnx_dict = {}
-    for r in model.reactions:
-
-        if r.id.startswith("EX_") : 
-            continue  # not interested in EX_ reaction
-
-        # get the MNX annotations for this reaction: 
-        try: mnx_annots = r.annotation['metanetx.reaction']
-        except: mnx_annots = []
-        if type(mnx_annots) == str: 
-            mnx_annots = [mnx_annots]
-        for mnx_id in mnx_annots: 
-            if mnx_id not in mnx_dict.keys():
-                mnx_dict[mnx_id] = set() 
-            mnx_dict[mnx_id].add(r.id)
-            
-    
-    # PART B) iterate the dictionary of duplicates and solve duplications.
-    to_delete = [] # reactions to delete
-    for mnx_id in mnx_dict.keys():
-        if len(mnx_dict[mnx_id] ) ==1: 
-            continue # interested only in duplicated reactions. 
-        # print the rids of these 'repeating group'
-        print(mnx_dict[mnx_id])
-
-
-        # STEP 1) print their reactions, and identify the 'cu' (curated) member (if any). 
-        cu_rid = None
-        for rid in mnx_dict[mnx_id]:
-            r = model.reactions.get_by_id(rid)
-            msg = 'cu' if rid in curated_rids else '--'
-            if msg=='cu': cu_rid = rid
-            print('.     ', msg, rid, r.reaction, r.bounds)
-
-
-        # STEP 2) check if they are really the same in terms of reactants / products.
-        # Take the first item as reference: 
-        rid0 = list(mnx_dict[mnx_id])[0]
-        r0 = model.reactions.get_by_id(rid0)
-        reacs0 = [m.id for m in r0.reactants]
-        prods0 = [m.id for m in r0.products]
-        # Iterate the others:
-        same_ids = True
-        for rid in list(mnx_dict[mnx_id])[1:]:
-            r = model.reactions.get_by_id(rid)
-            reacs = [m.id for m in r.reactants]
-            prods = [m.id for m in r.products]
-            if set(reacs0) == set(reacs) and set(prods0) == set(prods):
-                continue
-            elif set(reacs0) == set(prods) and set(prods0) == set(reacs):
-                continue
-            else:
-                same_ids = False
-                break
-        print('_______Same metabolites?', same_ids)
-
-
-        # STEP 3) check if they have the same GPR
-        gpr0 = r0.gene_reaction_rule
-        same_gpr= True
-        print('.     ', gpr0)
-        for rid in list(mnx_dict[mnx_id])[1:]:
-            r = model.reactions.get_by_id(rid)
-            gpr = r.gene_reaction_rule
-            print('.     ', gpr)
-            if gpr == gpr0: 
-                continue
-            else:
-                same_gpr = False
-        print('_______Same GPR?', same_gpr)
-        
-        
-        # STEP 4) Keeping just 1 of the group.
-        # The GPR of the 'keeping_rid' will be updated, concatenating using ORs.
-        if cu_rid != None: keeping_rid = cu_rid
-        else: 
-            # take the first reaction not having all metabolites in _e compartment.
-            # (assuming that at least 1 'good' reaction exists. 
-            for rid in mnx_dict[mnx_id]:
-                r = model.reactions.get_by_id(rid)
-                if not all([True if m.id.endswith('_e') else False for m in r.metabolites ]):
-                    keeping_rid = rid
-                    break
-        keeping_r = model.reactions.get_by_id(keeping_rid)
-        keeping_gpr = keeping_r.gene_reaction_rule
-        for rid in mnx_dict[mnx_id]: 
-            if rid != keeping_rid:
-                r = model.reactions.get_by_id(rid)
-                to_delete.append(r)
-                if keeping_gpr == '': keeping_gpr = r.gene_reaction_rule
-                elif r.gene_reaction_rule == '': pass
-                else: keeping_gpr = keeping_gpr + ' or ' + r.gene_reaction_rule
-                print('======>', rid, 'marked for DELETION!')
-        keeping_r.gene_reaction_rule = keeping_gpr
-        keeping_r.update_genes_from_gpr()
-                
-        
-        print() 
+    # first delete duplicated reactions: 
+    to_delete = [model.reactions.get_by_id(rid) for rid in to_translate.keys()]
     model.remove_reactions(to_delete)
-            
     
+    
+    # then update gpr where needed: 
+    results_df = pnd.read_csv('working/duplicates/dup_r_edits.csv', index_col=0)
+    results_df = results_df[results_df['same_geneset']==False]
+    results_df = results_df.reset_index(drop=True)
+    groups = results_df.groupby('replacement').groups
+    for replacement in groups:
+        group = results_df.iloc[groups[replacement], ]
+        gprs = set(group['d_gpr'].to_list() + group['r_gpr'].to_list())
+        final_gpr = '(' + ') or ('.join(list(gprs) ) + ')'
+        r = model.reactions.get_by_id(replacement)
+        r.gene_reaction_rule = final_gpr
+        r.update_genes_from_gpr() 
+                                                  
+
 
 def solve_duplicates(logger, outdir,  identity, coverage, refmodel):
     
@@ -397,21 +349,17 @@ def solve_duplicates(logger, outdir,  identity, coverage, refmodel):
     refmodel = cobra.io.load_json_model(f'working/brh/{refmodel_basename}.refmodel_translated.json')
     
     
-    # get the translation dictionary:                                       
-    to_translate = get_translation_dictionary_MNX(draft_panmodel)  # 1-to-many
-    to_translate = sort_translation_dictionary(to_translate, draft_panmodel, refmodel, reffree)  # 1-to-1
-                      
-                      
-    # translate reactions with the 'good' metabolites; 
+    # solve duplicated metabolites:                                       
+    to_translate = get_translation_dictionary_mnx(draft_panmodel, mrmode='m')  # 1-to-many 
+    to_translate = sort_translation_dictionary(to_translate, draft_panmodel, refmodel, reffree, mrmode='m')  # 1-to-1
     translate_targets(logger, draft_panmodel, to_translate)
-    
-    
-    # remove disconnected metabolites:
     parse_disconnected_metabolites(logger, draft_panmodel)
     
     
-    # remove duplicate reaction
-    check_duplicate_r_MNX(draft_panmodel, refmodel)
+    # solve duplicated reactions:
+    to_translate = get_translation_dictionary_mnx(draft_panmodel, mrmode='r')  # 1-to-many 
+    to_translate = sort_translation_dictionary(to_translate, draft_panmodel, refmodel, reffree, mrmode='r')  # 1-to-1
+    remove_duplicated_and_set_gpr(draft_panmodel, to_translate)
     
     
     # save deduplicated model
