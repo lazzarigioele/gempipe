@@ -55,6 +55,7 @@ dependencies:
   - cffi=1.15.1=py39he91dace_3
   - charset-normalizer=2.1.1=pyhd8ed1ab_0
   - cleo=2.1.0=pyhd8ed1ab_0
+  - click=8.1.7=unix_pyh707e725_0
   - clustalo=1.2.4=hdbdd923_7
   - clustalw=2.1=h4ac6f70_9
   - cobra=0.28.0=pyhd8ed1ab_0
@@ -138,6 +139,7 @@ dependencies:
   - jpeg=9e=h166bdaf_2
   - json5=0.9.5=pyh9f0ad1d_0
   - jsonschema=4.17.3=pyhd8ed1ab_0
+  - jupyter-cache=1.0.0=pyhd8ed1ab_0
   - jupyter_client=7.4.8=pyhd8ed1ab_0
   - jupyter_core=5.1.2=py39hf3d152e_0
   - jupyter_events=0.5.0=pyhd8ed1ab_1
@@ -214,6 +216,7 @@ dependencies:
   - markdown-it-py=3.0.0=pyhd8ed1ab_0
   - markupsafe=2.1.1=py39hb9d737c_2
   - matplotlib-inline=0.1.6=pyhd8ed1ab_0
+  - mdit-py-plugins=0.4.0=pyhd8ed1ab_0
   - mdurl=0.1.0=pyhd8ed1ab_0
   - metaeuk=6.a5d39d9=pl5321h6a68c12_3
   - metis=5.1.0=h59595ed_1007
@@ -227,6 +230,8 @@ dependencies:
   - msgpack-python=1.0.7=py39h7633fee_0
   - muscle=5.1=h4ac6f70_3
   - mysql-connector-c=6.1.11=h6eb9d5d_1007
+  - myst-nb=1.0.0=pyhd8ed1ab_0
+  - myst-parser=2.0.0=pyhd8ed1ab_0
   - nbclassic=0.4.8=pyhd8ed1ab_0
   - nbclient=0.7.2=pyhd8ed1ab_0
   - nbconvert=7.2.7=pyhd8ed1ab_0
