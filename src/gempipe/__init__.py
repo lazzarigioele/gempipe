@@ -23,7 +23,7 @@ def main():
     
     # define the header of main- and sub-commands. 
     pub_details = 'TODO'
-    header = f'gempipe v{importlib.metadata.metadata("gempipe")["Version"]}, please cite "{pub_details}".'
+    header = f'gempipe v{importlib.metadata.metadata("gempipe")["Version"]}, please cite "{pub_details}". Full documentation available at https://gempipe.readthedocs.io/en/latest/index.html.'
     
     
     # create the command line arguments:
@@ -39,6 +39,7 @@ def main():
     recon_parser.add_argument("-v", "--version", action="version", version=f"v{importlib.metadata.metadata('gempipe')['Version']}", help="Show version number and exit.")
     recon_parser.add_argument("-c", "--cores", metavar='', type=int, default=1, help="Number of parallel processes to use.")
     recon_parser.add_argument("--overwrite", action='store_true', help="Delete the working/ directory at the startup.")
+    recon_parser.add_argument("-o", "--outdir", metavar='', type=str, default='./', help="Main output directory (will be created if not existing).")
     recon_parser.add_argument("-t", "--taxids", metavar='', type=str, default='-', help="Taxids of the species to model (comma separated, for example '252393,68334').")
     recon_parser.add_argument("-g", "--genomes", metavar='', type=str, default='-', help="Input genome files or folder containing the genomes (see documentation).")
     recon_parser.add_argument("-p", "--proteomes", metavar='', type=str, default='-', help="Input proteome files or folder containing the proteomes (see documentation).")
@@ -51,7 +52,6 @@ def main():
     recon_parser.add_argument("--coverage", metavar='', type=int, default=70, help="Minimum percentage coverage to use when aligning against the BiGG gene database.")
     recon_parser.add_argument("-rm", "--refmodel", metavar='', type=str, default='-', help="Model to be used as reference.")
     recon_parser.add_argument("-rp", "--refproteome", metavar='', type=str, default='-', help="Proteome to be used as reference.")
-    recon_parser.add_argument("-o", "--outdir", metavar='', type=str, default='./', help="Main output directory (will be created if not existing).")
     recon_parser.add_argument("-m", "--mancor", metavar='', type=str, default='-', help="Manual corrections to apply during the reference expansion.")
 
     

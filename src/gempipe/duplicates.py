@@ -113,19 +113,19 @@ def sort_translation_dictionary(to_translate, model, refmodel, reffree, mrmode='
                     m = get_first_occurrence(mrid, model)
                     formula = m.formula
                     charge = m.charge
-                    in_refmodel = 'RM' if mrid in mrids_refmodel else '--'
-                    in_reffree = 'RF' if mrid in mrids_reffree else '--'
+                    in_refmodel = mrid in mrids_refmodel
+                    in_reffree = mrid in mrids_reffree
 
                     # for the replacement metabolite
                     good_m = get_first_occurrence(good_mrid, model)
                     good_formula = good_m.formula
                     good_charge = good_m.charge
-                    good_in_refmodel = 'RM' if good_mrid in mrids_refmodel else '--'
-                    good_in_reffree = 'RF' if good_mrid in mrids_reffree else '--'
+                    good_in_refmodel = good_mrid in mrids_refmodel
+                    good_in_reffree = good_mrid in mrids_reffree
 
 
                     # WARNING: by design, skip if both metabolite are ancoded in the refmodel:
-                    if in_refmodel == 'RM' and good_in_refmodel == 'RM':
+                    if in_refmodel and good_in_refmodel:
                         continue
 
 
@@ -146,15 +146,15 @@ def sort_translation_dictionary(to_translate, model, refmodel, reffree, mrmode='
                     
                     # for this reaction to replace
                     r = model.reactions.get_by_id(mrid)
-                    in_refmodel = 'RM' if mrid in mrids_refmodel else '--'
-                    in_reffree = 'RF' if mrid in mrids_reffree else '--'
+                    in_refmodel = mrid in mrids_refmodel
+                    in_reffree = mrid in mrids_reffree
                     mids_involved = set([m.id for m in r.metabolites if m.id.rsplit('_', 1)[0] != 'h'])  # exclude protons.
                     gids_involved = set([g.id for g in r.genes])  
                     
                     # for the replacement reaction
                     good_r = model.reactions.get_by_id(good_mrid)
-                    good_in_refmodel = 'RM' if good_mrid in mrids_refmodel else '--'
-                    good_in_reffree = 'RF' if good_mrid in mrids_reffree else '--'
+                    good_in_refmodel = good_mrid in mrids_refmodel
+                    good_in_reffree = good_mrid in mrids_reffree
                     good_mids_involved = set([m.id for m in good_r.metabolites if m.id.rsplit('_', 1)[0] != 'h'])  # exclude protons.
                     good_gids_involved = set([g.id for g in good_r.genes])  
                     
@@ -166,7 +166,7 @@ def sort_translation_dictionary(to_translate, model, refmodel, reffree, mrmode='
                     
                     
                     # WARNING: by design, skip if both reactions are ancoded in the refmodel:
-                    if in_refmodel == 'RM' and good_in_refmodel == 'RM':
+                    if in_refmodel and good_in_refmodel:
                         continue
                         
                         
@@ -185,11 +185,21 @@ def sort_translation_dictionary(to_translate, model, refmodel, reffree, mrmode='
                     # populate the t-to-1 dictionary
                     to_translate_11[mrid] = good_mrid
                 
-                
-    # save tabular results
+     
+    # produce the final results table: 
     results_df = pnd.DataFrame.from_records(results_df)
+    
+    
+    # erease meaningless fileds when not using a reference
+    if refmodel.id == '__EMPTY__': 
+        results_df['d_in_refmodel'] = '-'
+        results_df['r_in_refmodel'] = '-'
+        
+        
+    # save tabular results
     if   mrmode=='m': results_df.to_csv('working/duplicates/dup_m_edits.csv')  
     elif mrmode=='r': results_df.to_csv('working/duplicates/dup_r_edits.csv')  
+        
     return to_translate_11
 
 
@@ -345,9 +355,11 @@ def solve_duplicates(logger, outdir,  identity, coverage, refmodel):
     # load the needed models: 
     draft_panmodel = cobra.io.load_json_model(outdir + 'draft_panmodel.json')
     reffree = cobra.io.load_json_model(f'working/free/draft_panmodel_{identity}_{coverage}.json')
-    refmodel_basename = os.path.basename(refmodel)
-    refmodel = cobra.io.load_json_model(f'working/brh/{refmodel_basename}.refmodel_translated.json')
-    
+    if refmodel != '-':
+        refmodel_basename = os.path.basename(refmodel)
+        refmodel = cobra.io.load_json_model(f'working/brh/{refmodel_basename}.refmodel_translated.json')
+    else: refmodel = cobra.Model('__EMPTY__')
+        
     
     # solve duplicated metabolites:                                       
     to_translate = get_translation_dictionary_mnx(draft_panmodel, mrmode='m')  # 1-to-many 
