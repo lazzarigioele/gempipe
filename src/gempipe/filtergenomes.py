@@ -172,7 +172,6 @@ def compute_tmetrics(logger, cores):
     
 
 
-
 def filter_genomes(logger, cores, buscodb, buscoM, ncontigs, N50):
     
     

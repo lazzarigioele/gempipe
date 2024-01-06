@@ -10,12 +10,12 @@ import pandas as pnd
 
 
 
-def get_metadata_table(logger):
+def get_metadata_table(logger, rawmeta_filepath):
     
     
     # read the raw metadata: 
     logger.info("Creating the metadata table for your genomes...") 
-    metadata = pnd.read_csv("working/genomes/raw_ncbi.csv", index_col=0)
+    metadata = pnd.read_csv(rawmeta_filepath, index_col=0)
     
     
     # this table has 2 rows for each genome, one if the '_assembly_stats.txt' row.
@@ -72,13 +72,17 @@ def create_genomes_dictionary(logger):
 
 def get_genomes(logger, taxids, cores): 
     
+    # get metadata basename: 
+    taxids_sorted = sorted(taxids.split(','))
+    meta_basename = f"raw_ncbi_{'_'.join(taxids_sorted)}"
+    
     
     # execute the download
     logger.info("Downloading from NCBI all the genome assemblies linked to the provided taxids...")
     with open('working/logs/stdout_download.txt', 'w') as stdout, open('working/logs/stderr_download.txt', 'w') as stderr: 
         command = f"""ncbi-genome-download \
             --no-cache \
-            --metadata-table working/genomes/raw_ncbi.txt \
+            --metadata-table working/genomes/{meta_basename}.txt \
             --retries 100 --parallel 10 \
             --output-folder working/genomes/ \
             --species-taxids {taxids} \
@@ -91,9 +95,9 @@ def get_genomes(logger, taxids, cores):
     
     
     # format the metadata
-    metadata = pnd.read_csv("working/genomes/raw_ncbi.txt", sep='\t')
-    metadata.to_csv("working/genomes/raw_ncbi.csv")
-    os.remove("working/genomes/raw_ncbi.txt")
+    metadata = pnd.read_csv(f"working/genomes/{meta_basename}.txt", sep='\t')
+    metadata.to_csv(f"working/genomes/{meta_basename}.csv")
+    os.remove(f"working/genomes/{meta_basename}.txt")
     
     
     # moving the genomes to the right directory
@@ -113,33 +117,6 @@ def get_genomes(logger, taxids, cores):
     logger.debug("Decompression finished. Logs are stored in ./working/logs/stdout_decompression.txt and ./working/logs/stderr_decompression.txt.") 
     
     
-    
-def check_already_downloaded():
-    
-    
-    # get the available files: 
-    found_genomes = glob.glob('working/genomes/*.fna')
-    found_metadata = os.path.exists('working/genomes/raw_ncbi.csv')
-    if len(found_genomes) > 0 and found_metadata:
-        
-        
-        # get the downloaded accessions:
-        accessions = []
-        for genome_file in found_genomes: 
-            basename = os.path.basename(genome_file)
-            accession, _ = os.path.splitext(basename)
-            accessions.append(accession)
-            
-            
-        # load the metadata table:
-        metadata = pnd.read_csv("working/genomes/raw_ncbi.csv", index_col=0)
-        if set(accessions) == set(metadata['assembly_accession'].to_list()):
-            return True
-        
-        
-    return False
-    
-    
 
 def download_genomes(logger, taxids, cores):
     
@@ -148,19 +125,23 @@ def download_genomes(logger, taxids, cores):
     os.makedirs('working/genomes/', exist_ok=True)
     
     
-    # check the presence of already availables genomes:
-    if check_already_downloaded(): 
-        found_genomes = glob.glob('working/genomes/*.fna')
-        logger.info(f"Found {len(found_genomes)} genome assemblies already stored in your ./working/ directory: skipping the download from NCBI.")
-        logger.debug(f"Genomes found: " + str(found_genomes))
+    # get metadata basename: 
+    taxids_sorted = sorted(taxids.split(','))
+    meta_basename = f"raw_ncbi_{'_'.join(taxids_sorted)}"
+    
+    
+    # check if the genomes were already downloaded:
+    if os.path.exists(f'working/genomes/{meta_basename}.csv'):
+        metadata = pnd.read_csv(f"working/genomes/{meta_basename}.csv", index_col=0) 
+        if all([os.path.exists(f'working/genomes/{accession}.fna') for accession in metadata['assembly_accession']]):
+            logger.info(f"Genome assemblies already downloaded for taxids {taxids}: {len(metadata['assembly_accession'])} assemblies found. Skipping the downloaded from NCBI.")
+ 
+            # create metadata table and genomes dictionary: 
+            get_metadata_table(logger, f'working/genomes/{meta_basename}.csv')
+            create_genomes_dictionary(logger)
 
-            
-        # create metadata table and genomes dictionary: 
-        get_metadata_table(logger)
-        create_genomes_dictionary(logger)
-            
-            
-        return 0    
+
+            return 0    
     
           
     # download from ncbi: 
@@ -168,7 +149,7 @@ def download_genomes(logger, taxids, cores):
 
     
     # create the metadata table and the genomes dictionary
-    get_metadata_table(logger)
+    get_metadata_table(logger, f'working/genomes/{meta_basename}.csv')
     create_genomes_dictionary(logger)
     
     

@@ -131,10 +131,22 @@ def check_cached(logger, pam_path, imp_files, summary_path=None):
 def create_summary(logger, module_dir):
     
     
+    # get the accessions retained:
+    accessions = set()
+    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+        species_to_proteome = pickle.load(handler)
+        for species in species_to_proteome.keys(): 
+            for proteome in species_to_proteome[species]:
+                basename = os.path.basename(proteome)
+                accession, _ = os.path.splitext(basename)
+                accessions.add(accession)
+    
+    
     # parse each results file: 
     summary = []
     for file in glob.glob(f'{module_dir}/results/*.csv'):
         accession = file.rsplit('/', 1)[1].replace('.csv', '')
+        if accession not in accessions: continue  # other files present from previous runs.
         with open(file, 'r') as r_handler: 
             if r_handler.read() == '""\n':  # if the result csv for this accession is empty: 
                 refound_summary.append({'accession': accession, 'n_refound': 0, 'n_frag': 0, 'n_overlap': 0, 'n_stop': 0})

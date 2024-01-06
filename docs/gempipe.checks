@@ -1,0 +1,98 @@
+A1
+handle_manual_proteomes:
+    + just copy files
+    + create the dict p
+
+    ---> jump B
+
+A2
+handle_manual_genomes:
+    + just copy files
+    + create the dict g
+
+extract_cds:
+    § proteomes/{accession}.faa
+    § coordinates/{accession}.csv
+    + create the dict p
+    + create the dict c
+
+filter_genomes:
+    § filtering/bmetrics.csv
+        accession in bmetrics['accession']
+    § filtering/tmetrics.csv
+        accession in tmetrics['accession']
+    + rewrite the dict g
+    + rewrite the dict p
+
+    ---> jump B
+
+A3
+download_genomes:
+    § genomes/{meta_basename}.csv
+        genomes/{accession}.fna for accession in metadata['assembly_accession'] 
+    + create the dict g
+
+extract_cds: "
+
+filter_genomes: "
+
+    ---> jump B
+
+
+B:
+compute_clusters:
+    § clustering/pam.csv (accessions == columns)
+    § clustering/acc_to_seqs.pickle
+        clustering/cluster_to_rep.pickle
+        clustering/cluster_to_seqs.pickle
+        clustering/seq_to_acc.pickle
+        clustering/seq_to_cluster.pickle
+        clustering/acc_to_suffix.pickle
+        clustering/cluster_to_relfreq.pickle
+        clustering/rep_to_aaseq.pickle
+        clustering/representatives.ren.faa
+        clustering/sequences.csv
+
+
+C:
+recovery_broken:
+    § rec_broken/pam.csv (accessions == columns)
+        § rec_broken/summary.csv (accessions == rows)
+        rec_broken/sequences.csv
+        rec_broken/seq_to_coords.pickle
+        
+recovery_masking:
+    § rec_masking/pam.csv (accessions == columns)
+        § rec_masking/summary.csv (accessions == rows)
+        rec_masking/sequences.csv
+        rec_masking/seq_to_coords.pickle
+
+recovery_overlap:
+    § rec_overlap/pam.csv (accessions == columns)
+        § rec_overlap/summary.csv (accessions == rows)
+        rec_overlap/sequences.csv
+        rec_overlap/seq_to_coords.pickle
+
+~~~> PAM (definitive)
+
+D:
+func_annot:                                                
+    ~~~> PAM
+    C accessions == proc_acc == PAM:columns
+    § annotation/pan.emapper.annotations
+    § annotation/representatives.faa (seq_ids == PAM:rows)
+    
+network_rec:                                               
+    ~~~> annotation/representatives.faa
+    C accessions == proc_acc
+    § free/alignment.tsv
+    § free/draft_panmodel_{identity}_{coverage}.json
+    § free/gpr_inflator/gid_to_cluster_all.txt
+    § free/gpr_inflator/gpr_updates.txt
+
+
+E:
+perform_brh:
+    § brh/{accession}_brh_{ref_proteome_basename}.csv
+    
+convert_reference:

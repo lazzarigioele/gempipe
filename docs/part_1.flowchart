@@ -73,6 +73,7 @@ style Gene_functions fill:violet
 
 style NCBI_download fill:whitesmoke
 style CDS_prediction fill:whitesmoke
+style Filtering fill:whitesmoke
 style Bio_metrics fill:whitesmoke
 style Tech_metrics fill:whitesmoke
 style Clustering fill:whitesmoke
@@ -84,4 +85,7 @@ style BRH fill:whitesmoke
 style PruneU fill:whitesmoke
 style Ref_expansion fill:whitesmoke
 style Func_annot fill:whitesmoke
+style reannotation fill:whitesmoke
+style Solve_dup_m fill:whitesmoke 
+style Solve_dup_r fill:whitesmoke 
 

@@ -2,6 +2,8 @@ import os
 from importlib import resources
 import subprocess
 import cobra
+import shutil
+import pickle
 
 
 
@@ -354,7 +356,6 @@ def PruneU(logger, cores, staining, identity, coverage):
 
 
 
-
 def eggnogg_gpr_inflator(logger, panmodel): 
     
     
@@ -549,15 +550,30 @@ def network_rec(logger, cores, staining, identity, coverage):
     cobra_config.solver = "glpk_exact"
     
     
+    # get the accessions retained:
+    accessions = set()
+    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+        species_to_proteome = pickle.load(handler)
+        for species in species_to_proteome.keys(): 
+            for proteome in species_to_proteome[species]:
+                basename = os.path.basename(proteome)
+                accession, _ = os.path.splitext(basename)
+                accessions.add(accession)
+    
+    
     # check if the needed files are already computed
-    if os.path.exists('working/free/alignment.tsv'):
-        if os.path.exists(f'working/free/draft_panmodel_{identity}_{coverage}.json'): 
-            if os.path.exists(f'working/free/gpr_inflator/gid_to_cluster_all.txt'):
-                if os.path.exists(f'working/free/gpr_inflator/gpr_updates.txt'):
-                    # log some message: 
-                    logger.info('Found all the needed files already computed. Skipping this step.')
-                    
-                    return 0
+    if os.path.exists('working/free/proc_acc.pickle'):
+        with open('working/free/proc_acc.pickle', 'rb') as handler:
+            proc_acc = pickle.load(handler) 
+        if accessions == proc_acc:
+            if os.path.exists('working/free/alignment.tsv'):
+                if os.path.exists(f'working/free/draft_panmodel_{identity}_{coverage}.json'): 
+                    if os.path.exists(f'working/free/gpr_inflator/gid_to_cluster_all.txt'):
+                        if os.path.exists(f'working/free/gpr_inflator/gpr_updates.txt'):
+                            # log some message: 
+                            logger.info('Found all the needed files already computed. Skipping this step.')
+                            # signal to skip this module:
+                            return 0
     
     
     # run PruneU
@@ -574,6 +590,12 @@ def network_rec(logger, cores, staining, identity, coverage):
     
     # some log messages
     logger.info(f"Reference-free reconstruction completed: {' '.join(['G:', str(len(draft_panmodel.genes)), '|', 'R:', str(len(draft_panmodel.reactions)), '|', 'M:', str(len(draft_panmodel.metabolites))])}.")
+    
+    
+    # make traces to keep track of the accessions processed:
+    # run_bigg_aligner(), first function to be called, works on annotation/representatives.faa,
+    # so copy the 'proc_acc.pickle' inside annotation/
+    shutil.copyfile('working/annotation/proc_acc.pickle', 'working/free/proc_acc.pickle')
     
     
     return 0

@@ -24,19 +24,34 @@ def func_annot(logger, cores, outdir):
     pam = pnd.read_csv(outdir + 'pam.csv', index_col=0)
     
     
-    # check if all the output where already computed: 
-    clusters = list(pam.index)
-    if os.path.exists('working/annotation/pan.emapper.annotations'):
-        if os.path.exists('working/annotation/representatives.faa'):
-            seq_ids = [] 
-            with open('working/annotation/representatives.faa', 'r') as r_handler:
-                for seqrecord in SeqIO.parse(r_handler, "fasta"):
-                    seq_ids.append(seqrecord.id)
-            if set(seq_ids) == set(clusters):
-                # log some message: 
-                logger.info('Found all the needed files already computed. Skipping this step.')
-                # signal to skip this module:
-                return 0
+    # get the accessions retained:
+    accessions = set()
+    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+        species_to_proteome = pickle.load(handler)
+        for species in species_to_proteome.keys(): 
+            for proteome in species_to_proteome[species]:
+                basename = os.path.basename(proteome)
+                accession, _ = os.path.splitext(basename)
+                accessions.add(accession)
+    
+    
+    # check if all the output where already computed:
+    if os.path.exists('working/annotation/proc_acc.pickle'):
+        with open('working/annotation/proc_acc.pickle', 'rb') as handler:
+            proc_acc = pickle.load(handler) 
+        if accessions == proc_acc == set(list(pam.columns)):
+            if os.path.exists('working/annotation/pan.emapper.annotations'):
+                if os.path.exists('working/annotation/representatives.faa'):
+                    seq_ids = [] 
+                    with open('working/annotation/representatives.faa', 'r') as r_handler:
+                        for seqrecord in SeqIO.parse(r_handler, "fasta"):
+                            seq_ids.append(seqrecord.id)
+                    clusters = list(pam.index)
+                    if set(seq_ids) == set(clusters):
+                        # log some message: 
+                        logger.info('Found all the needed files already computed. Skipping this step.')
+                        # signal to skip this module:
+                        return 0
     
     
     # load the sequences resources: 
@@ -86,6 +101,11 @@ def func_annot(logger, cores, outdir):
         process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
         process.wait()
 
+        
+    # make traces to keep track of the accessions processed
+    proc_acc = set(list(pam.columns))
+    with open('working/annotation/proc_acc.pickle', 'wb') as handler:
+        pickle.dump(proc_acc, handler)
     
     
     return 0

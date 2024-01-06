@@ -1,9 +1,7 @@
 **/.DS_Store
 **/.ipynb_checkpoints
 **/__pycache__
-working/annotation/db/eggnog_proteins.dmnd
-working/annotation/db/eggnog.taxa.db
-working/annotation/db/eggnog.db
+ 
 dist/
 poetry.lock
 

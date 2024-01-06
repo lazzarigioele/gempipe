@@ -114,8 +114,9 @@ def task_brh(proteome, args):
 
 
     # save results to disk
+    ref_proteome_basename = os.path.basename(ref_proteome)
     results_df = pnd.DataFrame.from_records(results_df)
-    results_df.to_csv(f'working/brh/{accession}.csv')
+    results_df.to_csv(f'working/brh/{accession}_brh_{ref_proteome_basename}.csv')
     
     
     # save disk space removeing databases: 
@@ -127,7 +128,7 @@ def task_brh(proteome, args):
     
 
 
-def create_refgid_to_clusters(refmodel_basename): 
+def create_refgid_to_clusters(refmodel_basename, ref_proteome_basename): 
     
     
     # load the previously created doctionaries: 
@@ -146,7 +147,7 @@ def create_refgid_to_clusters(refmodel_basename):
     
             
             # read the brh results for this genome: 
-            df_result = pnd.read_csv(f'working/brh/{accession}.csv', index_col=0)
+            df_result = pnd.read_csv(f'working/brh/{accession}_brh_{ref_proteome_basename}.csv', index_col=0)
             df_result = df_result.set_index('cds', drop=True, verify_integrity=True)
             
             
@@ -289,12 +290,13 @@ def perform_brh(logger, cores, ref_proteome):
     
 
     # check if it's everything pre-computed
+    ref_proteome_basename = os.path.basename(ref_proteome)
     results_presence = []
     for species in species_to_proteome.keys(): 
         for proteome in species_to_proteome[species]:
             basename = os.path.basename(proteome)
             accession, _ = os.path.splitext(basename)
-            results_presence.append(os.path.exists(f'working/brh/{accession}.csv'))
+            results_presence.append(os.path.exists(f'working/brh/{accession}_brh_{ref_proteome_basename}.csv'))
     if all(results_presence): 
         # log some message: 
         logger.info('Found all the needed files already computed. Skipping this step.')
@@ -362,7 +364,7 @@ def convert_reference(logger, refmodel, ref_proteome):
 
     
     # create a dictionary ref_seq-to-clusters, parsing the BRHs. 
-    create_refgid_to_clusters(refmodel_basename)
+    create_refgid_to_clusters(refmodel_basename, refmodel_basename)
     
     
     # get a opy of the refmodel, and translate its genes to clusters notation. 

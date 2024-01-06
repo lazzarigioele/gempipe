@@ -15,3 +15,8 @@ style species_models fill:gold
 style gapfilling fill:whitesmoke
 style panmodel fill:gold
 style PAM fill:gold
+
+style strain_derivation fill:whitesmoke
+style species_derivation fill:whitesmoke 
+
+
