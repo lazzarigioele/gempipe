@@ -8,7 +8,7 @@ from Bio import SeqIO, SeqRecord, Seq
 
 
 
-from .commons import check_cached
+from ..commons import check_cached
 
 
 

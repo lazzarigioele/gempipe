@@ -7,11 +7,9 @@ import traceback
 import importlib.metadata
 
 
-
 from .recon import recon_command
+from .curate import *
 from .derive import derive_command
-
-
 
 
 from .flowchart import Flowchart
@@ -133,16 +131,16 @@ if __name__ == "__main__":
     main()
     
     # some command line examples to test the pipeline
-    # gempipe recon -s neg -t 252393,68334 -b enterobacterales_odb10 --ncontigs 2000 --N50 5000 --buscoM 10% -c 16
+    # gempipe recon -s neg -t 252393,68334 -b enterobacterales_odb10 --ncontigs 2000 --N50 5000 --buscoM 10% -c 16 --verbose
     
     # official plantarum without manual correactions
-    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 16 -rm testing/from_mendoza/iLP728.xml -rp testing/from_mendoza/protein_fasta.faa
+    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 16 -rm testing/from_mendoza/iLP728.xml -rp testing/from_mendoza/protein_fasta.faa --verbose
     
     # improved plantarum wihtout manual corrections
-    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 16 -rm testing/from_mendoza/iLP728_improved.json -rp testing/from_mendoza/protein_fasta.faa
+    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 16 -rm testing/from_mendoza/iLP728_improved.json -rp testing/from_mendoza/protein_fasta.faa --verbose
     
     # offical plantarum with manual corrections 
-    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 16 -rm testing/from_mendoza/iLP728.xml -rp testing/from_mendoza/protein_fasta.faa -m testing/mancor.txt
+    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 16 -rm testing/from_mendoza/iLP728.xml -rp testing/from_mendoza/protein_fasta.faa -m testing/mancor.txt --verbose
     
     # improved plantarum with manual corrections
-    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 16 -rm testing/from_mendoza/iLP728_improved.json -rp testing/from_mendoza/protein_fasta.faa -m testing/mancor.txt
+    # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 16 -rm testing/from_mendoza/iLP728_improved.json -rp testing/from_mendoza/protein_fasta.faa -m testing/mancor.txt --verbose

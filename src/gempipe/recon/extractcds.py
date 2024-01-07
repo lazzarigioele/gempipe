@@ -9,9 +9,9 @@ import shutil
 import pandas as pnd
 
 
-from .commons import chunkize_items
-from .commons import load_the_worker
-from .commons import gather_results
+from ..commons import chunkize_items
+from ..commons import load_the_worker
+from ..commons import gather_results
 
 
 

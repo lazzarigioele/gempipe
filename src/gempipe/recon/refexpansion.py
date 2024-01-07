@@ -8,8 +8,8 @@ import pandas as pnd
 import cobra
 
 
-from .commons import get_retained_accessions
-from .commons import get_md5_string
+from ..commons import get_retained_accessions
+from ..commons import get_md5_string
 
 
 

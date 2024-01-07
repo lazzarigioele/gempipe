@@ -4,7 +4,7 @@ from importlib import resources
 import os
 
 
-from .commons import get_md5_string
+from ..commons import get_md5_string
 
 
 __PIMPCACHE__ = None

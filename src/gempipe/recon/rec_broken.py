@@ -9,13 +9,13 @@ import itertools
 import pandas as pnd
 
 
-from .commons import chunkize_items
-from .commons import load_the_worker
-from .commons import gather_results
-from .commons import check_cached
-from .commons import create_summary
-from .commons import extract_aa_seq_from_genome
-from .commons import get_blast_header
+from ..commons import chunkize_items
+from ..commons import load_the_worker
+from ..commons import gather_results
+from ..commons import check_cached
+from ..commons import create_summary
+from ..commons import extract_aa_seq_from_genome
+from ..commons import get_blast_header
 
 
 

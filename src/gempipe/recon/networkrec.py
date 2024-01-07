@@ -11,8 +11,8 @@ import pandas as pnd
 
 
 
-from .commons import get_blast_header
-from .commons import get_retained_accessions
+from ..commons import get_blast_header
+from ..commons import get_retained_accessions
     
 
 

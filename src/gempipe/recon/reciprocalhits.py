@@ -12,11 +12,11 @@ from cobra.util.solver import linear_reaction_coefficients
 from Bio import SeqIO, SeqRecord, Seq
 
 
-from .commons import get_blast_header
-from .commons import chunkize_items
-from .commons import load_the_worker
-from .commons import gather_results
-from .commons import get_retained_accessions
+from ..commons import get_blast_header
+from ..commons import chunkize_items
+from ..commons import load_the_worker
+from ..commons import gather_results
+from ..commons import get_retained_accessions
 
 
 

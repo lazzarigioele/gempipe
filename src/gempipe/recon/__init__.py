@@ -20,7 +20,9 @@ from .reciprocalhits import convert_reference
 from .refexpansion import ref_expansion
 from .pimp import denovo_annotation
 from .duplicates import solve_duplicates
-from .commons import get_md5_string
+
+from ..commons import get_md5_string
+
 
 
 def recon_command(args, logger):
