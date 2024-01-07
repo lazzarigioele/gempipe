@@ -23,7 +23,7 @@ def main():
     
     # define the header of main- and sub-commands. 
     pub_details = 'TODO'
-    header = f'gempipe v{importlib.metadata.metadata("gempipe")["Version"]}, please cite "{pub_details}". Full documentation available at https://gempipe.readthedocs.io/en/latest/index.html.'
+    header = f'gempipe v{importlib.metadata.metadata("gempipe")["Version"]}, please cite "{pub_details}".\nFull documentation available at https://gempipe.readthedocs.io/en/latest/index.html.'
     
     
     # create the command line arguments:
@@ -40,6 +40,7 @@ def main():
     recon_parser.add_argument("-c", "--cores", metavar='', type=int, default=1, help="Number of parallel processes to use.")
     recon_parser.add_argument("--overwrite", action='store_true', help="Delete the working/ directory at the startup.")
     recon_parser.add_argument("-o", "--outdir", metavar='', type=str, default='./', help="Main output directory (will be created if not existing).")
+    recon_parser.add_argument("--verbose", action='store_true', help="Make stdout messages more verbose, including debug messages.")
     recon_parser.add_argument("-t", "--taxids", metavar='', type=str, default='-', help="Taxids of the species to model (comma separated, for example '252393,68334').")
     recon_parser.add_argument("-g", "--genomes", metavar='', type=str, default='-', help="Input genome files or folder containing the genomes (see documentation).")
     recon_parser.add_argument("-p", "--proteomes", metavar='', type=str, default='-', help="Input proteome files or folder containing the proteomes (see documentation).")
@@ -61,6 +62,7 @@ def main():
     derive_parser.add_argument("-v", "--version", action="version", version=f"v{importlib.metadata.metadata('gempipe')['Version']}", help="Show version number and exit.")
     derive_parser.add_argument("-c", "--cores", metavar='', type=int, help="How many parallel processes to use.")
     derive_parser.add_argument("-o", "--outdir", metavar='', type=str, default='./', help="Main output directory (will be created if not existing).")
+    derive_parser.add_argument("--verbose", action='store_true', help="Make stdout messages more verbose, including debug messages.")
     
 
     # check the inputted subcommand, automatic sys.exit(1) if a bad subprogram was specied. 
@@ -78,7 +80,6 @@ def main():
         handler.setFormatter(formatter)
         logger = logging.getLogger('gempipe')
         logger.addHandler(handler)
-        logger.setLevel(logging.DEBUG) # debug (lvl 10) and up
         while True:
             message = queue.get() # block until a new message arrives
             if message is None: # sentinel message to exit the loop
@@ -92,7 +93,8 @@ def main():
     # connect the logger for this (main) process: 
     logger = logging.getLogger('gempipe')
     logger.addHandler(QueueHandler(queue))
-    logger.setLevel(logging.DEBUG) # debug (lvl 10) and up
+    if args.verbose: logger.setLevel(logging.DEBUG) # debug (lvl 10) and up
+    else: logger.setLevel(logging.INFO) # debug (lvl 20) and up
     
     
     # show a welcome message:
