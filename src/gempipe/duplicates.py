@@ -5,6 +5,9 @@ import pandas as pnd
 import cobra
 
 
+from .commons import get_md5_string
+
+
 
 def get_first_occurrence(puremid, model):
     
@@ -336,11 +339,11 @@ def remove_duplicated_and_set_gpr(model, to_translate):
                                                   
 
 
-def solve_duplicates(logger, identity, coverage, refmodel):
+def solve_duplicates(logger, identity, coverage, refmodel, panmodel_md5):
     
     
     # log some message: 
-    logger.info("Detecting duplicated metabolites using MetaNetX annotations...")
+    logger.info("Detecting duplicates using MetaNetX annotations...")
     
     
     # create subdirs without overwriting: 
@@ -352,6 +355,18 @@ def solve_duplicates(logger, identity, coverage, refmodel):
     cobra_config.solver = "glpk_exact"
     
     
+    # check presence of already computed files 
+    if os.path.exists(f'working/duplicates/draft_panmodel.json'):
+        # compare md5 of the input pan-model:
+        if panmodel_md5 == get_md5_string('working/duplicates/draft_panmodel.json'):
+            if os.path.exists(f'working/duplicates/draft_panmodel_da.json'):
+                if os.path.exists(f'working/duplicates/draft_panmodel_da_dd.json'):
+                    # log some message: 
+                    logger.info('Found all the needed files already computed. Skipping this step.')
+                    # signal to skip this module:
+                    return 0
+    
+    
     # load the needed models: 
     draft_panmodel = cobra.io.load_json_model('working/duplicates/draft_panmodel_da.json')
     reffree = cobra.io.load_json_model(f'working/free/draft_panmodel_{identity}_{coverage}.json')
@@ -361,7 +376,8 @@ def solve_duplicates(logger, identity, coverage, refmodel):
     else: refmodel = cobra.Model('__EMPTY__')
         
     
-    # solve duplicated metabolites:                                       
+    # solve duplicated metabolites:
+    logger.info("Detecting duplicate metabolites using MetaNetX annotations...")
     to_translate = get_translation_dictionary_mnx(draft_panmodel, mrmode='m')  # 1-to-many 
     to_translate = sort_translation_dictionary(to_translate, draft_panmodel, refmodel, reffree, mrmode='m')  # 1-to-1
     translate_targets(logger, draft_panmodel, to_translate)
@@ -369,13 +385,14 @@ def solve_duplicates(logger, identity, coverage, refmodel):
     
     
     # solve duplicated reactions:
+    logger.info("Detecting duplicate reactions using MetaNetX annotations...")
     to_translate = get_translation_dictionary_mnx(draft_panmodel, mrmode='r')  # 1-to-many 
     to_translate = sort_translation_dictionary(to_translate, draft_panmodel, refmodel, reffree, mrmode='r')  # 1-to-1
     remove_duplicated_and_set_gpr(draft_panmodel, to_translate)
     
     
     # save deduplicated model
-    cobra.io.save_json_model(draft_panmodel, f'working/duplicates/draft_panmodel_{identity}_{coverage}_dd.json')
+    cobra.io.save_json_model(draft_panmodel, f'working/duplicates/draft_panmodel_da_dd.json')
     
                              
     return 0

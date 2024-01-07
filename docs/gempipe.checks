@@ -107,3 +107,18 @@ ref_expansion:
     § expansion/draft_panmodel.json
     § expansion/results.csv
     § expansion/added_metabolites.txt
+    
+    
+F:
+denovo_annotation:
+    § duplicates/draft_panmodel.json
+    (md5) duplicates/draft_panmodel.json
+    § duplicates/draft_panmodel_da.json
+    
+
+solve_duplicates:
+    § duplicates/draft_panmodel.json
+    (md5) duplicates/draft_panmodel.json
+    § duplicates/draft_panmodel_da.json
+    § duplicates/draft_panmodel_da_dd.json
+    

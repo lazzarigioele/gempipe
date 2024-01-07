@@ -1,6 +1,10 @@
 import pickle
 import cobra
 from importlib import resources
+import os
+
+
+from .commons import get_md5_string
 
 
 __PIMPCACHE__ = None
@@ -224,16 +228,27 @@ def pimp_my_model(logger, model, fromchilds=False, overwrite=False):
         
         
 
-def denovo_annotation(logger):
+def denovo_annotation(logger, panmodel_md5):
     
     
     # log some message: 
-    logger.info("Performing denovo model annotation...")
+    logger.info("Performing de-novo model annotation...")
     
     
     # set up the cobra solver
     cobra_config = cobra.Configuration()
     cobra_config.solver = "glpk_exact"
+    
+    
+    # check presence of already computed files 
+    if os.path.exists(f'working/duplicates/draft_panmodel.json'):
+        # compare md5 of the input pan-model:
+        if panmodel_md5 == get_md5_string('working/duplicates/draft_panmodel.json'):
+            if os.path.exists(f'working/duplicates/draft_panmodel_da.json'):
+                # log some message: 
+                logger.info('Found all the needed files already computed. Skipping this step.')
+                # signal to skip this module:
+                return 0
     
     
     # load the final draft panmodel

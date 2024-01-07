@@ -20,6 +20,7 @@ from .reciprocalhits import convert_reference
 from .refexpansion import ref_expansion
 from .pimp import denovo_annotation
 from .duplicates import solve_duplicates
+from .commons import get_md5_string
 
 
 def recon_command(args, logger):
@@ -164,21 +165,22 @@ def recon_command(args, logger):
     if args.refmodel != '-' and args.refproteome != '-':
         shutil.copyfile('working/expansion/draft_panmodel.json', 'working/duplicates/draft_panmodel.json')
     else: shutil.copyfile(f'working/free/draft_panmodel_{args.identity}_{args.coverage}.json', 'working/duplicates/draft_panmodel.json')
+    panmodel_md5 = get_md5_string('working/duplicates/draft_panmodel.json')
     
     
     # PART 6. Automated curation
     
     # perform de-novo annotation with metanetx 4.4 (aka pimp_my_model)
-    response = denovo_annotation(logger)
+    response = denovo_annotation(logger, panmodel_md5)
     if response == 1: return 1
     
     # solve duplicate metabolites and reactions using mnx annotation
-    response = solve_duplicates(logger, args.identity, args.coverage, args.refmodel,)
+    response = solve_duplicates(logger, args.identity, args.coverage, args.refmodel, panmodel_md5)
     if response == 1: return 1
 
     
     # save the final panmodel
-    shutil.copyfile(f'working/duplicates/draft_panmodel_{args.identity}_{args.coverage}_dd.json', outdir + 'draft_panmodel.json')
+    shutil.copyfile(f'working/duplicates/draft_panmodel_da_dd.json', outdir + 'draft_panmodel.json')
     
         
         
