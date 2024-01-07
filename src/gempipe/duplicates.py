@@ -336,7 +336,7 @@ def remove_duplicated_and_set_gpr(model, to_translate):
                                                   
 
 
-def solve_duplicates(logger, outdir,  identity, coverage, refmodel):
+def solve_duplicates(logger, identity, coverage, refmodel):
     
     
     # log some message: 
@@ -353,7 +353,7 @@ def solve_duplicates(logger, outdir,  identity, coverage, refmodel):
     
     
     # load the needed models: 
-    draft_panmodel = cobra.io.load_json_model(outdir + 'draft_panmodel.json')
+    draft_panmodel = cobra.io.load_json_model('working/duplicates/draft_panmodel_da.json')
     reffree = cobra.io.load_json_model(f'working/free/draft_panmodel_{identity}_{coverage}.json')
     if refmodel != '-':
         refmodel_basename = os.path.basename(refmodel)
@@ -375,7 +375,7 @@ def solve_duplicates(logger, outdir,  identity, coverage, refmodel):
     
     
     # save deduplicated model
-    cobra.io.save_json_model(draft_panmodel, f'working/duplicates/draft_panmodel_{identity}_{coverage}_ddM.json')
+    cobra.io.save_json_model(draft_panmodel, f'working/duplicates/draft_panmodel_{identity}_{coverage}_dd.json')
     
                              
     return 0

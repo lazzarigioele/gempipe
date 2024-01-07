@@ -224,7 +224,7 @@ def pimp_my_model(logger, model, fromchilds=False, overwrite=False):
         
         
 
-def denovo_annotation(logger, outdir):
+def denovo_annotation(logger):
     
     
     # log some message: 
@@ -237,7 +237,7 @@ def denovo_annotation(logger, outdir):
     
     
     # load the final draft panmodel
-    draft_panmodel = cobra.io.load_json_model(outdir + 'draft_panmodel.json')
+    draft_panmodel = cobra.io.load_json_model('working/duplicates/draft_panmodel.json')
     
                 
     # denovo annotation
@@ -246,7 +246,7 @@ def denovo_annotation(logger, outdir):
 
     
     # replace file on disk:
-    cobra.io.save_json_model(draft_panmodel, outdir + 'draft_panmodel.json')
+    cobra.io.save_json_model(draft_panmodel, 'working/duplicates/draft_panmodel_da.json')
     
     
     return 0 

@@ -16,6 +16,7 @@ from .commons import get_blast_header
 from .commons import chunkize_items
 from .commons import load_the_worker
 from .commons import gather_results
+from .commons import get_retained_accessions
 
 
 
@@ -132,21 +133,21 @@ def create_refgid_to_clusters(refmodel_basename, ref_proteome_basename):
     
     
     # load the previously created doctionaries: 
-    with open('working/genomes/species_to_genome.pickle', 'rb') as handler:
-        species_to_genome = pickle.load(handler)
+    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+        species_to_proteome = pickle.load(handler)
     with open('working/clustering/seq_to_cluster.pickle', 'rb') as handler:
         seq_to_cluster = pickle.load(handler)
     
     
-    # parse each filtered genome: 
+    # parse each filtered accession: 
     refgid_to_clusters = {}
-    for species in species_to_genome.keys():
-        for genome in species_to_genome[species]: 
-            basename = os.path.basename(genome)
+    for species in species_to_proteome.keys():
+        for proteome in species_to_proteome[species]: 
+            basename = os.path.basename(proteome)
             accession, _ = os.path.splitext(basename)
     
             
-            # read the brh results for this genome: 
+            # read the brh results for this accession: 
             df_result = pnd.read_csv(f'working/brh/{accession}_brh_{ref_proteome_basename}.csv', index_col=0)
             df_result = df_result.set_index('cds', drop=True, verify_integrity=True)
             
@@ -353,23 +354,36 @@ def convert_reference(logger, refmodel, ref_proteome):
         return 1
     
     
-    # check if it's everything pre-computed
+    # get basename for reference model:
     refmodel_basename = os.path.basename(refmodel)
-    if os.path.exists(f'working/brh/{refmodel_basename}.refmodel_original.json'):
-        if os.path.exists(f'working/brh/{refmodel_basename}.refmodel_translated.json'):
-            if os.path.exists(f'working/brh/{refmodel_basename}.refgid_to_clusters.pickle'):
-                logger.info('Found all the needed files already computed. Skipping this step.')
-                # signal to skip this module:
-                return 0
+    
+    
+    # check if it's everything pre-computed
+    if os.path.exists('working/brh/proc_acc.pickle'):
+        with open('working/brh/proc_acc.pickle', 'rb') as handler:
+            proc_acc = pickle.load(handler) 
+        if get_retained_accessions() == proc_acc:
+            if os.path.exists(f'working/brh/{refmodel_basename}.refmodel_original.json'):
+                if os.path.exists(f'working/brh/{refmodel_basename}.refmodel_translated.json'):
+                    if os.path.exists(f'working/brh/{refmodel_basename}.refgid_to_clusters.pickle'):
+                        # log some message: 
+                        logger.info('Found all the needed files already computed. Skipping this step.')
+                        # signal to skip this module:
+                        return 0
 
     
     # create a dictionary ref_seq-to-clusters, parsing the BRHs. 
-    create_refgid_to_clusters(refmodel_basename, refmodel_basename)
+    ref_proteome_basename = os.path.basename(ref_proteome)
+    create_refgid_to_clusters(refmodel_basename, ref_proteome_basename)
     
     
     # get a opy of the refmodel, and translate its genes to clusters notation. 
     response = translate_refmodel(logger, refmodel, ref_proteome)
     if response == 1: return 1
+
+
+    # make traces to keep track of the accessions processed:
+    shutil.copyfile('working/annotation/proc_acc.pickle', 'working/brh/proc_acc.pickle')
     
     
     return 0

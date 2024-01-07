@@ -159,21 +159,26 @@ def recon_command(args, logger):
         if response == 1: return 1
     
     
-    # define the final draft pan-model in the current directory: 
+    # define the final draft pan-model in the duplicates/ directory: 
+    os.makedirs('working/duplicates/', exist_ok=True)  # without overwriting
     if args.refmodel != '-' and args.refproteome != '-':
-        shutil.copyfile('working/expansion/draft_panmodel.json', outdir + 'draft_panmodel.json')
-    else: shutil.copyfile(f'working/free/draft_panmodel_{args.identity}_{args.coverage}.json', outdir + 'draft_panmodel.json')
+        shutil.copyfile('working/expansion/draft_panmodel.json', 'working/duplicates/draft_panmodel.json')
+    else: shutil.copyfile(f'working/free/draft_panmodel_{args.identity}_{args.coverage}.json', 'working/duplicates/draft_panmodel.json')
     
     
     # PART 6. Automated curation
     
     # perform de-novo annotation with metanetx 4.4 (aka pimp_my_model)
-    response = denovo_annotation(logger, outdir)
+    response = denovo_annotation(logger)
     if response == 1: return 1
     
     # solve duplicate metabolites and reactions using mnx annotation
-    response = solve_duplicates(logger, outdir, args.identity, args.coverage, args.refmodel,)
+    response = solve_duplicates(logger, args.identity, args.coverage, args.refmodel,)
     if response == 1: return 1
+
+    
+    # save the final panmodel
+    shutil.copyfile(f'working/duplicates/draft_panmodel_{args.identity}_{args.coverage}_dd.json', outdir + 'draft_panmodel.json')
     
         
         

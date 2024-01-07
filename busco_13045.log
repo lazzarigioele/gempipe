@@ -1,6 +1,0 @@
-2024-01-06 18:41:16 DEBUG:busco.run_BUSCO	Command line: /opt/conda/bin/busco -f --cpu 16 -i working/proteomes/GCA_001633645.1.faa --mode proteins --lineage_dataset lactobacillales_odb10 --download_path working/bmetrics/db/ --out_path working/bmetrics/ --out GCA_001633645.1
-2024-01-06 18:41:16 INFO:busco.run_BUSCO	***** Start a BUSCO v5.4.0 analysis, current time: 01/06/2024 18:41:16 *****
-2024-01-06 18:41:16 DEBUG:busco.ConfigManager	Getting config file
-2024-01-06 18:41:16 INFO:busco.ConfigManager	Configuring BUSCO with local environment
-2024-01-06 18:41:16 INFO:busco.BuscoConfig	Mode is proteins
-2024-01-06 18:41:16 INFO:busco.BuscoDownloadManager	Downloading information on latest versions of BUSCO data...

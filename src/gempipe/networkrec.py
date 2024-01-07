@@ -12,6 +12,7 @@ import pandas as pnd
 
 
 from .commons import get_blast_header
+from .commons import get_retained_accessions
     
 
 
@@ -550,22 +551,11 @@ def network_rec(logger, cores, staining, identity, coverage):
     cobra_config.solver = "glpk_exact"
     
     
-    # get the accessions retained:
-    accessions = set()
-    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
-        species_to_proteome = pickle.load(handler)
-        for species in species_to_proteome.keys(): 
-            for proteome in species_to_proteome[species]:
-                basename = os.path.basename(proteome)
-                accession, _ = os.path.splitext(basename)
-                accessions.add(accession)
-    
-    
     # check if the needed files are already computed
     if os.path.exists('working/free/proc_acc.pickle'):
         with open('working/free/proc_acc.pickle', 'rb') as handler:
             proc_acc = pickle.load(handler) 
-        if accessions == proc_acc:
+        if get_retained_accessions() == proc_acc:
             if os.path.exists('working/free/alignment.tsv'):
                 if os.path.exists(f'working/free/draft_panmodel_{identity}_{coverage}.json'): 
                     if os.path.exists(f'working/free/gpr_inflator/gid_to_cluster_all.txt'):

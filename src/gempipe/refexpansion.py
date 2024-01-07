@@ -1,8 +1,15 @@
 import os
+import shutil 
+import copy
+import pickle
 
 
 import pandas as pnd
 import cobra
+
+
+from .commons import get_retained_accessions
+from .commons import get_md5_string
 
 
 
@@ -345,29 +352,48 @@ def ref_expansion(logger, refmodel, mancor, identity, coverage):
     os.makedirs('working/expansion/', exist_ok=True)
     
     
+    # check the existence of the manual corrections file:
+    mancor_filepath = copy.deepcopy(mancor)
+    if mancor_filepath != '-': 
+        if not os.path.exists(mancor_filepath): # check the input:
+            logger.error(f"Provided path to the manual corrections (-m/--mancor) does not exist: {mancor_filepath}.")
+            return 1
+        
+        
+    # do the md5: 
+    if mancor_filepath != '-': # existence of the file was verified above
+        md5_new = get_md5_string(mancor_filepath)
+    else: 
+        md5_new = '-'
+            
+    
     # check if the output was already computed
-    if os.path.exists(f'working/expansion/draft_panmodel.json'):
-        if os.path.exists(f'working/expansion/results.csv'):
-            if os.path.exists(f'working/expansion/added_metabolites.txt'):
-                logger.info('Found all the needed files already computed. Skipping this step.')
-                # signal to skip this module:
-                return 0
+    if os.path.exists('working/expansion/proc_acc.pickle'):
+        with open('working/expansion/proc_acc.pickle', 'rb') as handler:
+            proc_acc = pickle.load(handler) 
+        if get_retained_accessions() == proc_acc:
+            if os.path.exists(f'working/expansion/mancor.txt'):
+                md5_old = get_md5_string('working/expansion/mancor.txt')
+            else: md5_old = '-'  # fresh run , or previous run without mancor.
+            if md5_old == md5_new:
+                if os.path.exists(f'working/expansion/draft_panmodel.json'):
+                    if os.path.exists(f'working/expansion/results.csv'):
+                        if os.path.exists(f'working/expansion/added_metabolites.txt'):
+                            logger.info('Found all the needed files already computed. Skipping this step.')
+                            # signal to skip this module:
+                            return 0
     
     
     # get the manual corrections dictionary:
-    if mancor != '-': 
-        if not os.path.exists(mancor): # check the input:
-            logger.error(f"Provided path to the manual corrections (-m/--mancor) does not exist: {mancor}.")
-            return 1
-        else:  # convert manual corrections to dictionary
-            response = mancor_to_dict(logger, mancor)
-            if type(response) == int:
-                if response == 1: return 1
-            else: # good corrections file: 
-                mancor = response  # convert the filepath to dict
-                logger.info(  # log some message
-                    f"Using the provided manual corrections ({len(mancor['formulas'].keys())} formula corrections, {len(mancor['charges'].keys())} charge corrections, " + \
-                    f"{len(mancor['reactions'].keys())} reaction corrections, and {len(mancor['blacklist'])} reactions in blacklist)...")
+    if mancor_filepath != '-': # existence of the file was verified above
+        response = mancor_to_dict(logger, mancor_filepath)
+        if type(response) == int:
+            if response == 1: return 1
+        else: # good corrections file: 
+            mancor = response  # convert the filepath to dict
+            logger.info(  # log some message
+                f"Using the provided manual corrections ({len(mancor['formulas'].keys())} formula corrections, {len(mancor['charges'].keys())} charge corrections, " + \
+                f"{len(mancor['reactions'].keys())} reaction corrections, and {len(mancor['blacklist'])} reactions in blacklist)...")
     else: mancor = {'formulas': {}, 'charges': {}, 'reactions': {}, 'blacklist': []}  # emtpy, easier to handle
 
     
@@ -392,6 +418,15 @@ def ref_expansion(logger, refmodel, mancor, identity, coverage):
     # finally save the new draft panmodel
     cobra.io.save_json_model(draft_panmodel_exp, 'working/expansion/draft_panmodel.json')
     logger.debug("New draft pan-model saved to 'working/expansion/draft_panmodel.json'.")
+    
+    
+    # make traces to keep track of the accessions processed:
+    # copy the one of brh/ , since the translated refmodelis the starting point
+    shutil.copyfile('working/brh/proc_acc.pickle', 'working/expansion/proc_acc.pickle')
+    if mancor_filepath != '-': shutil.copyfile(mancor_filepath, 'working/expansion/mancor.txt')
+    else:  # delete an eventual previous version: 
+        if os.path.exists(f'working/expansion/mancor.txt'):
+            os.remove(f'working/expansion/mancor.txt')
     
     
     return 0

@@ -96,3 +96,14 @@ perform_brh:
     § brh/{accession}_brh_{ref_proteome_basename}.csv
     
 convert_reference:
+    C accessions == proc_acc
+    § brh/{refmodel_basename}.refmodel_original.json'):
+    § brh/{refmodel_basename}.refmodel_translated.json'):
+    § brh/{refmodel_basename}.refgid_to_clusters.pickle
+    
+ref_expansion:
+    C accessions == proc_acc
+    C mancor_old == mancor_new (md5)
+    § expansion/draft_panmodel.json
+    § expansion/results.csv
+    § expansion/added_metabolites.txt

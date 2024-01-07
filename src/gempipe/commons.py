@@ -3,6 +3,8 @@ import os
 import pickle
 import glob
 import subprocess
+import hashlib
+
 
 
 import pandas as pnd
@@ -77,22 +79,27 @@ def gather_results(results):
 
 
 
+def get_retained_accessions():
+    # to be called after the genomes filtering.
+    
+    
+    accessions = set()
+    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+        species_to_proteome = pickle.load(handler)
+        for species in species_to_proteome.keys(): 
+            for proteome in species_to_proteome[species]:
+                basename = os.path.basename(proteome)
+                accession, _ = os.path.splitext(basename)
+                accessions.add(accession)
+    return accessions
+
+
+
 def check_cached(logger, pam_path, imp_files, summary_path=None):
     
     
-    # read which proteomes passed the filters: 
-    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
-        species_to_proteome = pickle.load(handler)
-        
-        
-    # get the accessions to search for: 
-    accessions = []
-    for species in species_to_proteome.keys(): 
-        for proteome in species_to_proteome[species]:
-            basename = os.path.basename(proteome)
-            accession, _ = os.path.splitext(basename)
-            accessions.append(accession)
-    accessions = set(accessions)
+    # get the accessions retained:
+    accessions = get_retained_accessions()
     
     
     # search for the PAM: 
@@ -132,21 +139,15 @@ def create_summary(logger, module_dir):
     
     
     # get the accessions retained:
-    accessions = set()
-    with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
-        species_to_proteome = pickle.load(handler)
-        for species in species_to_proteome.keys(): 
-            for proteome in species_to_proteome[species]:
-                basename = os.path.basename(proteome)
-                accession, _ = os.path.splitext(basename)
-                accessions.add(accession)
+    accessions = get_retained_accessions()
     
     
     # parse each results file: 
     summary = []
     for file in glob.glob(f'{module_dir}/results/*.csv'):
         accession = file.rsplit('/', 1)[1].replace('.csv', '')
-        if accession not in accessions: continue  # other files present from previous runs.
+        if accession not in accessions: 
+            continue  # other files present from previous runs.
         with open(file, 'r') as r_handler: 
             if r_handler.read() == '""\n':  # if the result csv for this accession is empty: 
                 refound_summary.append({'accession': accession, 'n_refound': 0, 'n_frag': 0, 'n_overlap': 0, 'n_stop': 0})
@@ -177,6 +178,10 @@ def create_summary(logger, module_dir):
 def update_pam(logger, module_dir, pam):
     
     
+    # get the accessions retained:
+    accessions = get_retained_accessions()
+    
+    
     # define important objects:
     cnt_newgenes = 0
     pam_update = pam.copy()
@@ -185,6 +190,8 @@ def update_pam(logger, module_dir, pam):
     # parse each results file: 
     for file in glob.glob(f'{module_dir}/results/*.csv'):
         accession = file.rsplit('/', 1)[1].replace('.csv', '')
+        if accession not in accessions: 
+            continue  # other files present from previous runs.
         with open(file, 'r') as r_handler: 
             if r_handler.read() == '""\n':  # if the result csv for this accession is empty: 
                 continue
@@ -252,3 +259,13 @@ def get_blast_header():
     
     # to standardize all the blast subprocesses
     return "qseqid sseqid pident ppos length qlen slen qstart qend sstart send evalue bitscore qcovhsp scovhsp"
+
+
+def get_md5_string(filepath):
+    
+    
+    with open(filepath, 'rb') as file:  # 'rb' good also for txt files.
+        md5 = hashlib.md5()
+        md5.update(file.read())  # warning: no chunks; keep attention with large files.
+        md5_string = md5.hexdigest()
+    return md5_string
