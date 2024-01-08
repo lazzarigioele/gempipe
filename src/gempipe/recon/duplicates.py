@@ -1,4 +1,5 @@
 import os
+import pickle
 
 
 import pandas as pnd
@@ -339,7 +340,7 @@ def remove_duplicated_and_set_gpr(model, to_translate):
                                                   
 
 
-def solve_duplicates(logger, identity, coverage, refmodel, panmodel_md5):
+def solve_duplicates(logger, identity, coverage, refmodel):
     
     
     # log some message: 
@@ -356,11 +357,17 @@ def solve_duplicates(logger, identity, coverage, refmodel, panmodel_md5):
     
     
     # check presence of already computed files 
-    if os.path.exists(f'working/duplicates/draft_panmodel.json'):
-        # compare md5 of the input pan-model:
-        if panmodel_md5 == get_md5_string('working/duplicates/draft_panmodel.json'):
-            if os.path.exists(f'working/duplicates/draft_panmodel_da.json'):
-                if os.path.exists(f'working/duplicates/draft_panmodel_da_dd.json'):
+    if os.path.exists(f'working/duplicates/draft_panmodel.json') and os.path.exists(f'working/duplicates/md5.pickle'):
+        if os.path.exists(f'working/duplicates/draft_panmodel_da.json') and os.path.exists(f'working/duplicates/md5_da.pickle'):
+            if os.path.exists(f'working/duplicates/draft_panmodel_da_dd.json') and os.path.exists(f'working/duplicates/md5_da_dd.pickle'):
+                with open('working/duplicates/md5.pickle', 'rb') as handler:
+                    md5 = pickle.load(handler)
+                with open('working/duplicates/md5_da.pickle', 'rb') as handler:
+                    md5_da = pickle.load(handler)
+                with open('working/duplicates/md5_da_dd.pickle', 'rb') as handler:
+                    md5_da_dd = pickle.load(handler)
+                # compare md5:
+                if md5 == md5_da == md5_da_dd == get_md5_string('working/duplicates/draft_panmodel.json'):
                     # log some message: 
                     logger.info('Found all the needed files already computed. Skipping this step.')
                     # signal to skip this module:
@@ -394,5 +401,11 @@ def solve_duplicates(logger, identity, coverage, refmodel, panmodel_md5):
     # save deduplicated model
     cobra.io.save_json_model(draft_panmodel, f'working/duplicates/draft_panmodel_da_dd.json')
     
-                             
+        
+    # trace the parent model md5:
+    parent_md5 = get_md5_string('working/duplicates/draft_panmodel.json')
+    with open('working/duplicates/md5_da_dd.pickle', 'wb') as handle:
+        pickle.dump(parent_md5, handle)
+        
+        
     return 0

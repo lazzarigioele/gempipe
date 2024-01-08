@@ -97,7 +97,13 @@ def main():
     
     # show a welcome message:
     print('\n' + header + '\n', file=sys.stdout)
+    command_line = '' # print the full command line:
+    for arg, value in vars(args).items():
+        if arg == 'subcommand': command_line = command_line + f"gempipe {value} "
+        else: command_line = command_line + f"--{arg} {value} "
+    print('Inputted command line: "' + command_line + '".\n')
     logger.info("Welcome to gempipe! Launching the pipeline...")
+    
 
 
     try: 
@@ -132,6 +138,9 @@ if __name__ == "__main__":
     
     # some command line examples to test the pipeline
     # gempipe recon -s neg -t 252393,68334 -b enterobacterales_odb10 --ncontigs 2000 --N50 5000 --buscoM 10% -c 16 --verbose
+    
+    # just aphidicola:
+    # gempipe recon -c 8 -s neg -t 68334 -b enterobacterales_odb10 -o docs/samples/aphidicola
     
     # official plantarum without manual correactions
     # gempipe recon -s pos -g testing/plantarum_Siezen2010 -b lactobacillales_odb10 -c 16 -rm testing/from_mendoza/iLP728.xml -rp testing/from_mendoza/protein_fasta.faa --verbose

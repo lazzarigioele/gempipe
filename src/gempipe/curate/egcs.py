@@ -1,3 +1,7 @@
+import cobra
+
+
+from gemmap.curate.medium import reset_uptakes
 
 
 def verify_egc(model, mid, escher=False): 
@@ -6,9 +10,9 @@ def verify_egc(model, mid, escher=False):
     Can also output a model for Escher, with just the reactions composing the cycle. 
     
     Args:
-        model: ``cobra.Model`` to verify. Must be encoded with the BiGG notation.
-        mid: metabolite ID for which the EGC must be checked. Warning: must be without compartment, so for example ``atp`` instead of ``atp_c``. 
-        escher: save a reduced ``cobra.Model`` in the current directory. To be loaded in Escher. 
+        model (cobra.Model): target model. Must be encoded with the BiGG notation.
+        mid (str): metabolite ID for which the EGC must be checked. Warning: must be without compartment, so for example ``atp`` instead of ``atp_c``. 
+        escher (bool): save a reduced ``cobra.Model`` in the current directory. To be loaded in Escher. 
 
     """
     
@@ -16,9 +20,7 @@ def verify_egc(model, mid, escher=False):
     with model: 
         
         # close all the exchange reactions: 
-        for r in model.reactions:
-            if r.id.startswith('EX') and len(r.metabolites) ==1: 
-                r.bounds = (0,1000)
+        reset_uptakes(model)
 
                 
         # create a dissipation reaction: 

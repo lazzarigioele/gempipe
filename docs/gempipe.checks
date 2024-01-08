@@ -114,11 +114,15 @@ denovo_annotation:
     § duplicates/draft_panmodel.json
     (md5) duplicates/draft_panmodel.json
     § duplicates/draft_panmodel_da.json
+    § duplicates/md5_da.pickle
+    (md5) duplicates/md5_da.pickle
     
 
 solve_duplicates:
     § duplicates/draft_panmodel.json
     (md5) duplicates/draft_panmodel.json
     § duplicates/draft_panmodel_da.json
+    (md5) duplicates/md5_da.pickle
     § duplicates/draft_panmodel_da_dd.json
+    (md5) duplicates/md5_da_dd.pickle
     

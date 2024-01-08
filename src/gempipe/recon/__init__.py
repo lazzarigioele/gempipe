@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+import pickle
 
 
 
@@ -167,17 +168,21 @@ def recon_command(args, logger):
     if args.refmodel != '-' and args.refproteome != '-':
         shutil.copyfile('working/expansion/draft_panmodel.json', 'working/duplicates/draft_panmodel.json')
     else: shutil.copyfile(f'working/free/draft_panmodel_{args.identity}_{args.coverage}.json', 'working/duplicates/draft_panmodel.json')
+    
+    # save the panmodel md5:
     panmodel_md5 = get_md5_string('working/duplicates/draft_panmodel.json')
+    with open('working/duplicates/md5.pickle', 'wb') as handle: 
+        pickle.dump(panmodel_md5, handle)
     
     
     # PART 6. Automated curation
     
     # perform de-novo annotation with metanetx 4.4 (aka pimp_my_model)
-    response = denovo_annotation(logger, panmodel_md5)
+    response = denovo_annotation(logger)
     if response == 1: return 1
     
     # solve duplicate metabolites and reactions using mnx annotation
-    response = solve_duplicates(logger, args.identity, args.coverage, args.refmodel, panmodel_md5)
+    response = solve_duplicates(logger, args.identity, args.coverage, args.refmodel)
     if response == 1: return 1
 
     

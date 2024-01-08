@@ -228,7 +228,7 @@ def pimp_my_model(logger, model, fromchilds=False, overwrite=False):
         
         
 
-def denovo_annotation(logger, panmodel_md5):
+def denovo_annotation(logger):
     
     
     # log some message: 
@@ -241,10 +241,14 @@ def denovo_annotation(logger, panmodel_md5):
     
     
     # check presence of already computed files 
-    if os.path.exists(f'working/duplicates/draft_panmodel.json'):
-        # compare md5 of the input pan-model:
-        if panmodel_md5 == get_md5_string('working/duplicates/draft_panmodel.json'):
-            if os.path.exists(f'working/duplicates/draft_panmodel_da.json'):
+    if os.path.exists(f'working/duplicates/draft_panmodel.json') and os.path.exists(f'working/duplicates/md5.pickle'):
+        if os.path.exists(f'working/duplicates/draft_panmodel_da.json') and os.path.exists(f'working/duplicates/md5_da.pickle'):
+            with open('working/duplicates/md5.pickle', 'rb') as handler:
+                md5 = pickle.load(handler)
+            with open('working/duplicates/md5_da.pickle', 'rb') as handler:
+                md5_da = pickle.load(handler)
+            # compare md5:
+            if md5 == md5_da == get_md5_string('working/duplicates/draft_panmodel.json'):
                 # log some message: 
                 logger.info('Found all the needed files already computed. Skipping this step.')
                 # signal to skip this module:
@@ -262,6 +266,12 @@ def denovo_annotation(logger, panmodel_md5):
     
     # replace file on disk:
     cobra.io.save_json_model(draft_panmodel, 'working/duplicates/draft_panmodel_da.json')
+    
+    
+    # trace the parent model md5:
+    parent_md5 = get_md5_string('working/duplicates/draft_panmodel.json')
+    with open('working/duplicates/md5_da.pickle', 'wb') as handle:
+        pickle.dump(parent_md5, handle)
     
     
     return 0 

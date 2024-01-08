@@ -134,6 +134,7 @@ def download_genomes(logger, taxids, cores):
     if os.path.exists(f'working/genomes/{meta_basename}.csv'):
         metadata = pnd.read_csv(f"working/genomes/{meta_basename}.csv", index_col=0) 
         if all([os.path.exists(f'working/genomes/{accession}.fna') for accession in metadata['assembly_accession']]):
+            metadata = metadata[metadata['local_filename'].str.endswith('assembly_stats.txt')==False]  # keep only rows for genomes
             logger.info(f"Genome assemblies already downloaded for taxids {taxids}: {len(metadata['assembly_accession'])} assemblies found. Skipping the downloaded from NCBI.")
  
             # create metadata table and genomes dictionary: 

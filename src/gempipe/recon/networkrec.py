@@ -221,11 +221,12 @@ def get_reaction_scores_table(logger, protein_scores):
     
     
 
-def get_universe(logger, staining): 
+def get_universe_template(logger=None, staining='neg'): 
     
     
     # some log messages
-    logger.debug(f"PruneU: Copying the gram {staining} universe... ")
+    if logger != None:  # function used also outside the pipe
+        logger.debug(f"PruneU: Copying the gram {staining} universe... ")
     
     
     # get a copy of the appropriate universe: 
@@ -235,10 +236,19 @@ def get_universe(logger, staining):
     if staining == 'neg': 
         with resources.path("gempipe.assets", "universe_gramneg.json") as asset_path:  # taken from CarveMe v1.5.2
             universe = cobra.io.load_json_model(asset_path)
+            
+ 
+    # correct compartments:
+    for m in universe.metabolites:
+        if   m.compartment == 'C_c':  m.compartment = 'c'
+        elif m.compartment == 'C_p':  m.compartment = 'p'
+        elif m.compartment == 'C_e':  m.compartment = 'e'
+    universe.compartments = {'c': 'cytosol', 'p': 'periplasm', 'e': 'extracellular'}
            
         
     # some log messages
-    logger.debug(f"PruneU: Done, {' '.join(['G:', str(len(universe.genes)), '|', 'R:', str(len(universe.reactions)), '|', 'M:', str(len(universe.metabolites))])}.")
+    if logger != None:  # function used also outside the pipe
+        logger.debug(f"PruneU: Done, {' '.join(['G:', str(len(universe.genes)), '|', 'R:', str(len(universe.reactions)), '|', 'M:', str(len(universe.metabolites))])}.")
     
     
     return universe
@@ -342,7 +352,7 @@ def PruneU(logger, cores, staining, identity, coverage):
     
     
     # copy the gram pos / neg universe for subtraction: 
-    universe = get_universe(logger, staining)
+    universe = get_universe_template(logger, staining)
     
     
     # remove reactions not present
