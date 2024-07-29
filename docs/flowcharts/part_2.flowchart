@@ -1,0 +1,25 @@
+subgraph Part_2[Part 2]
+
+Manual_curation((Manual_curation)) --> panmodel{{panmodel}}
+
+end
+
+draft_panmodel{{draft_panmodel}} --> Manual_curation((Manual_curation))
+Universe{{Universe}} --> Manual_curation((Manual_curation))
+Gene_functions{{Gene_functions}} --> Manual_curation((Manual_curation))
+PAM{{PAM}} --> Manual_curation((Manual_curation))
+
+
+click Manual_curation href "https://gempipe.readthedocs.io/en/latest/part_2_manual_curation.html" "Link"
+
+
+
+style Part_2 fill:white
+
+style panmodel fill:gold
+
+style Manual_curation fill:whitesmoke
+style draft_panmodel fill:lightblue
+style Universe fill:violet
+style Gene_functions fill:lightblue
+style PAM fill:gold

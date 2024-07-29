@@ -1,0 +1,652 @@
+,substrate,source,formula,exr_before,exr_before_present,exr_after,exr_after_present,growth,value,status
+0,L-Arabinose,C,,EX_glc__D_e,True,EX_arab__L_e,False,,,
+1,D-Saccharic Acid,C,C6H8O8,EX_glc__D_e,True,EX_glcr_e,True,True,19.728399825770712,optimal
+2,D-Galactose,C,C6H12O6,EX_glc__D_e,True,EX_gal_e,True,False,0.0,optimal
+3,L-Aspartic Acid,N,C4H6NO4,EX_nh4_e,True,EX_asp__L_e,True,True,28.743739474494365,optimal
+4,L-Aspartic Acid,C,C4H6NO4,EX_glc__D_e,True,EX_asp__L_e,True,True,17.61453507413486,optimal
+5,D-Alanine,N,C3H7NO2,EX_nh4_e,True,EX_ala__D_e,True,True,29.849954136807384,optimal
+6,D-Alanine,C,C3H7NO2,EX_glc__D_e,True,EX_ala__D_e,True,True,19.02052916103399,optimal
+7,D-Trehalose,C,C12H22O11,EX_glc__D_e,True,EX_tre_e,True,True,30.183046206137302,optimal
+8,D-Mannose,C,C6H12O6,EX_glc__D_e,True,EX_man_e,True,True,17.32622016149821,optimal
+9,Dulcitol,C,,EX_glc__D_e,True,EX_galt_e,False,,,
+10,D-Sorbitol,C,C6H14O6,EX_glc__D_e,True,EX_sbt__D_e,True,False,0.0,optimal
+11,Glycerol,C,C3H8O3,EX_glc__D_e,True,EX_glyc_e,True,True,23.86641761621898,optimal
+12,L-Fucose,C,,EX_glc__D_e,True,EX_fuc__L_e,False,,,
+13,D-Glucuronic Acid,C,C6H9O7,EX_glc__D_e,True,EX_glcur_e,True,True,19.728399825770346,optimal
+14,D-Gluconic Acid,C,C6H11O7,EX_glc__D_e,True,EX_glcn_e,True,True,27.783604891015717,optimal
+15,D-Xylose,C,,EX_glc__D_e,True,EX_xyl__D_e,False,,,
+16,L-Lactic Acid,C,C3H5O3,EX_glc__D_e,True,EX_lac__L_e,True,True,16.934251923000964,optimal
+17,Formic Acid,C,CH1O2,EX_glc__D_e,True,EX_for_e,True,True,11.921334759848218,optimal
+18,D-Mannitol,C,,EX_glc__D_e,True,EX_mnl_e,False,,,
+19,L-Glutamic Acid,N,C5H8NO4,EX_nh4_e,True,EX_glu__L_e,True,True,36.87099906253781,optimal
+20,L-Glutamic Acid,C,C5H8NO4,EX_glc__D_e,True,EX_glu__L_e,True,True,24.66390528097745,optimal
+21,D-Galactonic acid-g-Lactone,C,C6H11O7,EX_glc__D_e,True,EX_galctn__D_e,True,False,-1.3275968902282547e-12,optimal
+22,"D,L-Malic Acid",C,C4H4O5,EX_glc__D_e,True,EX_mal__L_e,True,True,17.473351356761334,optimal
+23,D-Ribose,C,C5H10O5,EX_glc__D_e,True,EX_rib__D_e,True,True,17.326220161498213,optimal
+24,Tween 20,C,,EX_glc__D_e,True,,False,,,
+25,L-Rhamnose,C,,EX_glc__D_e,True,EX_rmn_e,False,,,
+26,D-Fructose,C,C6H12O6,EX_glc__D_e,True,EX_fru_e,True,True,30.59660464678263,optimal
+27,Acetic Acid,C,C2H3O2,EX_glc__D_e,True,EX_ac_e,True,True,11.945926186640058,optimal
+28,a-d-glucose,C,C6H12O6,EX_glc__D_e,True,EX_glc__D_e,True,True,20.73323107155366,optimal
+29,Maltose,C,C12H22O11,EX_glc__D_e,True,EX_malt_e,True,True,30.183046206137252,optimal
+30,D-Melibiose,C,,EX_glc__D_e,True,EX_melib_e,False,,,
+31,Thymidine,N,,EX_nh4_e,True,EX_thymd_e,False,,,
+32,Thymidine,C,,EX_glc__D_e,True,EX_thymd_e,False,,,
+33,D-Glucosaminic acid,C,,EX_glc__D_e,True,,False,,,
+34,"1,2-propanediol",C,,EX_glc__D_e,True,EX_12ppd__S_e,False,,,
+35,Tween 40,C,,EX_glc__D_e,True,,False,,,
+36,a-Ketoglutaric acid,C,C5H4O5,EX_glc__D_e,True,EX_akg_e,True,True,24.66390528097738,optimal
+37,a-Ketobutyric acid,C,,EX_glc__D_e,True,EX_2obut_e,False,,,
+38,a-Methyl-D-Galactoside,C,,EX_glc__D_e,True,,False,,,
+39,alpha-D-Lactose,C,,EX_glc__D_e,True,EX_lcts_e,False,,,
+40,Lactulose,C,,EX_glc__D_e,True,,False,,,
+41,Sucrose,C,C12H22O11,EX_glc__D_e,True,EX_sucr_e,True,True,30.183046206137185,optimal
+42,m-tartaric acid,C,,EX_glc__D_e,True,EX_tartr__M_e,False,,,
+43,D-Fructose-6-Phosphate,C,,EX_glc__D_e,True,EX_f6p_e,False,,,
+44,a-Hydroxyglutaric acid-g-Lactone,C,,EX_glc__D_e,True,,False,,,
+45,a-hydroxybutyric acid,C,,EX_glc__D_e,True,EX_2hb_e,False,,,
+46,b-Methyl-D-Glucoside,C,,EX_glc__D_e,True,EX_mbdg_e,False,,,
+47,Adonitol,C,,EX_glc__D_e,True,EX_rbt_e,False,,,
+48,Maltotriose,C,C18H32O16,EX_glc__D_e,True,EX_malttr_e,True,False,1.9824829196085974e-13,optimal
+49,2`-Deoxyadenosine,C,C10H13N5O3,EX_glc__D_e,True,EX_dad_2_e,True,False,1.9824829196085974e-13,optimal
+50,Citric acid,C,C6H5O7,EX_glc__D_e,True,EX_cit_e,True,True,19.728399825770698,optimal
+51,D-Threonine,C,,EX_glc__D_e,True,,False,,,
+52,Bromosuccinic acid,C,,EX_glc__D_e,True,,False,,,
+53,Propionic Acid,C,C3H5O2,EX_glc__D_e,True,EX_ppa_e,True,True,11.945926186640069,optimal
+54,Mucic acid,C,C6H8O8,EX_glc__D_e,True,EX_galct__D_e,True,True,19.728399825770676,optimal
+55,Glycolic Acid,C,C2H3O3,EX_glc__D_e,True,EX_glyclt_e,True,True,14.318145293894775,optimal
+56,Glyoxylic Acid,C,,EX_glc__D_e,True,EX_glx_e,False,,,
+57,D-Cellobiose,C,,EX_glc__D_e,True,EX_cellb_e,False,,,
+58,Tricarballylic acid,C,,EX_glc__D_e,True,EX_tcb_e,False,,,
+59,acetoacetic acid,C,C4H5O3,EX_glc__D_e,True,EX_acac_e,True,True,17.006576899589728,optimal
+60,Mono-Methylsuccinate,C,,EX_glc__D_e,True,,False,,,
+61,Methylpyruvate,C,,EX_glc__D_e,True,,False,,,
+62,D-Malic Acid,C,C4H6O5,EX_glc__D_e,True,EX_mal__D_e,True,True,16.934251923000808,optimal
+63,L-Malic Acid,C,C4H4O5,EX_glc__D_e,True,EX_mal__L_e,True,True,17.473351356761306,optimal
+64,Gly-Pro,N,,EX_nh4_e,True,EX_gly_pro__L_e,False,,,
+65,Gly-Pro,C,,EX_glc__D_e,True,EX_gly_pro__L_e,False,,,
+66,p-Hydroxyphenyl Acetic acid,C,C8H7O3,EX_glc__D_e,True,EX_4hphac_e,True,False,0.0,optimal
+67,m-hydroxyphenyl acetic acid,C,,EX_glc__D_e,True,EX_3hoxpac_e,False,,,
+68,Tyramine,N,,EX_nh4_e,True,EX_tym_e,False,,,
+69,Tyramine,C,,EX_glc__D_e,True,EX_tym_e,False,,,
+70,D-Psicose,C,,EX_glc__D_e,True,,False,,,
+71,L-Lyxose,C,,EX_glc__D_e,True,EX_lyx__L_e,False,,,
+72,Pyruvic Acid,C,C3H3O3,EX_glc__D_e,True,EX_pyr_e,True,True,19.020529161034013,optimal
+73,L-Galactonic Acid-gamma-Lactone,C,,EX_glc__D_e,True,EX_galctn__L_e,False,,,
+74,D-Galacturonic Acid,C,C6H9O7,EX_glc__D_e,True,EX_galur_e,True,True,19.728399825770694,optimal
+75,Phenylethylamine,C,C8H12N,EX_glc__D_e,True,EX_peamn_e,True,True,16.518084323009987,optimal
+76,2-aminoethanol,C,C2H8NO,EX_glc__D_e,True,EX_etha_e,True,True,22.532655551588384,optimal
+77,chondroitin sulfate c,C,,EX_glc__D_e,True,EX_cs_c_e,False,,,
+78,a-Cyclodextrin,C,,EX_glc__D_e,True,,False,,,
+79,b-Cyclodextrin,C,,EX_glc__D_e,True,,False,,,
+80,g-Cyclodextrin,C,,EX_glc__D_e,True,,False,,,
+81,dextrin,C,,EX_glc__D_e,True,EX_dextrin_e,False,,,
+82,Gelatin,C,,EX_glc__D_e,True,,False,,,
+83,glycogen,C,,EX_glc__D_e,True,EX_glycogen_e,False,,,
+84,Inulin,C,,EX_glc__D_e,True,,False,,,
+85,Laminarin,C,,EX_glc__D_e,True,,False,,,
+86,mannan,C,,EX_glc__D_e,True,EX_mannan_e,False,,,
+87,pectin,C,,EX_glc__D_e,True,EX_pectin_e,False,,,
+88,N-Acetyl-Neuraminic acid,C,,EX_glc__D_e,True,EX_acnam_e,False,,,
+89,b-d-allose,C,,EX_glc__D_e,True,EX_all__D_e,False,,,
+90,Amygdalin,C,,EX_glc__D_e,True,,False,,,
+91,d-arabinose,C,,EX_glc__D_e,True,EX_arab__D_e,False,,,
+92,D-Arabitol,C,,EX_glc__D_e,True,EX_abt__D_e,False,,,
+93,l-arabitol,C,,EX_glc__D_e,True,EX_abt__L_e,False,,,
+94,Arbutin,C,C12H16O7,EX_glc__D_e,True,EX_arbt_e,True,False,0.0,optimal
+95,2-deoxy-d-ribose,C,,EX_glc__D_e,True,EX_drib_e,False,,,
+96,i-Erythritol,C,,EX_glc__D_e,True,,False,,,
+97,D-Fucose,C,,EX_glc__D_e,True,,False,,,
+98,3-O-b-D-Galactopyranosyl-D-Arabinose,C,,EX_glc__D_e,True,,False,,,
+99,Gentiobiose,C,,EX_glc__D_e,True,,False,,,
+100,L-Glucose,C,,EX_glc__D_e,True,,False,,,
+101,D-Lactitol,C,,EX_glc__D_e,True,,False,,,
+102,D-Melezitose,C,,EX_glc__D_e,True,,False,,,
+103,Maltitol,C,,EX_glc__D_e,True,,False,,,
+104,a-methyl-d-glucoside,C,,EX_glc__D_e,True,EX_amdglc_e,False,,,
+105,b-methyl-d-galactoside,C,,EX_glc__D_e,True,EX_gal_bD_e,False,,,
+106,3-Methylglucose,C,,EX_glc__D_e,True,,False,,,
+107,b-methyl-d-glucuronic acid,C,,EX_glc__D_e,True,EX_metglcur_e,False,,,
+108,a-Methyl-D-Mannoside,C,,EX_glc__D_e,True,,False,,,
+109,b-Methyl-D-Xyloside,C,,EX_glc__D_e,True,,False,,,
+110,Palatinose,C,,EX_glc__D_e,True,EX_pala_e,False,,,
+111,D-Raffinose,C,,EX_glc__D_e,True,EX_raffin_e,False,,,
+112,salicin,C,C13H18O7,EX_glc__D_e,True,EX_salcn_e,True,False,0.0,optimal
+113,Sedoheptulosan,C,,EX_glc__D_e,True,,False,,,
+114,L-Sorbose,C,,EX_glc__D_e,True,EX_srb__L_e,False,,,
+115,stachyose,C,,EX_glc__D_e,True,EX_stys_e,False,,,
+116,D-tagatose,C,,EX_glc__D_e,True,EX_tag__D_e,False,,,
+117,Turanose,C,,EX_glc__D_e,True,EX_tur_e,False,,,
+118,xylitol,C,,EX_glc__D_e,True,EX_xylt_e,False,,,
+119,N-Acetyl-D-Glucosaminitol,C,,EX_glc__D_e,True,,False,,,
+120,g-Amino-N-Butyric acid,N,C4H9NO2,EX_nh4_e,True,EX_4abut_e,True,True,38.205296186062455,optimal
+121,g-Amino-N-Butyric acid,C,C4H9NO2,EX_glc__D_e,True,EX_4abut_e,True,True,27.3642077962498,optimal
+122,d-Amino Valeric acid,C,C5H11NO2,EX_glc__D_e,True,EX_5aptn_e,True,True,12.329134683875493,optimal
+123,capric acid,C,C10H19O2,EX_glc__D_e,True,EX_dca_e,True,True,18.283484254829535,optimal
+124,caproic acid,C,C6H11O2,EX_glc__D_e,True,EX_hxa_e,True,True,17.06351437572075,optimal
+125,citraconic acid,C,,EX_glc__D_e,True,EX_citac_e,False,,,
+126,citramalic acid,C,,EX_glc__D_e,True,EX_citm_e,False,,,
+127,2-hydroxybenzoic acid,C,,EX_glc__D_e,True,EX_salc_e,False,,,
+128,4-hydroxybenzoic acid,C,C7H5O3,EX_glc__D_e,True,EX_4hbz_e,True,True,18.495688816038307,optimal
+129,b-hydroxybutyric acid,C,C4H7O3,EX_glc__D_e,True,EX_bhb_e,True,True,15.62921676479929,optimal
+130,g-hydroxybutyric acid,C,,EX_glc__D_e,True,EX_ghb_e,False,,,
+131,a-Keto-Valeric acid,C,,EX_glc__D_e,True,,False,,,
+132,itaconic acid,C,,EX_glc__D_e,True,EX_itacon_e,False,,,
+133,5-Keto-D-Gluconic acid,C,,EX_glc__D_e,True,EX_5dglcn_e,False,,,
+134,D-Lactic acid Methyl Ester,C,,EX_glc__D_e,True,,False,,,
+135,malonic acid,C,,EX_glc__D_e,True,EX_malon_e,False,,,
+136,Melibionic acid,C,,EX_glc__D_e,True,,False,,,
+137,oxalic acid,C,C2O4,EX_glc__D_e,True,EX_oxa_e,True,False,0.0,optimal
+138,Oxalomalic acid,C,,EX_glc__D_e,True,,False,,,
+139,quinic acid,C,C7H11O6,EX_glc__D_e,True,EX_quin_e,True,True,17.853477137010387,optimal
+140,"D-Ribono-1,4-Lactone",C,,EX_glc__D_e,True,,False,,,
+141,sebacic acid,C,,EX_glc__D_e,True,EX_sebacid_e,False,,,
+142,Succinamic acid,C,,EX_glc__D_e,True,,False,,,
+143,d-tartaric acid,C,,EX_glc__D_e,True,EX_tartr__D_e,False,,,
+144,L-Tartaric Acid,C,,EX_glc__D_e,True,EX_tartr__L_e,False,,,
+145,L-Alaninamide,C,,EX_glc__D_e,True,,False,,,
+146,n-acetyl-l-glutamic acid,N,,EX_nh4_e,True,EX_acglu_e,False,,,
+147,n-acetyl-l-glutamic acid,C,,EX_glc__D_e,True,EX_acglu_e,False,,,
+148,l-homoserine,N,C4H9NO3,EX_nh4_e,True,EX_hom__L_e,True,True,37.98692465779805,optimal
+149,l-homoserine,C,C4H9NO3,EX_glc__D_e,True,EX_hom__L_e,True,True,29.599410736184204,optimal
+150,hydroxy-l-proline,C,C5H9NO3,EX_glc__D_e,True,EX_4hpro_LT_e,True,True,16.440092833958097,optimal
+151,l-leucine,N,C6H13NO2,EX_nh4_e,True,EX_leu__L_e,True,True,23.743627198448397,optimal
+152,l-leucine,C,C6H13NO2,EX_glc__D_e,True,EX_leu__L_e,True,True,14.764894623657245,optimal
+153,L-Ornithine,N,C5H13N2O2,EX_nh4_e,True,EX_orn_e,True,True,31.454050775033608,optimal
+154,L-Ornithine,C,C5H13N2O2,EX_glc__D_e,True,EX_orn_e,True,True,22.098478150962126,optimal
+155,l-pyroglutamic acid,N,C5H6NO3,EX_nh4_e,True,EX_5oxpro_e,True,True,23.45991332470092,optimal
+156,l-pyroglutamic acid,C,C5H6NO3,EX_glc__D_e,True,EX_5oxpro_e,True,True,12.32913468387554,optimal
+157,"d,l-carnitine",C,C7H15NO3,EX_glc__D_e,True,EX_crn_e,True,True,17.00004673108611,optimal
+158,sec-Butylamine,C,,EX_glc__D_e,True,,False,,,
+159,"D,L-Octopamine",C,,EX_glc__D_e,True,,False,,,
+160,Dihydroxyacetone,C,,EX_glc__D_e,True,EX_dha_e,False,,,
+161,"2,3-butanediol",C,C4H10O2,EX_glc__D_e,True,EX_btd_RR_e,True,True,21.170738079198905,optimal
+162,"2,3-butanedione",C,,EX_glc__D_e,True,EX_diact_e,False,,,
+163,3-hydroxy-2-butanone,C,,EX_glc__D_e,True,EX_R_actn_e,False,,,
+164,ammonia,N,,EX_nh4_e,True,EX_nh3_e,False,,,
+165,nitrite,N,NO2,EX_nh4_e,True,EX_no2_e,True,True,20.932622313035242,optimal
+166,nitrate,N,NO3,EX_nh4_e,True,EX_no3_e,True,True,20.184042493796557,optimal
+167,urea,N,CH4N2O,EX_nh4_e,True,EX_urea_e,True,True,27.401191506402853,optimal
+168,Biuret,N,,EX_nh4_e,True,,False,,,
+169,L-Arginine,N,C6H15N4O2,EX_nh4_e,True,EX_arg__L_e,True,True,42.63957732325454,optimal
+170,L-Arginine,C,C6H15N4O2,EX_glc__D_e,True,EX_arg__L_e,True,True,24.63690691345999,optimal
+171,L-Asparagine,N,C4H8N2O3,EX_nh4_e,True,EX_asn__L_e,True,True,27.688366226913303,optimal
+172,L-Asparagine,C,C4H8N2O3,EX_glc__D_e,True,EX_asn__L_e,True,True,17.654102261911714,optimal
+173,l-cysteine,N,C3H7NO2S,EX_nh4_e,True,EX_cys__L_e,True,True,30.407239389528314,optimal
+174,l-cysteine,S,C3H7NO2S,EX_so4_e,True,EX_cys__L_e,True,True,30.405610506499112,optimal
+175,L-Histidine,N,C6H9N3O2,EX_nh4_e,True,EX_his__L_e,True,True,38.07366577711834,optimal
+176,L-Histidine,C,C6H9N3O2,EX_glc__D_e,True,EX_his__L_e,True,True,22.07643493454022,optimal
+177,l-lysine,N,C6H15N2O2,EX_nh4_e,True,EX_lys__L_e,True,True,27.804968525349814,optimal
+178,l-lysine,C,C6H15N2O2,EX_glc__D_e,True,EX_lys__L_e,True,True,18.115639137405328,optimal
+179,l-methionine,N,C5H11NO2S,EX_nh4_e,True,EX_met__L_e,True,True,23.17525186494885,optimal
+180,l-methionine,C,C5H11NO2S,EX_glc__D_e,True,EX_met__L_e,True,True,12.095865191904478,optimal
+181,l-methionine,S,C5H11NO2S,EX_so4_e,True,EX_met__L_e,True,True,23.17499379472841,optimal
+182,L-Proline,N,C5H9NO2,EX_nh4_e,True,EX_pro__L_e,True,True,31.263426490497693,optimal
+183,L-Proline,C,C5H9NO2,EX_glc__D_e,True,EX_pro__L_e,True,True,22.474762733711994,optimal
+184,L-Serine,N,C3H7NO3,EX_nh4_e,True,EX_ser__L_e,True,True,31.292961229212093,optimal
+185,L-Serine,C,C3H7NO3,EX_glc__D_e,True,EX_ser__L_e,True,True,24.156276038052063,optimal
+186,l-tryptophan,N,C11H12N2O2,EX_nh4_e,True,EX_trp__L_e,True,False,0.0,optimal
+187,d-asparagine,N,C4H8N2O3,EX_nh4_e,True,EX_asn__D_e,True,True,24.82869886897578,optimal
+188,d-lysine,N,C6H15N2O2,EX_nh4_e,True,EX_lys__D_e,True,True,23.988418475152,optimal
+189,d-valine,N,C5H11NO2,EX_nh4_e,True,EX_val__D_e,True,True,20.27595544963306,optimal
+190,N-Phthaloyl-L-Glutamic acid,N,,EX_nh4_e,True,,False,,,
+191,methylamine,N,,EX_nh4_e,True,EX_mma_e,False,,,
+192,N-Amylamine,N,,EX_nh4_e,True,,False,,,
+193,N-Butylamine,N,,EX_nh4_e,True,,False,,,
+194,Ethylamine,N,,EX_nh4_e,True,,False,,,
+195,Ethanolamine,N,C2H8NO,EX_nh4_e,True,EX_etha_e,True,True,27.145137291044307,optimal
+196,Ethylenediamine,N,,EX_nh4_e,True,,False,,,
+197,Putrescine,N,C4H14N2,EX_nh4_e,True,EX_ptrc_e,True,True,31.1513717344823,optimal
+198,Putrescine,C,C4H14N2,EX_glc__D_e,True,EX_ptrc_e,True,True,22.004813469797135,optimal
+199,agmatine,N,C5H16N4,EX_nh4_e,True,EX_agm_e,True,True,28.967347666047328,optimal
+200,histamine,N,,EX_nh4_e,True,EX_hista_e,False,,,
+201,b-phenylethylamine,N,C8H12N,EX_nh4_e,True,EX_peamn_e,True,True,25.94349106482473,optimal
+202,acetamide,N,,EX_nh4_e,True,EX_ad_e,False,,,
+203,acetamide,C,,EX_glc__D_e,True,EX_ad_e,False,,,
+204,formamide,N,,EX_nh4_e,True,EX_frmd_e,False,,,
+205,Glucuronamide,N,,EX_nh4_e,True,,False,,,
+206,Glucuronamide,C,,EX_glc__D_e,True,,False,,,
+207,DL-Lactamide,N,,EX_nh4_e,True,,False,,,
+208,D-Glucosamine,N,C6H14NO5,EX_nh4_e,True,EX_gam_e,True,False,0.0,optimal
+209,D-Glucosamine,C,C6H14NO5,EX_glc__D_e,True,EX_gam_e,True,False,0.0,optimal
+210,d-galactosamine,N,,EX_nh4_e,True,EX_galam_e,False,,,
+211,D-Mannosamine,N,,EX_nh4_e,True,,False,,,
+212,n-acetyl-d-galactosamine,N,,EX_nh4_e,True,EX_acgal_e,False,,,
+213,n-acetyl-d-galactosamine,C,,EX_glc__D_e,True,EX_acgal_e,False,,,
+214,N-Acetyl-D-Mannosamine,N,C8H15NO6,EX_nh4_e,True,EX_acmana_e,True,False,0.0,optimal
+215,N-Acetyl-D-Mannosamine,C,C8H15NO6,EX_glc__D_e,True,EX_acmana_e,True,False,0.0,optimal
+216,adenine,N,C5H5N5,EX_nh4_e,True,EX_ade_e,True,True,34.25979884449981,optimal
+217,Adenosine,N,C10H13N5O4,EX_nh4_e,True,EX_adn_e,True,True,46.39455646586757,optimal
+218,Adenosine,C,C10H13N5O4,EX_glc__D_e,True,EX_adn_e,True,True,46.394556465867566,optimal
+219,cytidine,N,,EX_nh4_e,True,EX_cytd_e,False,,,
+220,guanine,N,C5H5N5O,EX_nh4_e,True,EX_gua_e,True,True,33.49495337302835,optimal
+221,thymine,N,C5H6N2O2,EX_nh4_e,True,EX_thym_e,True,True,28.262913591488967,optimal
+222,Uridine,N,C9H12N2O6,EX_nh4_e,True,EX_uri_e,True,True,39.4289376892053,optimal
+223,Uridine,C,C9H12N2O6,EX_glc__D_e,True,EX_uri_e,True,True,35.891741023221144,optimal
+224,xanthine,N,C5H4N4O2,EX_nh4_e,True,EX_xan_e,True,True,32.50897437559042,optimal
+225,xanthosine,N,C10H12N4O6,EX_nh4_e,True,EX_xtsn_e,True,True,31.732999912291184,optimal
+226,uric acid,N,,EX_nh4_e,True,EX_urate_e,False,,,
+227,alloxan,N,,EX_nh4_e,True,EX_CE0074_e,False,,,
+228,allantoin,N,C4H6N4O3,EX_nh4_e,True,EX_alltn_e,True,True,32.66153112408891,optimal
+229,Parabanic acid,N,,EX_nh4_e,True,,False,,,
+230,DL-a-Amino-N-Butyric acid,N,,EX_nh4_e,True,,False,,,
+231,e-amino-n-caproic acid,N,,EX_nh4_e,True,EX_6ax_e,False,,,
+232,DL-a-Amino-Caprylic acid,N,,EX_nh4_e,True,,False,,,
+233,d-amino-n-valeric acid,N,C5H11NO2,EX_nh4_e,True,EX_5aptn_e,True,True,20.321740770291317,optimal
+234,a-Amino-N-Valeric acid,N,,EX_nh4_e,True,,False,,,
+235,ala-gln,N,,EX_nh4_e,True,EX_ala_gln_e,False,,,
+236,Ala-Gly,N,,EX_nh4_e,True,EX_L_alagly_e,False,,,
+237,Ala-Gly,C,,EX_glc__D_e,True,EX_L_alagly_e,False,,,
+238,ala-his,N,,EX_nh4_e,True,EX_ala_his_e,False,,,
+239,ala-thr,N,,EX_nh4_e,True,EX_ala_L_Thr__L_e,False,,,
+240,gly-gln,N,,EX_nh4_e,True,EX_gly_gln_e,False,,,
+241,gly-glu,N,,EX_nh4_e,True,EX_gly_glu__L_e,False,,,
+242,gly-glu,C,,EX_glc__D_e,True,EX_gly_glu__L_e,False,,,
+243,gly-met,N,,EX_nh4_e,True,EX_gly_met_e,False,,,
+244,gly-met,S,,EX_so4_e,True,EX_gly_met_e,False,,,
+245,met-ala,N,,EX_nh4_e,True,EX_met_L_ala__L_e,False,,,
+246,phosphate,P,HO4P,EX_pi_e,True,EX_pi_e,True,True,20.733231071553547,optimal
+247,pyrophosphate,P,HO7P2,EX_pi_e,True,EX_ppi_e,True,True,25.827170989620214,optimal
+248,trimetaphosphate,P,,EX_pi_e,True,EX_tmp_e,False,,,
+249,tripolyphosphate,P,,EX_pi_e,True,EX_pppi_e,False,,,
+250,Triethyl Phosphate,P,,EX_pi_e,True,,False,,,
+251,Hypophosphite,P,,EX_pi_e,True,,False,,,
+252,adenosine 2`-monophosphate,P,,EX_pi_e,True,EX_amp2p_e,False,,,
+253,adenosine 3`-monophosphate,P,,EX_pi_e,True,EX_3amp_e,False,,,
+254,adenosine 5`-monophosphate,P,,EX_pi_e,True,EX_amp_e,False,,,
+255,"adenosine 2`,3`-cyclic monophosphate",P,,EX_pi_e,True,EX_23camp_e,False,,,
+256,Dithiophosphate,P,,EX_pi_e,True,,False,,,
+257,Dithiophosphate,S,,EX_so4_e,True,,False,,,
+258,"D,L-a-Glycerol Phosphate",P,C3H7O6P,EX_pi_e,True,EX_glyc3p_e,True,False,0.0,optimal
+259,"D,L-a-Glycerol Phosphate",C,C3H7O6P,EX_glc__D_e,True,EX_glyc3p_e,True,False,0.0,optimal
+260,b-glycerol phosphate,P,,EX_pi_e,True,EX_glyc2p_e,False,,,
+261,carbamyl phosphate,P,,EX_pi_e,True,EX_cbp_e,False,,,
+262,d-2-phospho-glyceric acid,P,,EX_pi_e,True,EX_2pg_e,False,,,
+263,d-3-phospho-glyceric acid,P,,EX_pi_e,True,EX_3pg_e,False,,,
+264,Guanosine 2`-Monophosphate,P,,EX_pi_e,True,,False,,,
+265,guanosine 3`-monophosphate,P,,EX_pi_e,True,EX_3gmp_e,False,,,
+266,guanosine 5`-monophosphate,P,,EX_pi_e,True,EX_gmp_e,False,,,
+267,"guanosine 2`,3`-cyclic monophosphate",P,,EX_pi_e,True,EX_23cgmp_e,False,,,
+268,"guanosine 3`,5`-cyclic monophosphate",P,,EX_pi_e,True,EX_35cgmp_e,False,,,
+269,phosphoenol pyruvate,P,,EX_pi_e,True,EX_pep_e,False,,,
+270,phospho-glycolic acid,P,,EX_pi_e,True,EX_2pglyc_e,False,,,
+271,D-Glucose-1-Phosphate,P,,EX_pi_e,True,EX_g1p_e,False,,,
+272,D-Glucose-1-Phosphate,C,,EX_glc__D_e,True,EX_g1p_e,False,,,
+273,D-Glucose-6-Phosphate,P,,EX_pi_e,True,EX_g6p_e,False,,,
+274,D-Glucose-6-Phosphate,C,,EX_glc__D_e,True,EX_g6p_e,False,,,
+275,2-deoxy-d-glucose 6-phosphate,P,,EX_pi_e,True,EX_2doxg6p_e,False,,,
+276,d-glucosamine-6-phosphate,P,,EX_pi_e,True,EX_gam6p_e,False,,,
+277,6-phospho-gluconic acid,P,,EX_pi_e,True,EX_6pgc_e,False,,,
+278,Cytidine 2`-Monophosphate,P,,EX_pi_e,True,,False,,,
+279,cytidine 3`-monophosphate,P,,EX_pi_e,True,EX_3cmp_e,False,,,
+280,cytidine 5`-monophosphate,P,,EX_pi_e,True,EX_cmp_e,False,,,
+281,"cytidine 2`,3`-cyclic monophosphate",P,,EX_pi_e,True,EX_23ccmp_e,False,,,
+282,"cytidine 3`,5`-cyclic monophosphate",P,,EX_pi_e,True,EX_35ccmp_e,False,,,
+283,d-mannose-1-phosphate,P,,EX_pi_e,True,EX_man1p_e,False,,,
+284,d-mannose-6-phosphate,P,,EX_pi_e,True,EX_man6p_e,False,,,
+285,Cysteamine-S-Phosphate,P,,EX_pi_e,True,,False,,,
+286,phospho-l-arginine,P,,EX_pi_e,True,EX_argp_e,False,,,
+287,o-phospho-d-serine,P,,EX_pi_e,True,EX_pser__D_e,False,,,
+288,o-phospho-l-serine,P,,EX_pi_e,True,EX_pser__L_e,False,,,
+289,o-phospho-l-threonine,P,,EX_pi_e,True,EX_thrp_e,False,,,
+290,Uridine 2`-Monophosphate,P,,EX_pi_e,True,,False,,,
+291,uridine 3`-monophosphate,P,,EX_pi_e,True,EX_3ump_e,False,,,
+292,uridine 5`-monophosphate,P,,EX_pi_e,True,EX_ump_e,False,,,
+293,"uridine 2`,3`-cyclic monophosphate",P,,EX_pi_e,True,EX_23cump_e,False,,,
+294,"Uridine 3`,5`-Cyclic Monophosphate",P,,EX_pi_e,True,,False,,,
+295,O-Phospho-D-Tyrosine,P,,EX_pi_e,True,,False,,,
+296,o-phospho-l-tyrosine,P,,EX_pi_e,True,EX_tyrp_e,False,,,
+297,phosphocreatine,P,,EX_pi_e,True,EX_pcreat_e,False,,,
+298,phosphoryl choline,P,,EX_pi_e,True,EX_cholp_e,False,,,
+299,o-phosphoryl-ethanolamine,P,,EX_pi_e,True,EX_ethamp_e,False,,,
+300,phosphono acetic acid,P,,EX_pi_e,True,EX_ppac_e,False,,,
+301,2-aminoethyl phosphonic acid,P,,EX_pi_e,True,EX_2ameph_e,False,,,
+302,Methylene Diphosphonic acid,P,,EX_pi_e,True,,False,,,
+303,Thymidine 3`-Monophosphate,P,,EX_pi_e,True,,False,,,
+304,thymidine 5`-monophosphate,P,,EX_pi_e,True,EX_dtmp_e,False,,,
+305,inositol hexaphosphate,P,,EX_pi_e,True,EX_mi1p__D_e,False,,,
+306,"Thymidine 3`,5`-Cyclic Monophosphate",P,,EX_pi_e,True,,False,,,
+307,sulfate,S,O4S,EX_so4_e,True,EX_so4_e,True,True,20.73323107155342,optimal
+308,thiosulfate,S,O3S2,EX_so4_e,True,EX_tsul_e,True,True,20.786148978942403,optimal
+309,tetrathionate,S,,EX_so4_e,True,EX_tet_e,False,,,
+310,Thiophosphate,P,,EX_pi_e,True,,False,,,
+311,Thiophosphate,S,,EX_so4_e,True,,False,,,
+312,d-cysteine,S,C3H7NO2S,EX_so4_e,True,EX_cys__D_e,True,True,26.786284105188287,optimal
+313,cys-gly,N,C5H10N2O3S,EX_nh4_e,True,EX_cgly_e,True,True,29.934077270905714,optimal
+314,cys-gly,S,C5H10N2O3S,EX_so4_e,True,EX_cgly_e,True,True,29.933926925579843,optimal
+315,l-cysteic acid,S,,EX_so4_e,True,EX_Lcyst_e,False,,,
+316,cysteamine,S,,EX_so4_e,True,EX_cysam_e,False,,,
+317,l-cysteine sulfinic acid,S,,EX_so4_e,True,EX_3sala_e,False,,,
+318,n-acetyl-l-cysteine,S,,EX_so4_e,True,EX_CE1310_e,False,,,
+319,S-Methyl-L-Cysteine,S,,EX_so4_e,True,,False,,,
+320,cystathionine,S,,EX_so4_e,True,EX_cyst__L_e,False,,,
+321,lanthionine,S,,EX_so4_e,True,EX_lanth_e,False,,,
+322,DL-Ethionine,S,,EX_so4_e,True,,False,,,
+323,d-methionine,S,C5H11NO2S,EX_so4_e,True,EX_met__D_e,True,True,23.174993794728337,optimal
+324,"n-acetyl-d,l-methionine",S,,EX_so4_e,True,EX_acmet_e,False,,,
+325,l-methionine sulfoxide,S,,EX_so4_e,True,EX_metsox_S__L_e,False,,,
+326,L-Methionine Sulfone,S,,EX_so4_e,True,,False,,,
+327,l-djenkolic acid,S,,EX_so4_e,True,EX_djenk_e,False,,,
+328,1-Thio-b-D-Glucose,S,,EX_so4_e,True,,False,,,
+329,"d,l-lipoamide",S,,EX_so4_e,True,EX_lpam_e,False,,,
+330,taurocholic acid,S,,EX_so4_e,True,EX_tchola_e,False,,,
+331,taurine,S,C2H7NO3S,EX_so4_e,True,EX_taur_e,True,True,20.78412268586525,optimal
+332,hypotaurine,S,,EX_so4_e,True,EX_hyptaur_e,False,,,
+333,p-Aminobenzene Sulfonic acid,S,,EX_so4_e,True,,False,,,
+334,butane sulfonic acid,S,C4H9O3S,EX_so4_e,True,EX_butso3_e,True,False,0.0,optimal
+335,2-hydroxyethane sulfonic acid,S,C2H5O4S,EX_so4_e,True,EX_isetac_e,True,True,20.742872369132176,optimal
+336,methane sulfonic acid,S,CH3O3S,EX_so4_e,True,EX_mso3_e,True,True,20.75660426941266,optimal
+337,Tetramethylene Sulfone,S,,EX_so4_e,True,,False,,,
+338,L-Alanine,N,C3H7NO2,EX_nh4_e,True,EX_ala__L_e,True,True,29.852050469031404,optimal
+339,L-Alanine,C,C3H7NO2,EX_glc__D_e,True,EX_ala__L_e,True,True,19.02052916103405,optimal
+340,"adenosine 3`,5`-cyclic monophosphate",P,,EX_pi_e,True,EX_camp_e,False,,,
+341,glycine,N,C2H5NO2,EX_nh4_e,True,EX_gly_e,True,True,29.065457900763512,optimal
+342,glycine,C,C2H5NO2,EX_glc__D_e,True,EX_gly_e,True,True,23.797814832217483,optimal
+343,l-isoleucine,N,C6H13NO2,EX_nh4_e,True,EX_ile__L_e,True,True,26.392239260045553,optimal
+344,l-isoleucine,C,C6H13NO2,EX_glc__D_e,True,EX_ile__L_e,True,True,17.60844410691845,optimal
+345,L-Phenylalanine,N,C9H11NO2,EX_nh4_e,True,EX_phe__L_e,True,True,29.793022452074986,optimal
+346,L-Phenylalanine,C,C9H11NO2,EX_glc__D_e,True,EX_phe__L_e,True,True,19.561765459225274,optimal
+347,guanosine,N,C10H13N5O5,EX_nh4_e,True,EX_gsn_e,True,True,33.36767856544314,optimal
+348,L-Threonine,N,C4H9NO3,EX_nh4_e,True,EX_thr__L_e,True,True,34.39989069523372,optimal
+349,L-Threonine,C,C4H9NO3,EX_glc__D_e,True,EX_thr__L_e,True,True,28.607570427939418,optimal
+350,l-tyrosine,N,C9H11NO3,EX_nh4_e,True,EX_tyr__L_e,True,True,25.199737270162107,optimal
+351,l-valine,N,C5H11NO2,EX_nh4_e,True,EX_val__L_e,True,True,23.176926463444506,optimal
+352,l-valine,C,C5H11NO2,EX_glc__D_e,True,EX_val__L_e,True,True,15.437167070128742,optimal
+353,Inosine,N,C10H12N4O5,EX_nh4_e,True,EX_ins_e,True,True,32.52686157120628,optimal
+354,Inosine,C,C10H12N4O5,EX_glc__D_e,True,EX_ins_e,True,True,26.694222448392882,optimal
+355,l-citrulline,N,,EX_nh4_e,True,EX_citr__L_e,False,,,
+356,D-Aspartic Acid,N,,EX_nh4_e,True,EX_asp__D_e,False,,,
+357,D-Aspartic Acid,C,,EX_glc__D_e,True,EX_asp__D_e,False,,,
+358,d-glutamic acid,N,,EX_nh4_e,True,EX_glu__D_e,False,,,
+359,cytosine,N,C4H5N3O,EX_nh4_e,True,EX_csn_e,True,True,32.705982630491896,optimal
+360,uracil,N,C4H4N2O2,EX_nh4_e,True,EX_ura_e,True,True,30.282582677363834,optimal
+361,N-Acetyl-D-Glucosamine,N,,EX_nh4_e,True,EX_acgam_e,False,,,
+362,N-Acetyl-D-Glucosamine,C,,EX_glc__D_e,True,EX_acgam_e,False,,,
+363,glutathione,S,,EX_so4_e,True,EX_gthox_e,False,,,
+364,m-Inositol,C,C6H12O6,EX_glc__D_e,True,EX_inost_e,True,False,1.3171647407928098e-12,optimal
+365,butyric acid,C,,EX_glc__D_e,True,EX_but_e,False,,,
+366,Tween 80,C,,EX_glc__D_e,True,,False,,,
+367,Ala-Ala,N,,EX_nh4_e,True,,False,,,
+368,Ala-Arg,N,,EX_nh4_e,True,,False,,,
+369,Ala-Asn,N,,EX_nh4_e,True,,False,,,
+370,ala-glu,N,,EX_nh4_e,True,EX_ala_L_glu__L_e,False,,,
+371,ala-leu,N,,EX_nh4_e,True,EX_ala_leu_e,False,,,
+372,Ala-Lys,N,,EX_nh4_e,True,,False,,,
+373,Ala-Phe,N,,EX_nh4_e,True,,False,,,
+374,Ala-Pro,N,,EX_nh4_e,True,,False,,,
+375,Ala-Ser,N,,EX_nh4_e,True,,False,,,
+376,Ala-Trp,N,,EX_nh4_e,True,,False,,,
+377,Ala-Tyr,N,,EX_nh4_e,True,,False,,,
+378,Arg-Ala,N,,EX_nh4_e,True,,False,,,
+379,Arg-Arg,N,,EX_nh4_e,True,,False,,,
+380,Arg-Asp,N,,EX_nh4_e,True,,False,,,
+381,Arg-Gln,N,,EX_nh4_e,True,,False,,,
+382,Arg-Glu,N,,EX_nh4_e,True,,False,,,
+383,Arg-Ile,N,,EX_nh4_e,True,,False,,,
+384,Arg-Leu,N,,EX_nh4_e,True,,False,,,
+385,Arg-Lys,N,,EX_nh4_e,True,,False,,,
+386,Arg-Met,N,,EX_nh4_e,True,,False,,,
+387,Arg-Phe,N,,EX_nh4_e,True,,False,,,
+388,Arg-Ser,N,,EX_nh4_e,True,,False,,,
+389,Arg-Trp,N,,EX_nh4_e,True,,False,,,
+390,Arg-Tyr,N,,EX_nh4_e,True,,False,,,
+391,Arg-Val,N,,EX_nh4_e,True,,False,,,
+392,Asn-Glu,N,,EX_nh4_e,True,,False,,,
+393,Asn-Val,N,,EX_nh4_e,True,,False,,,
+394,Asp-Asp,N,,EX_nh4_e,True,,False,,,
+395,Asp-Glu,N,,EX_nh4_e,True,,False,,,
+396,Asp-Leu,N,,EX_nh4_e,True,,False,,,
+397,Asp-Lys,N,,EX_nh4_e,True,,False,,,
+398,Asp-Phe,N,,EX_nh4_e,True,,False,,,
+399,Asp-Trp,N,,EX_nh4_e,True,,False,,,
+400,Asp-Val,N,,EX_nh4_e,True,,False,,,
+401,Gln-Gln,N,,EX_nh4_e,True,,False,,,
+402,Gln-Gly,N,,EX_nh4_e,True,,False,,,
+403,Glu-Asp,N,,EX_nh4_e,True,,False,,,
+404,Glu-Glu,N,,EX_nh4_e,True,,False,,,
+405,Glu-Gly,N,,EX_nh4_e,True,,False,,,
+406,Glu-Ser,N,,EX_nh4_e,True,,False,,,
+407,Glu-Trp,N,,EX_nh4_e,True,,False,,,
+408,Glu-Tyr,N,,EX_nh4_e,True,,False,,,
+409,Glu-Val,N,,EX_nh4_e,True,,False,,,
+410,Gly-Ala,N,,EX_nh4_e,True,,False,,,
+411,Gly-Arg,N,,EX_nh4_e,True,,False,,,
+412,Gly-Cys,N,,EX_nh4_e,True,,False,,,
+413,Gly-Gly,N,,EX_nh4_e,True,,False,,,
+414,Gly-His,N,,EX_nh4_e,True,,False,,,
+415,Gly-Leu,N,,EX_nh4_e,True,,False,,,
+416,Gly-Lys,N,,EX_nh4_e,True,,False,,,
+417,Gly-Phe,N,,EX_nh4_e,True,,False,,,
+418,Gly-Ser,N,,EX_nh4_e,True,,False,,,
+419,Gly-Thr,N,,EX_nh4_e,True,,False,,,
+420,Gly-Trp,N,,EX_nh4_e,True,,False,,,
+421,Gly-Tyr,N,,EX_nh4_e,True,,False,,,
+422,Gly-Val,N,,EX_nh4_e,True,,False,,,
+423,His-Asp,N,,EX_nh4_e,True,,False,,,
+424,His-Gly,N,,EX_nh4_e,True,,False,,,
+425,His-Leu,N,,EX_nh4_e,True,,False,,,
+426,His-Lys,N,,EX_nh4_e,True,,False,,,
+427,His-Met,N,,EX_nh4_e,True,,False,,,
+428,His-Pro,N,,EX_nh4_e,True,,False,,,
+429,His-Ser,N,,EX_nh4_e,True,,False,,,
+430,His-Trp,N,,EX_nh4_e,True,,False,,,
+431,His-Tyr,N,,EX_nh4_e,True,,False,,,
+432,His-Val,N,,EX_nh4_e,True,,False,,,
+433,Ile-Ala,N,,EX_nh4_e,True,,False,,,
+434,Ile-Arg,N,,EX_nh4_e,True,,False,,,
+435,Ile-Gln,N,,EX_nh4_e,True,,False,,,
+436,Ile-Gly,N,,EX_nh4_e,True,,False,,,
+437,Ile-His,N,,EX_nh4_e,True,,False,,,
+438,Ile-Ile,N,,EX_nh4_e,True,,False,,,
+439,Ile-Met,N,,EX_nh4_e,True,,False,,,
+440,Ile-Phe,N,,EX_nh4_e,True,,False,,,
+441,Ile-Pro,N,,EX_nh4_e,True,,False,,,
+442,Ile-Ser,N,,EX_nh4_e,True,,False,,,
+443,Ile-Trp,N,,EX_nh4_e,True,,False,,,
+444,Ile-Tyr,N,,EX_nh4_e,True,,False,,,
+445,Ile-Val,N,,EX_nh4_e,True,,False,,,
+446,Leu-Ala,N,,EX_nh4_e,True,,False,,,
+447,Leu-Arg,N,,EX_nh4_e,True,,False,,,
+448,Leu-Asp,N,,EX_nh4_e,True,,False,,,
+449,Leu-Glu,N,,EX_nh4_e,True,,False,,,
+450,Leu-Gly,N,,EX_nh4_e,True,,False,,,
+451,Leu-Ile,N,,EX_nh4_e,True,,False,,,
+452,Leu-Leu,N,,EX_nh4_e,True,,False,,,
+453,Leu-Met,N,,EX_nh4_e,True,,False,,,
+454,Leu-Phe,N,,EX_nh4_e,True,,False,,,
+455,Leu-Ser,N,,EX_nh4_e,True,,False,,,
+456,Leu-Trp,N,,EX_nh4_e,True,,False,,,
+457,Leu-Val,N,,EX_nh4_e,True,,False,,,
+458,Lys-Ala,N,,EX_nh4_e,True,,False,,,
+459,Lys-Arg,N,,EX_nh4_e,True,,False,,,
+460,Lys-Glu,N,,EX_nh4_e,True,,False,,,
+461,Lys-Ile,N,,EX_nh4_e,True,,False,,,
+462,Lys-Leu,N,,EX_nh4_e,True,,False,,,
+463,Lys-Lys,N,,EX_nh4_e,True,,False,,,
+464,Lys-Phe,N,,EX_nh4_e,True,,False,,,
+465,Lys-Pro,N,,EX_nh4_e,True,,False,,,
+466,Lys-Ser,N,,EX_nh4_e,True,,False,,,
+467,Lys-Thr,N,,EX_nh4_e,True,,False,,,
+468,Lys-Trp,N,,EX_nh4_e,True,,False,,,
+469,Lys-Tyr,N,,EX_nh4_e,True,,False,,,
+470,Lys-Val,N,,EX_nh4_e,True,,False,,,
+471,Met-Arg,N,,EX_nh4_e,True,,False,,,
+472,Met-Asp,N,,EX_nh4_e,True,,False,,,
+473,Met-Gln,N,,EX_nh4_e,True,,False,,,
+474,Met-Glu,N,,EX_nh4_e,True,,False,,,
+475,Met-Gly,N,,EX_nh4_e,True,,False,,,
+476,Met-His,N,,EX_nh4_e,True,,False,,,
+477,Met-Ile,N,,EX_nh4_e,True,,False,,,
+478,Met-Leu,N,,EX_nh4_e,True,,False,,,
+479,Met-Lys,N,,EX_nh4_e,True,,False,,,
+480,Met-Met,N,,EX_nh4_e,True,,False,,,
+481,Met-Phe,N,,EX_nh4_e,True,,False,,,
+482,Met-Pro,N,,EX_nh4_e,True,,False,,,
+483,Met-Trp,N,,EX_nh4_e,True,,False,,,
+484,Met-Val,N,,EX_nh4_e,True,,False,,,
+485,Phe-Ala,N,,EX_nh4_e,True,,False,,,
+486,Phe-Gly,N,,EX_nh4_e,True,,False,,,
+487,Phe-Ile,N,,EX_nh4_e,True,,False,,,
+488,Phe-Phe,N,,EX_nh4_e,True,,False,,,
+489,Phe-Pro,N,,EX_nh4_e,True,,False,,,
+490,Phe-Ser,N,,EX_nh4_e,True,,False,,,
+491,Phe-Trp,N,,EX_nh4_e,True,,False,,,
+492,Pro-Ala,N,,EX_nh4_e,True,,False,,,
+493,Pro-Asp,N,,EX_nh4_e,True,,False,,,
+494,Pro-Gln,N,,EX_nh4_e,True,,False,,,
+495,Pro-Gly,N,,EX_nh4_e,True,,False,,,
+496,Pro-Hyp,N,,EX_nh4_e,True,,False,,,
+497,Pro-Leu,N,,EX_nh4_e,True,,False,,,
+498,Pro-Phe,N,,EX_nh4_e,True,,False,,,
+499,Pro-Pro,N,,EX_nh4_e,True,,False,,,
+500,Pro-Tyr,N,,EX_nh4_e,True,,False,,,
+501,Ser-Ala,N,,EX_nh4_e,True,,False,,,
+502,Ser-Gly,N,,EX_nh4_e,True,,False,,,
+503,Ser-His,N,,EX_nh4_e,True,,False,,,
+504,Ser-Leu,N,,EX_nh4_e,True,,False,,,
+505,Ser-Met,N,,EX_nh4_e,True,,False,,,
+506,Ser-Phe,N,,EX_nh4_e,True,,False,,,
+507,Ser-Pro,N,,EX_nh4_e,True,,False,,,
+508,Ser-Ser,N,,EX_nh4_e,True,,False,,,
+509,Ser-Tyr,N,,EX_nh4_e,True,,False,,,
+510,Ser-Val,N,,EX_nh4_e,True,,False,,,
+511,Thr-Ala,N,,EX_nh4_e,True,,False,,,
+512,Thr-Arg,N,,EX_nh4_e,True,,False,,,
+513,Thr-Glu,N,,EX_nh4_e,True,,False,,,
+514,Thr-Gly,N,,EX_nh4_e,True,,False,,,
+515,Thr-Leu,N,,EX_nh4_e,True,,False,,,
+516,Thr-Met,N,,EX_nh4_e,True,,False,,,
+517,Thr-Pro,N,,EX_nh4_e,True,,False,,,
+518,Trp-Ala,N,,EX_nh4_e,True,,False,,,
+519,Trp-Arg,N,,EX_nh4_e,True,,False,,,
+520,Trp-Asp,N,,EX_nh4_e,True,,False,,,
+521,Trp-Glu,N,,EX_nh4_e,True,,False,,,
+522,Trp-Gly,N,,EX_nh4_e,True,,False,,,
+523,Trp-Leu,N,,EX_nh4_e,True,,False,,,
+524,Trp-Lys,N,,EX_nh4_e,True,,False,,,
+525,Trp-Phe,N,,EX_nh4_e,True,,False,,,
+526,Trp-Ser,N,,EX_nh4_e,True,,False,,,
+527,Trp-Trp,N,,EX_nh4_e,True,,False,,,
+528,Trp-Tyr,N,,EX_nh4_e,True,,False,,,
+529,Tyr-Ala,N,,EX_nh4_e,True,,False,,,
+530,Tyr-Gln,N,,EX_nh4_e,True,,False,,,
+531,Tyr-Glu,N,,EX_nh4_e,True,,False,,,
+532,Tyr-Gly,N,,EX_nh4_e,True,,False,,,
+533,Tyr-His,N,,EX_nh4_e,True,,False,,,
+534,Tyr-Leu,N,,EX_nh4_e,True,,False,,,
+535,Tyr-Lys,N,,EX_nh4_e,True,,False,,,
+536,Tyr-Phe,N,,EX_nh4_e,True,,False,,,
+537,Tyr-Trp,N,,EX_nh4_e,True,,False,,,
+538,Tyr-Tyr,N,,EX_nh4_e,True,,False,,,
+539,Val-Arg,N,,EX_nh4_e,True,,False,,,
+540,Val-Asn,N,,EX_nh4_e,True,,False,,,
+541,Val-Asp,N,,EX_nh4_e,True,,False,,,
+542,Val-Gly,N,,EX_nh4_e,True,,False,,,
+543,Val-His,N,,EX_nh4_e,True,,False,,,
+544,Val-Ile,N,,EX_nh4_e,True,,False,,,
+545,Val-Leu,N,,EX_nh4_e,True,,False,,,
+546,Val-Tyr,N,,EX_nh4_e,True,,False,,,
+547,Val-Val,N,,EX_nh4_e,True,,False,,,
+548,g-Glu-Gly,N,,EX_nh4_e,True,,False,,,
+549,L-Glutamine,N,C5H10N2O3,EX_nh4_e,True,EX_gln__L_e,True,True,34.54012980750702,optimal
+550,L-Glutamine,C,C5H10N2O3,EX_glc__D_e,True,EX_gln__L_e,True,True,22.794577467018595,optimal
+551,ala-asp,N,,EX_nh4_e,True,EX_ala_L_asp__L_e,False,,,
+552,Ala-Ile,N,,EX_nh4_e,True,,False,,,
+553,Ala-Met,N,,EX_nh4_e,True,,False,,,
+554,Ala-Val,N,,EX_nh4_e,True,,False,,,
+555,Asp-Ala,N,,EX_nh4_e,True,,False,,,
+556,Asp-Gln,N,,EX_nh4_e,True,,False,,,
+557,Asp-Gly,N,,EX_nh4_e,True,,False,,,
+558,Glu-Ala,N,,EX_nh4_e,True,,False,,,
+559,gly-asn,N,,EX_nh4_e,True,EX_gly_asn__L_e,False,,,
+560,gly-asp,N,,EX_nh4_e,True,EX_gly_asp__L_e,False,,,
+561,gly-asp,C,,EX_glc__D_e,True,EX_gly_asp__L_e,False,,,
+562,Gly-Ile,N,,EX_nh4_e,True,,False,,,
+563,His-Ala,N,,EX_nh4_e,True,,False,,,
+564,His-Glu,N,,EX_nh4_e,True,,False,,,
+565,His-His,N,,EX_nh4_e,True,,False,,,
+566,Ile-Asn,N,,EX_nh4_e,True,,False,,,
+567,Ile-Leu,N,,EX_nh4_e,True,,False,,,
+568,Leu-Asn,N,,EX_nh4_e,True,,False,,,
+569,Leu-His,N,,EX_nh4_e,True,,False,,,
+570,Leu-Pro,N,,EX_nh4_e,True,,False,,,
+571,Leu-Tyr,N,,EX_nh4_e,True,,False,,,
+572,Lys-Asp,N,,EX_nh4_e,True,,False,,,
+573,Lys-Gly,N,,EX_nh4_e,True,,False,,,
+574,Lys-Met,N,,EX_nh4_e,True,,False,,,
+575,Met-Thr,N,,EX_nh4_e,True,,False,,,
+576,Met-Tyr,N,,EX_nh4_e,True,,False,,,
+577,Phe-Asp,N,,EX_nh4_e,True,,False,,,
+578,Phe-Glu,N,,EX_nh4_e,True,,False,,,
+579,Gln-Glu,N,,EX_nh4_e,True,,False,,,
+580,Phe-Met,N,,EX_nh4_e,True,,False,,,
+581,Phe-Tyr,N,,EX_nh4_e,True,,False,,,
+582,Phe-Val,N,,EX_nh4_e,True,,False,,,
+583,Pro-Arg,N,,EX_nh4_e,True,,False,,,
+584,Pro-Asn,N,,EX_nh4_e,True,,False,,,
+585,Pro-Glu,N,,EX_nh4_e,True,,False,,,
+586,Pro-lle,N,,EX_nh4_e,True,,False,,,
+587,Pro-Lys,N,,EX_nh4_e,True,,False,,,
+588,Pro-Ser,N,,EX_nh4_e,True,,False,,,
+589,Pro-Trp,N,,EX_nh4_e,True,,False,,,
+590,Pro-Val,N,,EX_nh4_e,True,,False,,,
+591,Ser-Asn,N,,EX_nh4_e,True,,False,,,
+592,Ser-Asp,N,,EX_nh4_e,True,,False,,,
+593,Ser-Gln,N,,EX_nh4_e,True,,False,,,
+594,Ser-Glu,N,,EX_nh4_e,True,,False,,,
+595,Thr-Asp,N,,EX_nh4_e,True,,False,,,
+596,Thr-Gln,N,,EX_nh4_e,True,,False,,,
+597,Thr-Phe,N,,EX_nh4_e,True,,False,,,
+598,Thr-Ser,N,,EX_nh4_e,True,,False,,,
+599,Trp-Val,N,,EX_nh4_e,True,,False,,,
+600,Tyr-Ile,N,,EX_nh4_e,True,,False,,,
+601,Tyr-Val,N,,EX_nh4_e,True,,False,,,
+602,Val-Ala,N,,EX_nh4_e,True,,False,,,
+603,Val-Gln,N,,EX_nh4_e,True,,False,,,
+604,Val-Glu,N,,EX_nh4_e,True,,False,,,
+605,Val-Lys,N,,EX_nh4_e,True,,False,,,
+606,Val-Met,N,,EX_nh4_e,True,,False,,,
+607,Val-Phe,N,,EX_nh4_e,True,,False,,,
+608,Val-Pro,N,,EX_nh4_e,True,,False,,,
+609,Val-Ser,N,,EX_nh4_e,True,,False,,,
+610,b-Ala-Ala,N,,EX_nh4_e,True,,False,,,
+611,b-Ala-Gly,N,,EX_nh4_e,True,,False,,,
+612,b-Ala-His,N,,EX_nh4_e,True,,False,,,
+613,Met-b-Ala,N,,EX_nh4_e,True,,False,,,
+614,b-Ala-Phe,N,,EX_nh4_e,True,,False,,,
+615,D-Ala-D-Ala,N,,EX_nh4_e,True,,False,,,
+616,D-Ala-Gly,N,,EX_nh4_e,True,,False,,,
+617,D-Ala-Leu,N,,EX_nh4_e,True,,False,,,
+618,D-Leu-D-Leu,N,,EX_nh4_e,True,,False,,,
+619,D-Leu-Gly,N,,EX_nh4_e,True,,False,,,
+620,D-Leu-Tyr,N,,EX_nh4_e,True,,False,,,
+621,g-D-Glu-Gly,N,,EX_nh4_e,True,,False,,,
+622,Gly-D-Ala,N,,EX_nh4_e,True,,False,,,
+623,Gly-D-Asp,N,,EX_nh4_e,True,,False,,,
+624,Gly-D-Ser,N,,EX_nh4_e,True,,False,,,
+625,Gly-D-Thr,N,,EX_nh4_e,True,,False,,,
+626,Gly-D-Val,N,,EX_nh4_e,True,,False,,,
+627,Leu-b-Ala,N,,EX_nh4_e,True,,False,,,
+628,Leu-D-Leu,N,,EX_nh4_e,True,,False,,,
+629,Phe-b-Ala,N,,EX_nh4_e,True,,False,,,
+630,Ala-Ala-Ala,N,,EX_nh4_e,True,,False,,,
+631,D-Ala-Gly-Gly,N,,EX_nh4_e,True,,False,,,
+632,Gly-Gly-Ala,N,,EX_nh4_e,True,,False,,,
+633,Gly-Gly-D-Leu,N,,EX_nh4_e,True,,False,,,
+634,Gly-Gly-Gly,N,,EX_nh4_e,True,,False,,,
+635,Gly-Gly-Ile,N,,EX_nh4_e,True,,False,,,
+636,Gly-Gly-Leu,N,,EX_nh4_e,True,,False,,,
+637,Gly-Gly-Phe,N,,EX_nh4_e,True,,False,,,
+638,Val-Tyr-Val,N,,EX_nh4_e,True,,False,,,
+639,Gly-Phe-Phe,N,,EX_nh4_e,True,,False,,,
+640,Leu-Gly-Gly,N,,EX_nh4_e,True,,False,,,
+641,Leu-Leu-Leu,N,,EX_nh4_e,True,,False,,,
+642,Phe-Gly-Gly,N,,EX_nh4_e,True,,False,,,
+643,Tyr-Gly-Gly,N,,EX_nh4_e,True,,False,,,
+644,Sorbic acid,C,,EX_glc__D_e,True,,False,,,
+645,hydroxylamine,N,,EX_nh4_e,True,EX_ham_e,False,,,
+646,Thiourea,S,,EX_so4_e,True,,False,,,
+647,D-Serine,N,C3H7NO3,EX_nh4_e,True,EX_ser__D_e,True,True,34.73133124557728,optimal
+648,D-Serine,C,C3H7NO3,EX_glc__D_e,True,EX_ser__D_e,True,True,33.29577595209537,optimal
+649,Succinic Acid,C,C4H4O4,EX_glc__D_e,True,EX_succ_e,True,True,17.473351356761324,optimal
+650,Fumaric Acid,C,C4H2O4,EX_glc__D_e,True,EX_fum_e,True,True,17.614535074134963,optimal

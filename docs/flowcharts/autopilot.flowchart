@@ -1,0 +1,16 @@
+
+
+Prio_gapfilling --> panmodel{{panmodel}}
+
+
+dd_draft_panmodel{{dd_draft_panmodel}} --> Prio_gapfilling
+Universe{{Universe}} --> Prio_gapfilling
+PAM{{PAM}} --> Prio_gapfilling
+
+
+style panmodel fill:gold
+
+style Prio_gapfilling fill:whitesmoke
+style dd_draft_panmodel fill:lightblue
+style Universe fill:violet
+style PAM fill:gold

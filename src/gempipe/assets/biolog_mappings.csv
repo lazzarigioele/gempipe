@@ -1,0 +1,1122 @@
+,source,PM,BiGG_ID,BiGG_exchange,SEED_ID,SEED_exchange,KEGG_ID
+L-Arabinose,{'C'},{'PM01:A02'},arab__L,EX_arab__L_e,cpd00224,EX_cpd00224_e0,C00259
+D-Saccharic Acid,{'C'},{'PM01:A04'},glcr,EX_glcr_e,cpd00571,EX_cpd00571_e0,C00818
+D-Galactose,{'C'},{'PM01:A06'},gal,EX_gal_e,cpd00108,EX_cpd00108_e0,C00124
+L-Aspartic Acid,"{'C', 'N'}","{'PM01:A07', 'PM05:A06', 'PM03:A10'}",asp__L,EX_asp__L_e,cpd00041,EX_cpd00041_e0,C00049
+D-Alanine,"{'C', 'N'}","{'PM01:A09', 'PM05:D06', 'PM03:C03'}",ala__D,EX_ala__D_e,cpd00117,EX_cpd00117_e0,C00133
+D-Trehalose,{'C'},{'PM01:A10'},tre,EX_tre_e,cpd00794,EX_cpd00794_e0,C01083
+D-Mannose,{'C'},{'PM01:A11'},man,EX_man_e,cpd00138,EX_cpd00138_e0,C00159
+Dulcitol,{'C'},{'PM01:A12'},galt,EX_galt_e,cpd01171,EX_cpd01171_e0,C01697
+D-Sorbitol,{'C'},{'PM01:B02'},sbt__D,EX_sbt__D_e,cpd00588,EX_cpd00588_e0,C00794
+Glycerol,{'C'},{'PM01:B03'},glyc,EX_glyc_e,cpd00100,EX_cpd00100_e0,C00116
+L-Fucose,{'C'},{'PM01:B04'},fuc__L,EX_fuc__L_e,cpd00751,EX_cpd00751_e0,C01019
+D-Glucuronic Acid,{'C'},{'PM01:B05'},glcur,EX_glcur_e,cpd00164,EX_cpd00164_e0,C00191
+D-Gluconic Acid,{'C'},{'PM01:B06'},glcn,EX_glcn_e,cpd00222,EX_cpd00222_e0,C00257
+D-Xylose,{'C'},{'PM01:B08'},xyl__D,EX_xyl__D_e,cpd00154,EX_cpd00154_e0,C00181
+L-Lactic Acid,{'C'},{'PM01:B09'},lac__L,EX_lac__L_e,cpd00159,EX_cpd00159_e0,C01432
+Formic Acid,{'C'},{'PM01:B10'},for,EX_for_e,cpd00047,EX_cpd00047_e0,C00058
+D-Mannitol,{'C'},{'PM01:B11'},mnl,EX_mnl_e,cpd00314,EX_cpd00314_e0,C00392
+L-Glutamic Acid,"{'C', 'N'}","{'PM01:B12', 'PM05:A08', 'PM03:A12'}",glu__L,EX_glu__L_e,cpd00023,EX_cpd00023_e0,C00025
+D-Galactonic acid-g-Lactone,{'C'},{'PM01:C02'},galctn__D,EX_galctn__D_e,cpd00765,EX_cpd00765_e0,C03383
+"D,L-Malic Acid",{'C'},{'PM01:C03'},mal__L,EX_mal__L_e,cpd00130,EX_cpd00130_e0,C00497
+D-Ribose,{'C'},{'PM01:C04'},rib__D,EX_rib__D_e,cpd00105,EX_cpd00105_e0,C00121
+Tween 20,{'C'},"{'PM01:C05', 'PM05:H09'}",,,,,C11624
+L-Rhamnose,{'C'},{'PM01:C06'},rmn,EX_rmn_e,cpd00396,EX_cpd00396_e0,C00507
+D-Fructose,{'C'},{'PM01:C07'},fru,EX_fru_e,cpd00082,EX_cpd00082_e0,C00095
+Acetic Acid,{'C'},{'PM01:C08'},ac,EX_ac_e,cpd00029,EX_cpd00029_e0,C00033
+a-d-glucose,{'C'},"{'PM01:C09', 'PM05:F08'}",glc__D,EX_glc__D_e,cpd00027,EX_cpd00027_e0,C00031
+Maltose,{'C'},{'PM01:C10'},malt,EX_malt_e,cpd00179,EX_cpd00179_e0,C00208
+D-Melibiose,{'C'},{'PM01:C11'},melib,EX_melib_e,cpd03198,EX_cpd03198_e0,C05402
+Thymidine,"{'C', 'N'}","{'PM01:C12', 'PM03:F09', 'PM05:F12'}",thymd,EX_thymd_e,cpd00184,EX_cpd00184_e0,C00214
+D-Glucosaminic acid,{'C'},{'PM01:D03'},,,,,C03752
+"1,2-propanediol",{'C'},{'PM01:D04'},12ppd__S,EX_12ppd__S_e,cpd19024,EX_cpd19024_e0,C00583
+Tween 40,{'C'},"{'PM01:D05', 'PM05:H10'}",,,,,
+a-Ketoglutaric acid,{'C'},{'PM01:D06'},akg,EX_akg_e,cpd00024,EX_cpd00024_e0,C00026
+a-Ketobutyric acid,{'C'},"{'PM01:D07', 'PM05:H03'}",2obut,EX_2obut_e,cpd00094,EX_cpd00094_e0,C00109
+a-Methyl-D-Galactoside,{'C'},{'PM01:D08'},,,,,C03619
+alpha-D-Lactose,{'C'},{'PM01:D09'},lcts,EX_lcts_e,cpd00208,EX_cpd00208_e0,C00243
+Lactulose,{'C'},{'PM01:D10'},,,,,C07064
+Sucrose,{'C'},{'PM01:D11'},sucr,EX_sucr_e,cpd00076,EX_cpd00076_e0,C00089
+m-tartaric acid,{'C'},{'PM01:E02'},tartr__M,EX_tartr__M_e,cpd00432,EX_cpd00432_e0,C00552
+D-Fructose-6-Phosphate,{'C'},{'PM01:E04'},f6p,EX_f6p_e,cpd00072,EX_cpd00072_e0,C00085
+a-Hydroxyglutaric acid-g-Lactone,{'C'},{'PM01:E06'},,,,,
+a-hydroxybutyric acid,{'C'},"{'PM01:E07', 'PM05:H02'}",2hb,EX_2hb_e,cpd03561,EX_cpd03561_e0,C05984
+b-Methyl-D-Glucoside,{'C'},{'PM01:E08'},mbdg,EX_mbdg_e,cpd15585,EX_cpd15585_e0,
+Adonitol,{'C'},{'PM01:E09'},rbt,EX_rbt_e,cpd00366,EX_cpd00366_e0,C00474
+Maltotriose,{'C'},{'PM01:E10'},malttr,EX_malttr_e,cpd01262,EX_cpd01262_e0,C01835
+2`-Deoxyadenosine,{'C'},"{'PM01:E11', 'PM05:A12'}",dad_2,EX_dad_2_e,cpd00438,EX_cpd00438_e0,C00559
+Citric acid,{'C'},{'PM01:F02'},cit,EX_cit_e,cpd00137,EX_cpd00137_e0,C00158
+D-Threonine,{'C'},{'PM01:F04'},,,,,C00820
+Bromosuccinic acid,{'C'},{'PM01:F06'},,,,,
+Propionic Acid,{'C'},{'PM01:F07'},ppa,EX_ppa_e,cpd00141,EX_cpd00141_e0,C00163
+Mucic acid,{'C'},{'PM01:F08'},galct__D,EX_galct__D_e,cpd00652,EX_cpd00652_e0,C01807
+Glycolic Acid,{'C'},{'PM01:F09'},glyclt,EX_glyclt_e,cpd00139,EX_cpd00139_e0,C00160
+Glyoxylic Acid,{'C'},{'PM01:F10'},glx,EX_glx_e,cpd00040,EX_cpd00040_e0,C00048
+D-Cellobiose,{'C'},{'PM01:F11'},cellb,EX_cellb_e,cpd00158,EX_cpd00158_e0,C00185
+Tricarballylic acid,{'C'},{'PM01:G02'},tcb,EX_tcb_e,cpd16654,EX_cpd16654_e0,
+acetoacetic acid,{'C'},{'PM01:G07'},acac,EX_acac_e,cpd00142,EX_cpd00142_e0,C00164
+Mono-Methylsuccinate,{'C'},{'PM01:G09'},,,,,
+Methylpyruvate,{'C'},{'PM01:G10'},,,,,
+D-Malic Acid,{'C'},{'PM01:G11'},mal__D,EX_mal__D_e,cpd00386,EX_cpd00386_e0,C00497
+L-Malic Acid,{'C'},{'PM01:G12'},mal__L,EX_mal__L_e,cpd00130,EX_cpd00130_e0,C00149
+Gly-Pro,"{'C', 'N'}","{'PM01:H01', 'PM06:E11'}",gly_pro__L,EX_gly_pro__L_e,cpd11588,EX_cpd11588_e0,
+p-Hydroxyphenyl Acetic acid,{'C'},{'PM01:H02'},4hphac,EX_4hphac_e,cpd00489,EX_cpd00489_e0,C00642
+m-hydroxyphenyl acetic acid,{'C'},{'PM01:H03'},3hoxpac,EX_3hoxpac_e,cpd03320,EX_cpd03320_e0,C05593
+Tyramine,"{'C', 'N'}","{'PM01:H04', 'PM03:E03'}",tym,EX_tym_e,cpd00374,EX_cpd00374_e0,C00483
+D-Psicose,{'C'},{'PM01:H05'},,,,,C06468
+L-Lyxose,{'C'},{'PM01:H06'},lyx__L,EX_lyx__L_e,cpd01067,EX_cpd01067_e0,C01508
+Pyruvic Acid,{'C'},{'PM01:H08'},pyr,EX_pyr_e,cpd00020,EX_cpd00020_e0,C00022
+L-Galactonic Acid-gamma-Lactone,{'C'},{'PM01:H09'},galctn__L,EX_galctn__L_e,cpd14659,EX_cpd14659_e0,C01115
+D-Galacturonic Acid,{'C'},{'PM01:H10'},galur,EX_galur_e,cpd00280,EX_cpd00280_e0,C00333
+Phenylethylamine,{'C'},{'PM01:H11'},peamn,EX_peamn_e,cpd03161,EX_cpd03161_e0,C05332
+2-aminoethanol,{'C'},{'PM01:H12'},etha,EX_etha_e,cpd00162,EX_cpd00162_e0,C00189
+chondroitin sulfate c,{'C'},{'PM02:A02'},cs_c,EX_cs_c_e,cpd11717,EX_cpd11717_e0,C00635
+a-Cyclodextrin,{'C'},{'PM02:A03'},,,,,
+b-Cyclodextrin,{'C'},{'PM02:A04'},,,,,
+g-Cyclodextrin,{'C'},{'PM02:A05'},,,,,
+dextrin,{'C'},{'PM02:A06'},dextrin,EX_dextrin_e,cpd11594,EX_cpd11594_e0,C00721
+Gelatin,{'C'},{'PM02:A07'},,,,,C01498
+glycogen,{'C'},{'PM02:A08'},glycogen,EX_glycogen_e,cpd00155,EX_cpd00155_e0,C00182
+Inulin,{'C'},{'PM02:A09'},,,,,C00368
+Laminarin,{'C'},{'PM02:A10'},,,,,C00771
+mannan,{'C'},{'PM02:A11'},mannan,EX_mannan_e,cpd11685,EX_cpd11685_e0,C00464
+pectin,{'C'},{'PM02:A12'},pectin,EX_pectin_e,cpd11601,EX_cpd11601_e0,C00714
+N-Acetyl-Neuraminic acid,{'C'},{'PM02:B02'},acnam,EX_acnam_e,cpd00232,EX_cpd00232_e0,C00270
+b-d-allose,{'C'},{'PM02:B03'},all__D,EX_all__D_e,cpd01055,EX_cpd01055_e0,C01487
+Amygdalin,{'C'},{'PM02:B04'},,,,,C08325
+d-arabinose,{'C'},{'PM02:B05'},arab__D,EX_arab__D_e,cpd00185,EX_cpd00185_e0,C00216
+D-Arabitol,{'C'},{'PM02:B06'},abt__D,EX_abt__D_e,cpd01307,EX_cpd01307_e0,C01904
+l-arabitol,{'C'},{'PM02:B07'},abt__L,EX_abt__L_e,cpd00417,EX_cpd00417_e0,C00532
+Arbutin,{'C'},{'PM02:B08'},arbt,EX_arbt_e,cpd03696,EX_cpd03696_e0,C06186
+2-deoxy-d-ribose,{'C'},{'PM02:B09'},drib,EX_drib_e,cpd01242,EX_cpd01242_e0,C01801
+i-Erythritol,{'C'},{'PM02:B10'},,,,,C00503
+D-Fucose,{'C'},{'PM02:B11'},,,,,C01018
+3-O-b-D-Galactopyranosyl-D-Arabinose,{'C'},{'PM02:B12'},,,,,
+Gentiobiose,{'C'},{'PM02:C01'},,,,,C08240
+L-Glucose,{'C'},{'PM02:C02'},,,,,
+D-Lactitol,{'C'},{'PM02:C03'},,,,,
+D-Melezitose,{'C'},{'PM02:C04'},,,,,C08243
+Maltitol,{'C'},{'PM02:C05'},,,,,G00275
+a-methyl-d-glucoside,{'C'},{'PM02:C06'},amdglc,EX_amdglc_e,cpd15584,EX_cpd15584_e0,
+b-methyl-d-galactoside,{'C'},{'PM02:C07'},gal_bD,EX_gal_bD_e,cpd00709,EX_cpd00709_e0,C03619
+3-Methylglucose,{'C'},{'PM02:C08'},,,,,
+b-methyl-d-glucuronic acid,{'C'},{'PM02:C09'},metglcur,EX_metglcur_e,,,C08350
+a-Methyl-D-Mannoside,{'C'},{'PM02:C10'},,,,,
+b-Methyl-D-Xyloside,{'C'},{'PM02:C11'},,,,,
+Palatinose,{'C'},{'PM02:C12'},pala,EX_pala_e,cpd01200,EX_cpd01200_e0,C01742
+D-Raffinose,{'C'},{'PM02:D01'},raffin,EX_raffin_e,cpd00382,EX_cpd00382_e0,C00492
+salicin,{'C'},{'PM02:D02'},salcn,EX_salcn_e,cpd01030,EX_cpd01030_e0,C01451
+Sedoheptulosan,{'C'},{'PM02:D03'},,,,,
+L-Sorbose,{'C'},{'PM02:D04'},srb__L,EX_srb__L_e,cpd00212,EX_cpd00212_e0,C00247
+stachyose,{'C'},{'PM02:D05'},stys,EX_stys_e,cpd01133,EX_cpd01133_e0,C01613
+D-tagatose,{'C'},{'PM02:D06'},tag__D,EX_tag__D_e,cpd00589,EX_cpd00589_e0,C00795
+Turanose,{'C'},{'PM02:D07'},tur,EX_tur_e,cpd20885,EX_cpd20885_e0,G03588
+xylitol,{'C'},{'PM02:D08'},xylt,EX_xylt_e,cpd00306,EX_cpd00306_e0,C00379
+N-Acetyl-D-Glucosaminitol,{'C'},{'PM02:D09'},,,,,
+g-Amino-N-Butyric acid,"{'C', 'N'}","{'PM02:D10', 'PM03:G08'}",4abut,EX_4abut_e,cpd00281,EX_cpd00281_e0,C00334
+d-Amino Valeric acid,{'C'},{'PM02:D11'},5aptn,EX_5aptn_e,cpd00339,EX_cpd00339_e0,C00431
+capric acid,{'C'},{'PM02:E01'},dca,EX_dca_e,cpd01107,EX_cpd01107_e0,C01571
+caproic acid,{'C'},{'PM02:E02'},caproic,EX_hxa_e,cpd28989,EX_cpd28989_e0,C01585
+citraconic acid,{'C'},{'PM02:E03'},citac,EX_citac_e,cpd01502,EX_cpd01502_e0,C02226
+citramalic acid,{'C'},{'PM02:E04'},citm,EX_citm_e,cpd00607,EX_cpd00607_e0,C00815
+2-hydroxybenzoic acid,{'C'},{'PM02:E06'},salc,EX_salc_e,cpd00599,EX_cpd00599_e0,C00805
+4-hydroxybenzoic acid,{'C'},{'PM02:E07'},4hbz,EX_4hbz_e,cpd00136,EX_cpd00136_e0,C00156
+b-hydroxybutyric acid,{'C'},{'PM02:E08'},bhb,EX_bhb_e,cpd00797,EX_cpd00797_e0,C01089
+g-hydroxybutyric acid,{'C'},{'PM02:E09'},ghb,EX_ghb_e,cpd00728,EX_cpd00728_e0,C00989
+a-Keto-Valeric acid,{'C'},{'PM02:E10'},,,,,C00567
+itaconic acid,{'C'},{'PM02:E11'},itacon,EX_itacon_e,cpd00380,EX_cpd00380_e0,C00490
+5-Keto-D-Gluconic acid,{'C'},{'PM02:E12'},5dglcn,EX_5dglcn_e,cpd00781,EX_cpd00781_e0,C01062
+D-Lactic acid Methyl Ester,{'C'},{'PM02:F01'},,,,,
+malonic acid,{'C'},{'PM02:F02'},malon,EX_malon_e,cpd00308,EX_cpd00308_e0,C00383
+Melibionic acid,{'C'},{'PM02:F03'},,,,,
+oxalic acid,{'C'},{'PM02:F04'},oxa,EX_oxa_e,cpd00180,EX_cpd00180_e0,C00209
+Oxalomalic acid,{'C'},{'PM02:F05'},,,,,C01990
+quinic acid,{'C'},{'PM02:F06'},quin,EX_quin_e,cpd00248,EX_cpd00248_e0,C00296
+"D-Ribono-1,4-Lactone",{'C'},{'PM02:F07'},,,,,
+sebacic acid,{'C'},{'PM02:F08'},sebacid,EX_sebacid_e,cpd05192,EX_cpd05192_e0,C08277
+Succinamic acid,{'C'},{'PM02:F10'},,,,,
+d-tartaric acid,{'C'},{'PM02:F11'},tartr__D,EX_tartr__D_e,cpd19018,EX_cpd19018_e0,C02107
+L-Tartaric Acid,{'C'},{'PM02:F12'},tartr__L,EX_tartr__L_e,cpd00666,EX_cpd00666_e0,C00898
+L-Alaninamide,{'C'},{'PM02:G02'},,,,,
+n-acetyl-l-glutamic acid,"{'C', 'N'}","{'PM02:G03', 'PM03:D01'}",acglu,EX_acglu_e,cpd00477,EX_cpd00477_e0,C00624
+l-homoserine,"{'C', 'N'}","{'PM02:G07', 'PM03:C11'}",hom__L,EX_hom__L_e,cpd00227,EX_cpd00227_e0,C00263
+hydroxy-l-proline,{'C'},"{'PM02:G08', 'PM05:C08'}",4hpro_LT,EX_4hpro_LT_e,cpd00851,EX_cpd00851_e0,C01015
+l-leucine,"{'C', 'N'}","{'PM02:G10', 'PM03:B05', 'PM05:B05'}",leu__L,EX_leu__L_e,cpd00107,EX_cpd00107_e0,C00123
+L-Ornithine,"{'C', 'N'}","{'PM02:H01', 'PM03:C12', 'PM05:D01'}",orn,EX_orn_e,cpd00064,EX_cpd00064_e0,C00077
+l-pyroglutamic acid,"{'C', 'N'}","{'PM02:H03', 'PM03:D03'}",5oxpro,EX_5oxpro_e,cpd01293,EX_cpd01293_e0,C02238
+"d,l-carnitine",{'C'},{'PM02:H05'},crn,EX_crn_e,cpd00266,EX_cpd00266_e0,C00487
+sec-Butylamine,{'C'},{'PM02:H06'},,,,,
+"D,L-Octopamine",{'C'},{'PM02:H07'},,,,,C04227
+Dihydroxyacetone,{'C'},{'PM02:H09'},dha,EX_dha_e,cpd00157,EX_cpd00157_e0,C00184
+"2,3-butanediol",{'C'},{'PM02:H10'},btd_RR,EX_btd_RR_e,cpd01947,EX_cpd01947_e0,C03044
+"2,3-butanedione",{'C'},{'PM02:H11'},diact,EX_diact_e,cpd00551,EX_cpd00551_e0,C00741
+3-hydroxy-2-butanone,{'C'},{'PM02:H12'},R_actn,EX_R_actn_e,cpd00361,EX_cpd00361_e0,C00466
+ammonia,{'N'},{'PM03:A02'},nh3,EX_nh3_e,cpd00013,EX_cpd00013_e0,C00014
+nitrite,{'N'},{'PM03:A03'},no2,EX_no2_e,cpd00075,EX_cpd00075_e0,C00088
+nitrate,{'N'},{'PM03:A04'},no3,EX_no3_e,cpd00209,EX_cpd00209_e0,C00244
+urea,{'N'},{'PM03:A05'},urea,EX_urea_e,cpd00073,EX_cpd00073_e0,C00086
+Biuret,{'N'},{'PM03:A06'},,,,,C06555
+L-Arginine,"{'C', 'N'}","{'PM03:A08', 'PM02:G04', 'PM05:A04'}",arg__L,EX_arg__L_e,cpd00051,EX_cpd00051_e0,C00062
+L-Asparagine,"{'C', 'N'}","{'PM03:A09', 'PM01:D01', 'PM05:A05'}",asn__L,EX_asn__L_e,cpd00132,EX_cpd00132_e0,C00152
+l-cysteine,"{'S', 'N'}","{'PM03:A11', 'PM05:A07', 'PM04:F07'}",cys__L,EX_cys__L_e,cpd00084,EX_cpd00084_e0,C00097
+L-Histidine,"{'C', 'N'}","{'PM03:B03', 'PM02:G06', 'PM05:B03'}",his__L,EX_his__L_e,cpd00119,EX_cpd00119_e0,C00135
+l-lysine,"{'C', 'N'}","{'PM03:B06', 'PM05:B06', 'PM02:G11'}",lys__L,EX_lys__L_e,cpd00039,EX_cpd00039_e0,C00047
+l-methionine,"{'C', 'S', 'N'}","{'PM03:B07', 'PM02:G12', 'PM05:B07', 'PM04:G07'}",met__L,EX_met__L_e,cpd00060,EX_cpd00060_e0,C00073
+L-Proline,"{'C', 'N'}","{'PM03:B09', 'PM05:C01', 'PM01:A08'}",pro__L,EX_pro__L_e,cpd00129,EX_cpd00129_e0,C00148
+L-Serine,"{'C', 'N'}","{'PM03:B10', 'PM05:C02', 'PM01:G03'}",ser__L,EX_ser__L_e,cpd00054,EX_cpd00054_e0,C00065
+l-tryptophan,{'N'},"{'PM03:B12', 'PM05:C04'}",trp__L,EX_trp__L_e,cpd00065,EX_cpd00065_e0,C00078
+d-asparagine,{'N'},{'PM03:C04'},asn__D,EX_asn__D_e,cpd01308,EX_cpd01308_e0,C01905
+d-lysine,{'N'},{'PM03:C07'},lys__D,EX_lys__D_e,cpd00549,EX_cpd00549_e0,C00739
+d-valine,{'N'},{'PM03:C09'},val__D,EX_val__D_e,cpd03840,EX_cpd03840_e0,C06417
+N-Phthaloyl-L-Glutamic acid,{'N'},{'PM03:D02'},,,,,
+methylamine,{'N'},{'PM03:D05'},mma,EX_mma_e,cpd00187,EX_cpd00187_e0,C00218
+N-Amylamine,{'N'},{'PM03:D06'},,,,,
+N-Butylamine,{'N'},{'PM03:D07'},,,,,
+Ethylamine,{'N'},{'PM03:D08'},,,,,C00797
+Ethanolamine,{'N'},{'PM03:D09'},etha,EX_etha_e,cpd00162,EX_cpd00162_e0,C00189
+Ethylenediamine,{'N'},{'PM03:D10'},,,,,C12511
+Putrescine,"{'C', 'N'}","{'PM03:D11', 'PM05:E01', 'PM02:H08'}",ptrc,EX_ptrc_e,cpd00118,EX_cpd00118_e0,C00134
+agmatine,{'N'},{'PM03:D12'},agm,EX_agm_e,cpd00152,EX_cpd00152_e0,C00179
+histamine,{'N'},{'PM03:E01'},hista,EX_hista_e,cpd00312,EX_cpd00312_e0,C00388
+b-phenylethylamine,{'N'},{'PM03:E02'},peamn,EX_peamn_e,cpd03161,EX_cpd03161_e0,C05332
+acetamide,"{'C', 'N'}","{'PM03:E04', 'PM02:G01'}",ad,EX_ad_e,cpd03734,EX_cpd03734_e0,C06244
+formamide,{'N'},{'PM03:E05'},frmd,EX_frmd_e,cpd00378,EX_cpd00378_e0,C00488
+Glucuronamide,"{'C', 'N'}","{'PM03:E06', 'PM01:H07'}",,,,,D01791
+DL-Lactamide,{'N'},{'PM03:E07'},,,,,
+D-Glucosamine,"{'C', 'N'}","{'PM03:E08', 'PM02:E05'}",gam,EX_gam_e,cpd00276,EX_cpd00276_e0,C00329
+d-galactosamine,{'N'},{'PM03:E09'},galam,EX_galam_e,,,C02262
+D-Mannosamine,{'N'},{'PM03:E10'},,,,,C03570
+n-acetyl-d-galactosamine,"{'C', 'N'}","{'PM03:E12', 'PM02:B01'}",acgal,EX_acgal_e,cpd00832,EX_cpd00832_e0,C01074
+N-Acetyl-D-Mannosamine,"{'C', 'N'}","{'PM03:F01', 'PM01:G08'}",acmana,EX_acmana_e,cpd00492,EX_cpd00492_e0,C00645
+adenine,{'N'},"{'PM03:F02', 'PM05:A10'}",ade,EX_ade_e,cpd00128,EX_cpd00128_e0,C00147
+Adenosine,"{'C', 'N'}","{'PM03:F03', 'PM05:A11', 'PM01:E12'}",adn,EX_adn_e,cpd00182,EX_cpd00182_e0,C00212
+cytidine,{'N'},"{'PM03:F04', 'PM05:D11'}",cytd,EX_cytd_e,cpd00367,EX_cpd00367_e0,C00475
+guanine,{'N'},"{'PM03:F06', 'PM05:B10'}",gua,EX_gua_e,cpd00207,EX_cpd00207_e0,C00242
+thymine,{'N'},"{'PM03:F08', 'PM05:F10'}",thym,EX_thym_e,cpd00151,EX_cpd00151_e0,C00178
+Uridine,"{'C', 'N'}","{'PM03:F11', 'PM01:D12', 'PM05:E11'}",uri,EX_uri_e,cpd00249,EX_cpd00249_e0,C00299
+xanthine,{'N'},{'PM03:G01'},xan,EX_xan_e,cpd00309,EX_cpd00309_e0,C00385
+xanthosine,{'N'},{'PM03:G02'},xtsn,EX_xtsn_e,cpd01217,EX_cpd01217_e0,C01762
+uric acid,{'N'},{'PM03:G03'},urate,EX_urate_e,cpd00300,EX_cpd00300_e0,C00366
+alloxan,{'N'},{'PM03:G04'},CE0074,EX_CE0074_e,cpd24434,EX_cpd24434_e0,C07599
+allantoin,{'N'},{'PM03:G05'},alltn,EX_alltn_e,cpd01092,EX_cpd01092_e0,C01551
+Parabanic acid,{'N'},{'PM03:G06'},,,,,
+DL-a-Amino-N-Butyric acid,{'N'},{'PM03:G07'},,,,,C02261
+e-amino-n-caproic acid,{'N'},{'PM03:G09'},6ax,EX_6ax_e,cpd01588,EX_cpd01588_e0,C02378
+DL-a-Amino-Caprylic acid,{'N'},{'PM03:G10'},,,,,
+d-amino-n-valeric acid,{'N'},{'PM03:G11'},5aptn,EX_5aptn_e,cpd00339,EX_cpd00339_e0,C00431
+a-Amino-N-Valeric acid,{'N'},{'PM03:G12'},,,,,C01826
+ala-gln,{'N'},"{'PM03:H02', 'PM08:A04'}",ala_gln,EX_ala_gln_e,cpd11587,EX_cpd11587_e0,
+Ala-Gly,"{'C', 'N'}","{'PM03:H04', 'PM06:A07', 'PM01:G06'}",L_alagly,EX_L_alagly_e,cpd11585,EX_cpd11585_e0,
+ala-his,{'N'},"{'PM03:H05', 'PM06:A08'}",ala_his,EX_ala_his_e,cpd11584,EX_cpd11584_e0,
+ala-thr,{'N'},"{'PM03:H07', 'PM06:B02'}",ala_L_Thr__L,EX_ala_L_Thr__L_e,cpd23857,EX_cpd23857_e0,
+gly-gln,{'N'},{'PM03:H09'},gly_gln,EX_gly_gln_e,cpd11580,EX_cpd11580_e0,
+gly-glu,"{'C', 'N'}","{'PM03:H10', 'PM01:G01'}",gly_glu__L,EX_gly_glu__L_e,cpd24418,EX_cpd24418_e0,
+gly-met,"{'S', 'N'}","{'PM03:H11', 'PM04:G09', 'PM06:E09'}",gly_met,EX_gly_met_e,cpd11591,EX_cpd11591_e0,
+met-ala,{'N'},{'PM03:H12'},met_L_ala__L,EX_met_L_ala__L_e,cpd23854,EX_cpd23854_e0,
+phosphate,{'P'},{'PM04:A02'},pi,EX_pi_e,cpd00009,EX_cpd00009_e0,C00009
+pyrophosphate,{'P'},{'PM04:A03'},ppi,EX_ppi_e,cpd00012,EX_cpd00012_e0,C00013
+trimetaphosphate,{'P'},{'PM04:A04'},tmp,EX_tmp_e,cpd01622,EX_cpd01622_e0,C02466
+tripolyphosphate,{'P'},{'PM04:A05'},pppi,EX_pppi_e,cpd00421,EX_cpd00421_e0,C00536
+Triethyl Phosphate,{'P'},{'PM04:A06'},,,,,
+Hypophosphite,{'P'},{'PM04:A07'},,,,,
+adenosine 2`-monophosphate,{'P'},{'PM04:A08'},amp2p,EX_amp2p_e,cpd00700,EX_cpd00700_e0,C00946
+adenosine 3`-monophosphate,{'P'},{'PM04:A09'},3amp,EX_3amp_e,cpd00988,EX_cpd00988_e0,C01367
+adenosine 5`-monophosphate,{'P'},{'PM04:A10'},amp,EX_amp_e,cpd00018,EX_cpd00018_e0,C00020
+"adenosine 2`,3`-cyclic monophosphate",{'P'},{'PM04:A11'},23camp,EX_23camp_e,cpd01570,EX_cpd01570_e0,
+Dithiophosphate,"{'P', 'S'}","{'PM04:B02', 'PM04:F06'}",,,,,
+"D,L-a-Glycerol Phosphate","{'P', 'C'}","{'PM04:B03', 'PM01:B07'}",glyc3p,EX_glyc3p_e,cpd16494,EX_cpd16494_e0,C00093
+b-glycerol phosphate,{'P'},{'PM04:B04'},glyc2p,EX_glyc2p_e,cpd01908,EX_cpd01908_e0,C02979
+carbamyl phosphate,{'P'},{'PM04:B05'},cbp,EX_cbp_e,cpd00146,EX_cpd00146_e0,C00169
+d-2-phospho-glyceric acid,{'P'},{'PM04:B06'},2pg,EX_2pg_e,cpd00482,EX_cpd00482_e0,C00631
+d-3-phospho-glyceric acid,{'P'},{'PM04:B07'},3pg,EX_3pg_e,cpd00169,EX_cpd00169_e0,C00197
+Guanosine 2`-Monophosphate,{'P'},{'PM04:B08'},,,,,
+guanosine 3`-monophosphate,{'P'},{'PM04:B09'},3gmp,EX_3gmp_e,cpd03701,EX_cpd03701_e0,C06193
+guanosine 5`-monophosphate,{'P'},{'PM04:B10'},gmp,EX_gmp_e,cpd00126,EX_cpd00126_e0,C00144
+"guanosine 2`,3`-cyclic monophosphate",{'P'},{'PM04:B11'},23cgmp,EX_23cgmp_e,cpd03702,EX_cpd03702_e0,
+"guanosine 3`,5`-cyclic monophosphate",{'P'},"{'PM04:B12', 'PM05:B09'}",35cgmp,EX_35cgmp_e,cpd00697,EX_cpd00697_e0,C00942
+phosphoenol pyruvate,{'P'},{'PM04:C01'},pep,EX_pep_e,cpd00061,EX_cpd00061_e0,C00074
+phospho-glycolic acid,{'P'},{'PM04:C02'},2pglyc,EX_2pglyc_e,cpd00727,EX_cpd00727_e0,C00988
+D-Glucose-1-Phosphate,"{'P', 'C'}","{'PM04:C03', 'PM01:E03'}",g1p,EX_g1p_e,cpd00089,EX_cpd00089_e0,C00103
+D-Glucose-6-Phosphate,"{'P', 'C'}","{'PM04:C04', 'PM01:C01'}",g6p,EX_g6p_e,cpd00079,EX_cpd00079_e0,C00092
+2-deoxy-d-glucose 6-phosphate,{'P'},{'PM04:C05'},2doxg6p,EX_2doxg6p_e,cpd03805,EX_cpd03805_e0,C06369
+d-glucosamine-6-phosphate,{'P'},{'PM04:C06'},gam6p,EX_gam6p_e,cpd00288,EX_cpd00288_e0,C00352
+6-phospho-gluconic acid,{'P'},{'PM04:C07'},6pgc,EX_6pgc_e,cpd00284,EX_cpd00284_e0,
+Cytidine 2`-Monophosphate,{'P'},{'PM04:C08'},,,,,C03104
+cytidine 3`-monophosphate,{'P'},{'PM04:C09'},3cmp,EX_3cmp_e,cpd03454,EX_cpd03454_e0,C05822 
+cytidine 5`-monophosphate,{'P'},{'PM04:C10'},cmp,EX_cmp_e,cpd00046,EX_cpd00046_e0,C00055
+"cytidine 2`,3`-cyclic monophosphate",{'P'},{'PM04:C11'},23ccmp,EX_23ccmp_e,cpd01571,EX_cpd01571_e0,
+"cytidine 3`,5`-cyclic monophosphate",{'P'},{'PM04:C12'},35ccmp,EX_35ccmp_e,cpd00696,EX_cpd00696_e0,C00941
+d-mannose-1-phosphate,{'P'},{'PM04:D01'},man1p,EX_man1p_e,cpd00485,EX_cpd00485_e0,C00636
+d-mannose-6-phosphate,{'P'},{'PM04:D02'},man6p,EX_man6p_e,cpd00235,EX_cpd00235_e0,C00275
+Cysteamine-S-Phosphate,{'P'},{'PM04:D03'},,,,,
+phospho-l-arginine,{'P'},{'PM04:D04'},argp,EX_argp_e,cpd03535,EX_cpd03535_e0,C05945
+o-phospho-d-serine,{'P'},{'PM04:D05'},pser__D,EX_pser__D_e,cpd01665,EX_cpd01665_e0,C02532
+o-phospho-l-serine,{'P'},{'PM04:D06'},pser__L,EX_pser__L_e,cpd00738,EX_cpd00738_e0,C01005
+o-phospho-l-threonine,{'P'},{'PM04:D07'},thrp,EX_thrp_e,cpd08928,EX_cpd08928_e0,
+Uridine 2`-Monophosphate,{'P'},{'PM04:D08'},,,,,C03031
+uridine 3`-monophosphate,{'P'},{'PM04:D09'},3ump,EX_3ump_e,cpd00989,EX_cpd00989_e0,C01368
+uridine 5`-monophosphate,{'P'},{'PM04:D10'},ump,EX_ump_e,cpd00091,EX_cpd00091_e0,C00105
+"uridine 2`,3`-cyclic monophosphate",{'P'},{'PM04:D11'},23cump,EX_23cump_e,cpd01572,EX_cpd01572_e0,C02355
+"Uridine 3`,5`-Cyclic Monophosphate",{'P'},{'PM04:D12'},,,,,
+O-Phospho-D-Tyrosine,{'P'},{'PM04:E01'},,,,,C06501
+o-phospho-l-tyrosine,{'P'},{'PM04:E02'},tyrp,EX_tyrp_e,cpd03912,EX_cpd03912_e0,C06501
+phosphocreatine,{'P'},{'PM04:E03'},pcreat,EX_pcreat_e,cpd01550,EX_cpd01550_e0,C02305
+phosphoryl choline,{'P'},{'PM04:E04'},cholp,EX_cholp_e,cpd00457,EX_cpd00457_e0,C00588
+o-phosphoryl-ethanolamine,{'P'},{'PM04:E05'},ethamp,EX_ethamp_e,cpd00285,EX_cpd00285_e0,C00346
+phosphono acetic acid,{'P'},{'PM04:E06'},ppac,EX_ppac_e,cpd03385,EX_cpd03385_e0,C05682
+2-aminoethyl phosphonic acid,{'P'},{'PM04:E07'},2ameph,EX_2ameph_e,cpd02233,EX_cpd02233_e0,C03557
+Methylene Diphosphonic acid,{'P'},{'PM04:E08'},,,,,
+Thymidine 3`-Monophosphate,{'P'},{'PM04:E09'},,,,,
+thymidine 5`-monophosphate,{'P'},{'PM04:E10'},dtmp,EX_dtmp_e,cpd00298,EX_cpd00298_e0,C00364
+inositol hexaphosphate,{'P'},{'PM04:E11'},mi1p__D,EX_mi1p__D_e,cpd00867,EX_cpd00867_e0,C01204
+"Thymidine 3`,5`-Cyclic Monophosphate",{'P'},{'PM04:E12'},,,,,
+sulfate,{'S'},{'PM04:F02'},so4,EX_so4_e,cpd00048,EX_cpd00048_e0,C00059
+thiosulfate,{'S'},{'PM04:F03'},tsul,EX_tsul_e,cpd00268,EX_cpd00268_e0,C00320
+tetrathionate,{'S'},{'PM04:F04'},tet,EX_tet_e,cpd01414,EX_cpd01414_e0,C02084
+Thiophosphate,"{'P', 'S'}","{'PM04:F05', 'PM04:B01'}",,,,,
+d-cysteine,{'S'},{'PM04:F08'},cys__D,EX_cys__D_e,cpd00587,EX_cpd00587_e0,C00793
+cys-gly,"{'S', 'N'}","{'PM04:F09', 'PM06:D04'}",cgly,EX_cgly_e,cpd01017,EX_cpd01017_e0,
+l-cysteic acid,{'S'},{'PM04:F10'},Lcyst,EX_Lcyst_e,cpd00395,EX_cpd00395_e0,C00506
+cysteamine,{'S'},{'PM04:F11'},cysam,EX_cysam_e,cpd01160,EX_cpd01160_e0,C01678
+l-cysteine sulfinic acid,{'S'},{'PM04:F12'},3sala,EX_3sala_e,cpd00467,EX_cpd00467_e0,C00606
+n-acetyl-l-cysteine,{'S'},{'PM04:G01'},CE1310,EX_CE1310_e,cpd04181,EX_cpd04181_e0,C06809
+S-Methyl-L-Cysteine,{'S'},{'PM04:G02'},,,,,C03540
+cystathionine,{'S'},{'PM04:G03'},cyst__L,EX_cyst__L_e,cpd00424,EX_cpd00424_e0,C00542
+lanthionine,{'S'},{'PM04:G04'},lanth,EX_lanth_e,cpd11577,EX_cpd11577_e0,
+DL-Ethionine,{'S'},{'PM04:G06'},,,,,C11227
+d-methionine,{'S'},{'PM04:G08'},met__D,EX_met__D_e,cpd00637,EX_cpd00637_e0,C00855
+"n-acetyl-d,l-methionine",{'S'},{'PM04:G10'},acmet,EX_acmet_e,cpd24446,EX_cpd24446_e0,C02712
+l-methionine sulfoxide,{'S'},{'PM04:G11'},metsox_S__L,EX_metsox_S__L_e,cpd01914,EX_cpd01914_e0,C02989
+L-Methionine Sulfone,{'S'},{'PM04:G12'},,,,,
+l-djenkolic acid,{'S'},{'PM04:H01'},djenk,EX_djenk_e,cpd05190,EX_cpd05190_e0,C08275
+1-Thio-b-D-Glucose,{'S'},{'PM04:H03'},,,,,
+"d,l-lipoamide",{'S'},{'PM04:H04'},lpam,EX_lpam_e,cpd00213,EX_cpd00213_e0,C00248
+taurocholic acid,{'S'},{'PM04:H05'},tchola,EX_tchola_e,cpd03047,EX_cpd03047_e0,C05122
+taurine,{'S'},{'PM04:H06'},taur,EX_taur_e,cpd00210,EX_cpd00210_e0,C00245
+hypotaurine,{'S'},{'PM04:H07'},hyptaur,EX_hyptaur_e,cpd00406,EX_cpd00406_e0,C00519
+p-Aminobenzene Sulfonic acid,{'S'},{'PM04:H08'},,,,,C00568
+butane sulfonic acid,{'S'},{'PM04:H09'},butso3,EX_butso3_e,cpd11596,EX_cpd11596_e0,
+2-hydroxyethane sulfonic acid,{'S'},{'PM04:H10'},isetac,EX_isetac_e,cpd03048,EX_cpd03048_e0,C05123
+methane sulfonic acid,{'S'},{'PM04:H11'},mso3,EX_mso3_e,cpd08023,EX_cpd08023_e0,C11145
+Tetramethylene Sulfone,{'S'},{'PM04:H12'},,,,,
+Positive Control,set(),{'PM05:A02'},,,,,
+L-Alanine,"{'C', 'N'}","{'PM05:A03', 'PM01:G05', 'PM03:A07'}",ala__L,EX_ala__L_e,cpd00035,EX_cpd00035_e0,C00041
+"adenosine 3`,5`-cyclic monophosphate",{'P'},"{'PM05:A09', 'PM04:A12'}",camp,EX_camp_e,cpd00446,EX_cpd00446_e0,C00575
+glycine,"{'C', 'N'}","{'PM05:B02', 'PM03:B02', 'PM02:G05'}",gly,EX_gly_e,cpd00033,EX_cpd00033_e0,C00037
+l-isoleucine,"{'C', 'N'}","{'PM05:B04', 'PM02:G09', 'PM03:B04'}",ile__L,EX_ile__L_e,cpd00322,EX_cpd00322_e0,C00407
+L-Phenylalanine,"{'C', 'N'}","{'PM05:B08', 'PM02:H02', 'PM03:B08'}",phe__L,EX_phe__L_e,cpd00066,EX_cpd00066_e0,C00079
+guanosine,{'N'},"{'PM05:B11', 'PM03:F07'}",gsn,EX_gsn_e,cpd00311,EX_cpd00311_e0,C00387
+2`-Deoxyguanosine,set(),{'PM05:B12'},,,,,C00330
+L-Threonine,"{'C', 'N'}","{'PM05:C03', 'PM03:B11', 'PM01:G04'}",thr__L,EX_thr__L_e,cpd00161,EX_cpd00161_e0,C00188
+l-tyrosine,{'N'},"{'PM05:C05', 'PM03:C01'}",tyr__L,EX_tyr__L_e,cpd00069,EX_cpd00069_e0,C00082
+l-valine,"{'C', 'N'}","{'PM05:C06', 'PM03:C02', 'PM02:H04'}",val__L,EX_val__L_e,cpd00156,EX_cpd00156_e0,C00183
+L-Isoleucine + L-Valine,set(),{'PM05:C07'},,,,,
+(5) 4-Amino-Imidazole-4(5)-Carboxamide,set(),{'PM05:C09'},,,,,C04051
+Hypoxanthine,set(),{'PM05:C10'},,,,,C00262
+Inosine,"{'C', 'N'}","{'PM05:C11', 'PM03:F12', 'PM01:F12'}",ins,EX_ins_e,cpd00246,EX_cpd00246_e0,C00294
+2`-Deoxyinosine,set(),{'PM05:C12'},,,,,C05512
+l-citrulline,{'N'},"{'PM05:D02', 'PM03:C10'}",citr__L,EX_citr__L_e,cpd00274,EX_cpd00274_e0,C00327
+Chorismic acid,set(),{'PM05:D03'},,,,,C00251
+(-)Shikimic acid,set(),{'PM05:D04'},,,,,C00493
+L-Homoserine Lactone,set(),{'PM05:D05'},,,,,
+D-Aspartic Acid,"{'C', 'N'}","{'PM05:D07', 'PM01:D02', 'PM03:C05'}",asp__D,EX_asp__D_e,cpd00320,EX_cpd00320_e0,C00402
+d-glutamic acid,{'N'},"{'PM05:D08', 'PM03:C06'}",glu__D,EX_glu__D_e,cpd00186,EX_cpd00186_e0,C00217
+"DL-Diamino-a,e-Pimelic acid",set(),{'PM05:D09'},,,,,C00680
+cytosine,{'N'},"{'PM05:D10', 'PM03:F05'}",csn,EX_csn_e,cpd00307,EX_cpd00307_e0,C00380
+2`-Deoxycytidine,set(),{'PM05:D12'},,,,,C00881
+Spermidine,set(),{'PM05:E02'},,,,,C00315
+Spermine,set(),{'PM05:E03'},,,,,C00750
+Pyridoxine,set(),{'PM05:E04'},,,,,C00314
+Pyridoxal,set(),{'PM05:E05'},,,,,C00250
+Pyridoxamine,set(),{'PM05:E06'},,,,,C00534
+b-Alanine,set(),{'PM05:E07'},,,,,C00099
+D-Pantothenic acid,set(),{'PM05:E08'},,,,,C00864
+Orotic acid,set(),{'PM05:E09'},,,,,C00295
+uracil,{'N'},"{'PM05:E10', 'PM03:F10'}",ura,EX_ura_e,cpd00092,EX_cpd00092_e0,C00106
+2`-Deoxyuridine,set(),{'PM05:E12'},,,,,C00526
+Quinolinic acid,set(),{'PM05:F01'},,,,,C03722
+Nicotinic acid,set(),{'PM05:F02'},,,,,C00253
+Nicotinamide,set(),{'PM05:F03'},,,,,C00153
+b-Nicotinamide Adenine Dinucleotide,set(),{'PM05:F04'},,,,,C00003
+d-Amino-levulinic acid,set(),{'PM05:F05'},,,,,C00431
+Hematin,set(),{'PM05:F06'},,,,,
+Deferoxamine,set(),{'PM05:F07'},,,,,C06940
+N-Acetyl-D-Glucosamine,"{'C', 'N'}","{'PM05:F09', 'PM01:A03', 'PM03:E11'}",acgam,EX_acgam_e,cpd00122,EX_cpd00122_e0,C00140
+glutathione,{'S'},"{'PM05:F11', 'PM04:G05'}",gthox,EX_gthox_e,cpd00111,EX_cpd00111_e0,C00051
+Oxaloacetic acid,set(),{'PM05:G01'},,,,,C00036
+D-Biotin,set(),{'PM05:G02'},,,,,C00120
+Cyanocobalamin,set(),{'PM05:G03'},,,,,C02823
+p-Amino-Benzoic acid,set(),{'PM05:G04'},,,,,C00568
+Folic acid,set(),{'PM05:G05'},,,,,C00504
+Inosine + Thiamine,set(),{'PM05:G06'},,,,,
+Thiamine,set(),{'PM05:G07'},,,,,C00378
+Thiamine Pyrophosphate,set(),{'PM05:G08'},,,,,C00068
+Riboflavin,set(),{'PM05:G09'},,,,,C00255
+Pyrrolo-Quinoline Qui,set(),{'PM05:G10'},,,,,C00113
+Menadione,set(),{'PM05:G11'},,,,,C05377
+m-Inositol,{'C'},"{'PM05:G12', 'PM01:F03'}",inost,EX_inost_e,cpd00121,EX_cpd00121_e0,C00137
+butyric acid,{'C'},"{'PM05:H01', 'PM02:D12'}",but,EX_but_e,cpd00211,EX_cpd00211_e0,C00246
+Caprylic acid,set(),{'PM05:H04'},,,,,C06423
+DL-Mevalonic acid Lactone,set(),{'PM05:H06'},,,,,C02104
+DL-Carnitine,set(),{'PM05:H07'},,,,,C00487
+Choline,set(),{'PM05:H08'},,,,,C00114
+Tween 60,set(),{'PM05:H11'},,,,,
+Tween 80,{'C'},"{'PM05:H12', 'PM01:E05'}",,,,,C11625
+Ala-Ala,{'N'},{'PM06:A03'},,,,,
+Ala-Arg,{'N'},{'PM06:A04'},,,,,C05034
+Ala-Asn,{'N'},{'PM06:A05'},,,,,
+ala-glu,{'N'},"{'PM06:A06', 'PM03:H03'}",ala_L_glu__L,EX_ala_L_glu__L_e,cpd15388,EX_cpd15388_e0,
+ala-leu,{'N'},"{'PM06:A09', 'PM03:H06'}",ala_leu,EX_ala_leu_e,cpd11583,EX_cpd11583_e0,C05035
+Ala-Lys,{'N'},{'PM06:A10'},,,,,C05036
+Ala-Phe,{'N'},{'PM06:A11'},,,,,
+Ala-Pro,{'N'},{'PM06:A12'},,,,,
+Ala-Ser,{'N'},{'PM06:B01'},,,,,
+Ala-Trp,{'N'},{'PM06:B03'},,,,,C02732
+Ala-Tyr,{'N'},{'PM06:B04'},,,,,C05039
+Arg-Ala,{'N'},{'PM06:B05'},,,,,
+Arg-Arg,{'N'},{'PM06:B06'},,,,,C05034
+Arg-Asp,{'N'},{'PM06:B07'},,,,,C02871
+Arg-Gln,{'N'},{'PM06:B08'},,,,,
+Arg-Glu,{'N'},{'PM06:B09'},,,,,
+Arg-Ile,{'N'},{'PM06:B10'},,,,,
+Arg-Leu,{'N'},{'PM06:B11'},,,,,C05035
+Arg-Lys,{'N'},{'PM06:B12'},,,,,C05036
+Arg-Met,{'N'},{'PM06:C01'},,,,,
+Arg-Phe,{'N'},{'PM06:C02'},,,,,
+Arg-Ser,{'N'},{'PM06:C03'},,,,,
+Arg-Trp,{'N'},{'PM06:C04'},,,,,C02732
+Arg-Tyr,{'N'},{'PM06:C05'},,,,,C05039
+Arg-Val,{'N'},{'PM06:C06'},,,,,
+Asn-Glu,{'N'},{'PM06:C07'},,,,,
+Asn-Val,{'N'},{'PM06:C08'},,,,,
+Asp-Asp,{'N'},{'PM06:C09'},,,,,C02871
+Asp-Glu,{'N'},{'PM06:C10'},,,,,
+Asp-Leu,{'N'},{'PM06:C11'},,,,,C05035
+Asp-Lys,{'N'},{'PM06:C12'},,,,,C05036
+Asp-Phe,{'N'},{'PM06:D01'},,,,,
+Asp-Trp,{'N'},{'PM06:D02'},,,,,C02732
+Asp-Val,{'N'},{'PM06:D03'},,,,,
+Gln-Gln,{'N'},{'PM06:D05'},,,,,
+Gln-Gly,{'N'},{'PM06:D06'},,,,,
+Glu-Asp,{'N'},{'PM06:D07'},,,,,C02871
+Glu-Glu,{'N'},{'PM06:D08'},,,,,
+Glu-Gly,{'N'},{'PM06:D09'},,,,,
+Glu-Ser,{'N'},{'PM06:D10'},,,,,
+Glu-Trp,{'N'},{'PM06:D11'},,,,,C02732
+Glu-Tyr,{'N'},{'PM06:D12'},,,,,C05039
+Glu-Val,{'N'},{'PM06:E01'},,,,,
+Gly-Ala,{'N'},{'PM06:E02'},,,,,
+Gly-Arg,{'N'},{'PM06:E03'},,,,,C05034
+Gly-Cys,{'N'},{'PM06:E04'},,,,,
+Gly-Gly,{'N'},{'PM06:E05'},,,,,
+Gly-His,{'N'},{'PM06:E06'},,,,,
+Gly-Leu,{'N'},{'PM06:E07'},,,,,C05035
+Gly-Lys,{'N'},{'PM06:E08'},,,,,C05036
+Gly-Phe,{'N'},{'PM06:E10'},,,,,
+Gly-Ser,{'N'},{'PM06:E12'},,,,,
+Gly-Thr,{'N'},{'PM06:F01'},,,,,
+Gly-Trp,{'N'},{'PM06:F02'},,,,,C02732
+Gly-Tyr,{'N'},{'PM06:F03'},,,,,C05039
+Gly-Val,{'N'},{'PM06:F04'},,,,,
+His-Asp,{'N'},{'PM06:F05'},,,,,C02871
+His-Gly,{'N'},{'PM06:F06'},,,,,
+His-Leu,{'N'},{'PM06:F07'},,,,,C05035
+His-Lys,{'N'},{'PM06:F08'},,,,,C05036
+His-Met,{'N'},{'PM06:F09'},,,,,
+His-Pro,{'N'},{'PM06:F10'},,,,,
+His-Ser,{'N'},{'PM06:F11'},,,,,
+His-Trp,{'N'},{'PM06:F12'},,,,,C02732
+His-Tyr,{'N'},{'PM06:G01'},,,,,C05039
+His-Val,{'N'},{'PM06:G02'},,,,,
+Ile-Ala,{'N'},{'PM06:G03'},,,,,
+Ile-Arg,{'N'},{'PM06:G04'},,,,,C05034
+Ile-Gln,{'N'},{'PM06:G05'},,,,,
+Ile-Gly,{'N'},{'PM06:G06'},,,,,
+Ile-His,{'N'},{'PM06:G07'},,,,,
+Ile-Ile,{'N'},{'PM06:G08'},,,,,
+Ile-Met,{'N'},{'PM06:G09'},,,,,
+Ile-Phe,{'N'},{'PM06:G10'},,,,,
+Ile-Pro,{'N'},{'PM06:G11'},,,,,
+Ile-Ser,{'N'},{'PM06:G12'},,,,,
+Ile-Trp,{'N'},{'PM06:H01'},,,,,C02732
+Ile-Tyr,{'N'},{'PM06:H02'},,,,,C05039
+Ile-Val,{'N'},{'PM06:H03'},,,,,
+Leu-Ala,{'N'},{'PM06:H04'},,,,,
+Leu-Arg,{'N'},{'PM06:H05'},,,,,C05034
+Leu-Asp,{'N'},{'PM06:H06'},,,,,C02871
+Leu-Glu,{'N'},{'PM06:H07'},,,,,
+Leu-Gly,{'N'},{'PM06:H08'},,,,,
+Leu-Ile,{'N'},{'PM06:H09'},,,,,
+Leu-Leu,{'N'},{'PM06:H10'},,,,,C05035
+Leu-Met,{'N'},{'PM06:H11'},,,,,
+Leu-Phe,{'N'},{'PM06:H12'},,,,,
+Leu-Ser,{'N'},{'PM07:A03'},,,,,
+Leu-Trp,{'N'},{'PM07:A04'},,,,,C02732
+Leu-Val,{'N'},{'PM07:A05'},,,,,
+Lys-Ala,{'N'},{'PM07:A06'},,,,,
+Lys-Arg,{'N'},{'PM07:A07'},,,,,C05034
+Lys-Glu,{'N'},{'PM07:A08'},,,,,
+Lys-Ile,{'N'},{'PM07:A09'},,,,,
+Lys-Leu,{'N'},{'PM07:A10'},,,,,C05035
+Lys-Lys,{'N'},{'PM07:A11'},,,,,C05036
+Lys-Phe,{'N'},{'PM07:A12'},,,,,
+Lys-Pro,{'N'},{'PM07:B01'},,,,,
+Lys-Ser,{'N'},{'PM07:B02'},,,,,
+Lys-Thr,{'N'},{'PM07:B03'},,,,,
+Lys-Trp,{'N'},{'PM07:B04'},,,,,C02732
+Lys-Tyr,{'N'},{'PM07:B05'},,,,,C05039
+Lys-Val,{'N'},{'PM07:B06'},,,,,
+Met-Arg,{'N'},{'PM07:B07'},,,,,C05034
+Met-Asp,{'N'},{'PM07:B08'},,,,,C02871
+Met-Gln,{'N'},{'PM07:B09'},,,,,
+Met-Glu,{'N'},{'PM07:B10'},,,,,
+Met-Gly,{'N'},{'PM07:B11'},,,,,
+Met-His,{'N'},{'PM07:B12'},,,,,
+Met-Ile,{'N'},{'PM07:C01'},,,,,
+Met-Leu,{'N'},{'PM07:C02'},,,,,C05035
+Met-Lys,{'N'},{'PM07:C03'},,,,,C05036
+Met-Met,{'N'},{'PM07:C04'},,,,,
+Met-Phe,{'N'},{'PM07:C05'},,,,,
+Met-Pro,{'N'},{'PM07:C06'},,,,,
+Met-Trp,{'N'},{'PM07:C07'},,,,,C02732
+Met-Val,{'N'},{'PM07:C08'},,,,,
+Phe-Ala,{'N'},{'PM07:C09'},,,,,
+Phe-Gly,{'N'},{'PM07:C10'},,,,,
+Phe-Ile,{'N'},{'PM07:C11'},,,,,
+Phe-Phe,{'N'},{'PM07:C12'},,,,,
+Phe-Pro,{'N'},{'PM07:D01'},,,,,
+Phe-Ser,{'N'},{'PM07:D02'},,,,,
+Phe-Trp,{'N'},{'PM07:D03'},,,,,C02732
+Pro-Ala,{'N'},{'PM07:D04'},,,,,
+Pro-Asp,{'N'},{'PM07:D05'},,,,,C02871
+Pro-Gln,{'N'},{'PM07:D06'},,,,,
+Pro-Gly,{'N'},{'PM07:D07'},,,,,
+Pro-Hyp,{'N'},{'PM07:D08'},,,,,
+Pro-Leu,{'N'},{'PM07:D09'},,,,,C05035
+Pro-Phe,{'N'},{'PM07:D10'},,,,,
+Pro-Pro,{'N'},{'PM07:D11'},,,,,
+Pro-Tyr,{'N'},{'PM07:D12'},,,,,C05039
+Ser-Ala,{'N'},{'PM07:E01'},,,,,
+Ser-Gly,{'N'},{'PM07:E02'},,,,,
+Ser-His,{'N'},{'PM07:E03'},,,,,
+Ser-Leu,{'N'},{'PM07:E04'},,,,,C05035
+Ser-Met,{'N'},{'PM07:E05'},,,,,
+Ser-Phe,{'N'},{'PM07:E06'},,,,,
+Ser-Pro,{'N'},{'PM07:E07'},,,,,
+Ser-Ser,{'N'},{'PM07:E08'},,,,,
+Ser-Tyr,{'N'},{'PM07:E09'},,,,,C05039
+Ser-Val,{'N'},{'PM07:E10'},,,,,
+Thr-Ala,{'N'},{'PM07:E11'},,,,,
+Thr-Arg,{'N'},{'PM07:E12'},,,,,C05034
+Thr-Glu,{'N'},{'PM07:F01'},,,,,
+Thr-Gly,{'N'},{'PM07:F02'},,,,,
+Thr-Leu,{'N'},{'PM07:F03'},,,,,C05035
+Thr-Met,{'N'},{'PM07:F04'},,,,,
+Thr-Pro,{'N'},{'PM07:F05'},,,,,
+Trp-Ala,{'N'},{'PM07:F06'},,,,,
+Trp-Arg,{'N'},{'PM07:F07'},,,,,C05034
+Trp-Asp,{'N'},{'PM07:F08'},,,,,C02871
+Trp-Glu,{'N'},{'PM07:F09'},,,,,
+Trp-Gly,{'N'},{'PM07:F10'},,,,,
+Trp-Leu,{'N'},{'PM07:F11'},,,,,C05035
+Trp-Lys,{'N'},{'PM07:F12'},,,,,C05036
+Trp-Phe,{'N'},{'PM07:G01'},,,,,
+Trp-Ser,{'N'},{'PM07:G02'},,,,,
+Trp-Trp,{'N'},{'PM07:G03'},,,,,C02732
+Trp-Tyr,{'N'},{'PM07:G04'},,,,,C05039
+Tyr-Ala,{'N'},{'PM07:G05'},,,,,
+Tyr-Gln,{'N'},{'PM07:G06'},,,,,
+Tyr-Glu,{'N'},{'PM07:G07'},,,,,
+Tyr-Gly,{'N'},{'PM07:G08'},,,,,
+Tyr-His,{'N'},{'PM07:G09'},,,,,
+Tyr-Leu,{'N'},{'PM07:G10'},,,,,C05035
+Tyr-Lys,{'N'},{'PM07:G11'},,,,,C05036
+Tyr-Phe,{'N'},{'PM07:G12'},,,,,
+Tyr-Trp,{'N'},{'PM07:H01'},,,,,C02732
+Tyr-Tyr,{'N'},{'PM07:H02'},,,,,C05039
+Val-Arg,{'N'},{'PM07:H03'},,,,,C05034
+Val-Asn,{'N'},{'PM07:H04'},,,,,
+Val-Asp,{'N'},{'PM07:H05'},,,,,C02871
+Val-Gly,{'N'},{'PM07:H06'},,,,,
+Val-His,{'N'},{'PM07:H07'},,,,,
+Val-Ile,{'N'},{'PM07:H08'},,,,,
+Val-Leu,{'N'},{'PM07:H09'},,,,,C05035
+Val-Tyr,{'N'},{'PM07:H10'},,,,,C05039
+Val-Val,{'N'},{'PM07:H11'},,,,,
+g-Glu-Gly,{'N'},"{'PM07:H12', 'PM08:G01'}",,,,,
+L-Glutamine,"{'C', 'N'}","{'PM08:A02', 'PM03:B01', 'PM01:E01', 'PM05:B01', 'PM07:A02', 'PM06:A02'}",gln__L,EX_gln__L_e,cpd00053,EX_cpd00053_e0,C00064
+ala-asp,{'N'},"{'PM08:A03', 'PM03:H01'}",ala_L_asp__L,EX_ala_L_asp__L_e,cpd11593,EX_cpd11593_e0,C02871
+Ala-Ile,{'N'},{'PM08:A05'},,,,,
+Ala-Met,{'N'},{'PM08:A06'},,,,,
+Ala-Val,{'N'},{'PM08:A07'},,,,,
+Asp-Ala,{'N'},{'PM08:A08'},,,,,
+Asp-Gln,{'N'},{'PM08:A09'},,,,,
+Asp-Gly,{'N'},{'PM08:A10'},,,,,
+Glu-Ala,{'N'},{'PM08:A11'},,,,,
+gly-asn,{'N'},"{'PM08:A12', 'PM03:H08'}",gly_asn__L,EX_gly_asn__L_e,cpd11581,EX_cpd11581_e0,
+gly-asp,"{'C', 'N'}","{'PM08:B01', 'PM01:F01'}",gly_asp__L,EX_gly_asp__L_e,cpd11589,EX_cpd11589_e0,C02871
+Gly-Ile,{'N'},{'PM08:B02'},,,,,
+His-Ala,{'N'},{'PM08:B03'},,,,,
+His-Glu,{'N'},{'PM08:B04'},,,,,
+His-His,{'N'},{'PM08:B05'},,,,,
+Ile-Asn,{'N'},{'PM08:B06'},,,,,
+Ile-Leu,{'N'},{'PM08:B07'},,,,,C05035
+Leu-Asn,{'N'},{'PM08:B08'},,,,,
+Leu-His,{'N'},{'PM08:B09'},,,,,
+Leu-Pro,{'N'},{'PM08:B10'},,,,,
+Leu-Tyr,{'N'},{'PM08:B11'},,,,,C05039
+Lys-Asp,{'N'},{'PM08:B12'},,,,,C02871
+Lys-Gly,{'N'},{'PM08:C01'},,,,,
+Lys-Met,{'N'},{'PM08:C02'},,,,,
+Met-Thr,{'N'},{'PM08:C03'},,,,,
+Met-Tyr,{'N'},{'PM08:C04'},,,,,C05039
+Phe-Asp,{'N'},{'PM08:C05'},,,,,C02871
+Phe-Glu,{'N'},{'PM08:C06'},,,,,
+Gln-Glu,{'N'},{'PM08:C07'},,,,,
+Phe-Met,{'N'},{'PM08:C08'},,,,,
+Phe-Tyr,{'N'},{'PM08:C09'},,,,,C05039
+Phe-Val,{'N'},{'PM08:C10'},,,,,
+Pro-Arg,{'N'},{'PM08:C11'},,,,,C05034
+Pro-Asn,{'N'},{'PM08:C12'},,,,,
+Pro-Glu,{'N'},{'PM08:D01'},,,,,
+Pro-lle,{'N'},{'PM08:D02'},,,,,
+Pro-Lys,{'N'},{'PM08:D03'},,,,,C05036
+Pro-Ser,{'N'},{'PM08:D04'},,,,,
+Pro-Trp,{'N'},{'PM08:D05'},,,,,C02732
+Pro-Val,{'N'},{'PM08:D06'},,,,,
+Ser-Asn,{'N'},{'PM08:D07'},,,,,
+Ser-Asp,{'N'},{'PM08:D08'},,,,,C02871
+Ser-Gln,{'N'},{'PM08:D09'},,,,,
+Ser-Glu,{'N'},{'PM08:D10'},,,,,
+Thr-Asp,{'N'},{'PM08:D11'},,,,,C02871
+Thr-Gln,{'N'},{'PM08:D12'},,,,,
+Thr-Phe,{'N'},{'PM08:E01'},,,,,
+Thr-Ser,{'N'},{'PM08:E02'},,,,,
+Trp-Val,{'N'},{'PM08:E03'},,,,,
+Tyr-Ile,{'N'},{'PM08:E04'},,,,,
+Tyr-Val,{'N'},{'PM08:E05'},,,,,
+Val-Ala,{'N'},{'PM08:E06'},,,,,
+Val-Gln,{'N'},{'PM08:E07'},,,,,
+Val-Glu,{'N'},{'PM08:E08'},,,,,
+Val-Lys,{'N'},{'PM08:E09'},,,,,C05036
+Val-Met,{'N'},{'PM08:E10'},,,,,
+Val-Phe,{'N'},{'PM08:E11'},,,,,
+Val-Pro,{'N'},{'PM08:E12'},,,,,
+Val-Ser,{'N'},{'PM08:F01'},,,,,
+b-Ala-Ala,{'N'},{'PM08:F02'},,,,,
+b-Ala-Gly,{'N'},{'PM08:F03'},,,,,
+b-Ala-His,{'N'},{'PM08:F04'},,,,,
+Met-b-Ala,{'N'},{'PM08:F05'},,,,,
+b-Ala-Phe,{'N'},{'PM08:F06'},,,,,
+D-Ala-D-Ala,{'N'},{'PM08:F07'},,,,,
+D-Ala-Gly,{'N'},{'PM08:F08'},,,,,
+D-Ala-Leu,{'N'},{'PM08:F09'},,,,,C05035
+D-Leu-D-Leu,{'N'},{'PM08:F10'},,,,,
+D-Leu-Gly,{'N'},{'PM08:F11'},,,,,
+D-Leu-Tyr,{'N'},{'PM08:F12'},,,,,C05039
+g-D-Glu-Gly,{'N'},{'PM08:G02'},,,,,
+Gly-D-Ala,{'N'},{'PM08:G03'},,,,,
+Gly-D-Asp,{'N'},{'PM08:G04'},,,,,
+Gly-D-Ser,{'N'},{'PM08:G05'},,,,,
+Gly-D-Thr,{'N'},{'PM08:G06'},,,,,
+Gly-D-Val,{'N'},{'PM08:G07'},,,,,
+Leu-b-Ala,{'N'},{'PM08:G08'},,,,,
+Leu-D-Leu,{'N'},{'PM08:G09'},,,,,
+Phe-b-Ala,{'N'},{'PM08:G10'},,,,,
+Ala-Ala-Ala,{'N'},{'PM08:G11'},,,,,
+D-Ala-Gly-Gly,{'N'},{'PM08:G12'},,,,,
+Gly-Gly-Ala,{'N'},{'PM08:H01'},,,,,
+Gly-Gly-D-Leu,{'N'},{'PM08:H02'},,,,,
+Gly-Gly-Gly,{'N'},{'PM08:H03'},,,,,
+Gly-Gly-Ile,{'N'},{'PM08:H04'},,,,,
+Gly-Gly-Leu,{'N'},{'PM08:H05'},,,,,C05035
+Gly-Gly-Phe,{'N'},{'PM08:H06'},,,,,
+Val-Tyr-Val,{'N'},{'PM08:H07'},,,,,
+Gly-Phe-Phe,{'N'},{'PM08:H08'},,,,,
+Leu-Gly-Gly,{'N'},{'PM08:H09'},,,,,
+Leu-Leu-Leu,{'N'},{'PM08:H10'},,,,,C05035
+Phe-Gly-Gly,{'N'},{'PM08:H11'},,,,,
+Tyr-Gly-Gly,{'N'},{'PM08:H12'},,,,,
+1% NaCl,set(),{'PM09:A01'},,,,,C13563
+2% NaCl,set(),{'PM09:A02'},,,,,C13563
+3% NaCl,set(),{'PM09:A03'},,,,,C13563
+4% NaCl,set(),{'PM09:A04'},,,,,C13563
+5% NaCl,set(),{'PM09:A05'},,,,,C13563
+5.5% NaCl,set(),{'PM09:A06'},,,,,C13563
+6.5% NaCl,set(),{'PM09:A08'},,,,,C13563
+7% NaCl,set(),{'PM09:A09'},,,,,C13563
+8% NaCl,set(),{'PM09:A10'},,,,,C13563
+9% NaCl,set(),{'PM09:A11'},,,,,C13563
+10% NaCl,set(),{'PM09:A12'},,,,,C13563
+6% NaCl,set(),"{'PM09:B01', 'PM09:A07'}",,,,,
+6% NaCl + Betaine,set(),{'PM09:B02'},,,,,C00719
+6% NaCl + NN Dimethyl Glycine,set(),{'PM09:B03'},,,,,C01026
+6% NaCl + Sarcosine,set(),{'PM09:B04'},,,,,C00213
+6% NaCl + Dimethyl Sulphonyl Propionate,set(),{'PM09:B05'},,,,,
+6% NaCl + MOPS,set(),{'PM09:B06'},,,,,
+6% NaCl + Ectoine,set(),{'PM09:B07'},,,,,C06231
+6% NaCl + Choline,set(),{'PM09:B08'},,,,,C00114
+6% NaCl + Phosphorylcholine,set(),{'PM09:B09'},,,,,C00588
+6% NaCl + Creatine,set(),{'PM09:B10'},,,,,C00300
+6% NaCl + Creatinine,set(),{'PM09:B11'},,,,,C00791
+6% NaCl + L-Carnitine,set(),{'PM09:B12'},,,,,C00318
+6% NaCl + KCl,set(),{'PM09:C01'},,,,,C13567
+6% NaCl + L-Proline,set(),{'PM09:C02'},,,,,C00148
+6% NaCl + N-Acetyl-L-Glutamine,set(),{'PM09:C03'},,,,,
+6% NaCl + b-Glutamic acid,set(),{'PM09:C04'},,,,,
+6% NaCl + g-Amino-N-Butyric acid,set(),{'PM09:C05'},,,,,
+6% NaCl + Glutathione,set(),{'PM09:C06'},,,,,C00051
+6% NaCl + Glycerol,set(),{'PM09:C07'},,,,,C00116
+6% NaCl + Trehalose,set(),{'PM09:C08'},,,,,C01083
+6% NaCl + Trimethylamine-N-Oxide,set(),{'PM09:C09'},,,,,C01104
+6% NaCl + Trimethylamine,set(),{'PM09:C10'},,,,,C00565
+6% NaCl + Octopine,set(),{'PM09:C11'},,,,,C04137
+6% NaCl + Trigonelline,set(),{'PM09:C12'},,,,,C01004
+3% Potassium Chloride,set(),{'PM09:D01'},,,,,C13567
+4% Potassium chloride,set(),{'PM09:D02'},,,,,C13567
+5% Potassium Chloride,set(),{'PM09:D03'},,,,,C13567
+6% Potassium chloride,set(),{'PM09:D04'},,,,,C13567
+2% Sodium Sulfate,set(),{'PM09:D05'},,,,,C13199
+3% Sodium Sulfate,set(),{'PM09:D06'},,,,,C13199
+4% Sodium Sulfate,set(),{'PM09:D07'},,,,,C13199
+5% Sodium Sulfate,set(),{'PM09:D08'},,,,,C13199
+5% Ethylene Glycol,set(),{'PM09:D09'},,,,,C01380
+10% Ethylene Glycol,set(),{'PM09:D10'},,,,,C01380
+15% Ethylene Glycol,set(),{'PM09:D11'},,,,,C01380
+20% Ethylene Glycol,set(),{'PM09:D12'},,,,,C01380
+1% Sodium Formate,set(),{'PM09:E01'},,,,,
+2% Sodium Formate,set(),{'PM09:E02'},,,,,
+3% Sodium Formate,set(),{'PM09:E03'},,,,,
+4% Sodium Formate,set(),{'PM09:E04'},,,,,
+5% Sodium Formate,set(),{'PM09:E05'},,,,,
+6% Sodium Formate,set(),{'PM09:E06'},,,,,
+2% Urea,set(),{'PM09:E07'},,,,,C00086
+3% Urea,set(),{'PM09:E08'},,,,,C00086
+4% Urea,set(),{'PM09:E09'},,,,,C00086
+5% Urea,set(),{'PM09:E10'},,,,,C00086
+6% Urea,set(),{'PM09:E11'},,,,,C00086
+7% Urea,set(),{'PM09:E12'},,,,,C00086
+1% Sodium Lactate,set(),{'PM09:F01'},,,,,C13960
+2% Sodium Lactate,set(),{'PM09:F02'},,,,,C13960
+3% Sodium Lactate,set(),{'PM09:F03'},,,,,C13960
+4% Sodium Lactate,set(),{'PM09:F04'},,,,,C13960
+5% Sodium Lactate,set(),{'PM09:F05'},,,,,C13960
+6% Sodium Lactate,set(),{'PM09:F06'},,,,,C13960
+7% Sodium Lactate,set(),{'PM09:F07'},,,,,C13960
+8% Sodium Lactate,set(),{'PM09:F08'},,,,,C13960
+9% Sodium Lactate,set(),{'PM09:F09'},,,,,C13960
+10% Sodium Lactate,set(),{'PM09:F10'},,,,,C13960
+11% Sodium Lactate,set(),{'PM09:F11'},,,,,C13960
+12% Sodium Lactate,set(),{'PM09:F12'},,,,,C13960
+20mM Sodium Phosphate pH 7,set(),{'PM09:G01'},,,,,
+50mM Sodium Phosphate pH 7,set(),{'PM09:G02'},,,,,
+100mM Sodium Phosphate pH 7,set(),{'PM09:G03'},,,,,
+200mM Sodium Phosphate pH 7,set(),{'PM09:G04'},,,,,
+20mM Sodium Benzoate pH 5.2,set(),{'PM09:G05'},,,,,D02277
+50mM Sodium Benzoate pH 5.2,set(),{'PM09:G06'},,,,,D02277
+100mM Sodium Benzoate pH 5.2,set(),{'PM09:G07'},,,,,D02277
+200mM Sodium Benzoate pH 5.2,set(),{'PM09:G08'},,,,,D02277
+10mM Ammonium Sulfate pH 8,set(),{'PM09:G09'},,,,,
+20mM Ammonium Sulfate pH 8,set(),{'PM09:G10'},,,,,
+50mM Ammonium Sulfate pH 8,set(),{'PM09:G11'},,,,,
+100mM Ammonium Sulfate pH 8,set(),{'PM09:G12'},,,,,
+10mM Sodium Nitrate,set(),{'PM09:H01'},,,,,C00244
+20mM Sodium Nitrate,set(),{'PM09:H02'},,,,,C00244
+40mM Sodium Nitrate,set(),{'PM09:H03'},,,,,C00244
+60mM Sodium Nitrate,set(),{'PM09:H04'},,,,,C00244
+80mM Sodium Nitrate,set(),{'PM09:H05'},,,,,C00244
+100mM Sodium Nitrate,set(),{'PM09:H06'},,,,,C00244
+10mM Sodium Nitrite,set(),{'PM09:H07'},,,,,C00088
+20mM Sodium Nitrite,set(),{'PM09:H08'},,,,,C00088
+40mM Sodium Nitrite,set(),{'PM09:H09'},,,,,C00088
+60mM Sodium Nitrite,set(),{'PM09:H10'},,,,,C00088
+80mM Sodium Nitrite,set(),{'PM09:H11'},,,,,C00088
+100mM Sodium Nitrite,set(),{'PM09:H12'},,,,,C00088
+pH 3.5,set(),{'PM10:A01'},,,,,
+pH 4,set(),{'PM10:A02'},,,,,
+pH 4.5,set(),"{'PM10:A03', 'PM10:B01'}",,,,,
+pH 5,set(),{'PM10:A04'},,,,,
+pH 5.5,set(),{'PM10:A05'},,,,,
+pH 6,set(),{'PM10:A06'},,,,,
+pH 7,set(),{'PM10:A07'},,,,,
+pH 8,set(),{'PM10:A08'},,,,,
+pH 8.5,set(),{'PM10:A09'},,,,,
+pH 9,set(),{'PM10:A10'},,,,,
+pH 9.5,set(),"{'PM10:A11', 'PM10:E01'}",,,,,
+pH 10,set(),{'PM10:A12'},,,,,
+pH 4.5 + L-Alanine,set(),{'PM10:B02'},,,,,C00041
+pH 4.5 + L-Arginine,set(),{'PM10:B03'},,,,,C00062
+pH 4.5 + L-Asparagine,set(),{'PM10:B04'},,,,,C00152
+pH 4.5 + L-Aspartic acid,set(),{'PM10:B05'},,,,,C00049
+pH 4.5 + L-Glutamic acid,set(),{'PM10:B06'},,,,,C00025
+pH 4.5 + L-Glutamine,set(),{'PM10:B07'},,,,,C00064
+pH 4.5 + Glycine,set(),{'PM10:B08'},,,,,C00037
+pH 4.5 + L-Histidine,set(),{'PM10:B09'},,,,,C00135
+pH 4.5 + L-Isoleucine,set(),{'PM10:B10'},,,,,C00407
+pH 4.5 + L-Leucine,set(),{'PM10:B11'},,,,,C00123
+pH 4.5 + L-Lysine,set(),{'PM10:B12'},,,,,C00047
+pH 4.5 + L-Methionine,set(),{'PM10:C01'},,,,,C00073
+pH 4.5 + L-Phenylalanine,set(),{'PM10:C02'},,,,,C00079
+pH 4.5 + L-Proline,set(),{'PM10:C03'},,,,,C00148
+pH 4.5 + L-Serine,set(),{'PM10:C04'},,,,,C00065
+pH 4.5 + L-Threonine,set(),{'PM10:C05'},,,,,C00188
+pH 4.5 + L-Tryptophan,set(),{'PM10:C06'},,,,,C00078
+pH 4.5 + L-Citrulline,set(),{'PM10:C07'},,,,,C00082
+pH 4.5 + L-Valine,set(),{'PM10:C08'},,,,,C00183
+pH 4.5 + Hydroxy-L-Proline,set(),{'PM10:C09'},,,,,C01015
+pH 4.5 + L-Ornithine,set(),{'PM10:C10'},,,,,C00077
+pH 4.5 + L-Homoarginine,set(),{'PM10:C11'},,,,,
+pH 4.5 + L-Homoserine,set(),{'PM10:C12'},,,,,C00263
+pH 4.5 + Anthranilic acid,set(),{'PM10:D01'},,,,,C00108
+pH 4.5 + L-Norleucine,set(),{'PM10:D02'},,,,,C01933
+pH 4.5 + L-Norvaline,set(),{'PM10:D03'},,,,,
+pH 4.5 + a-Amino-N-Butyric acid,set(),{'PM10:D04'},,,,,
+pH 4.5 + p-Aminobenzoate,set(),{'PM10:D05'},,,,,
+pH 4.5 + L-Cysteic acid,set(),{'PM10:D06'},,,,,C00506
+pH 4.5 + D-Lysine,set(),{'PM10:D07'},,,,,C00739
+pH 4.5 + 5-Hydroxy-L-Lysine,set(),{'PM10:D08'},,,,,C01211
+pH 4.5 + 5-Hydroxy-L-Tryptophan,set(),{'PM10:D09'},,,,,
+"pH 4.5 + DL-Diamino-a,e-Pimelic acid",set(),{'PM10:D10'},,,,,C00680
+pH 4.5 + Trimethylamine-N-Oxide,set(),{'PM10:D11'},,,,,C01104
+pH 4.5 + Urea,set(),{'PM10:D12'},,,,,C00086
+pH 9.5 + L-Alanine,set(),{'PM10:E02'},,,,,C00041
+pH 9.5 + L-Arginine,set(),{'PM10:E03'},,,,,C00062
+pH 9.5 + L-Asparagine,set(),{'PM10:E04'},,,,,C00152
+pH 9.5 + L-Aspartic acid,set(),{'PM10:E05'},,,,,C00049
+pH 9.5 + L-Glutamic acid,set(),{'PM10:E06'},,,,,C00025
+pH 9.5 + L-Glutamine,set(),{'PM10:E07'},,,,,C00064
+pH 9.5 + Glycine,set(),{'PM10:E08'},,,,,C00037
+pH 9.5 + L-Histidine,set(),{'PM10:E09'},,,,,C00135
+pH 9.5 + L-Isoleucine,set(),{'PM10:E10'},,,,,C00407
+pH 9.5 + L-Leucine,set(),{'PM10:E11'},,,,,C00123
+pH 9.5 + L-Lysine,set(),{'PM10:E12'},,,,,C00047
+pH 9.5 + L-Methionine,set(),{'PM10:F01'},,,,,C00073
+pH 9.5 + L-Phenylalanine,set(),{'PM10:F02'},,,,,C00079
+pH 9.5 + L-Proline,set(),{'PM10:F03'},,,,,C00148
+pH 9.5 + L-Serine,set(),{'PM10:F04'},,,,,C00065
+pH 9.5 + L-Threonine,set(),{'PM10:F05'},,,,,C00188
+pH 9.5 + L-Tryptophan,set(),{'PM10:F06'},,,,,C00078
+pH 9.5 + L-Tyrosine,set(),{'PM10:F07'},,,,,C00082
+pH 9.5 + L-Valine,set(),{'PM10:F08'},,,,,C00183
+pH 9.5 + Hydroxy-L-Proline,set(),{'PM10:F09'},,,,,C01015
+pH 9.5 + L-Ornithine,set(),{'PM10:F10'},,,,,C00077
+pH 9.5 + L-Homoarginine,set(),{'PM10:F11'},,,,,
+pH 9.5 + L-Homoserine,set(),{'PM10:F12'},,,,,C00263
+pH 9.5 + Anthranilic acid,set(),{'PM10:G01'},,,,,C00108
+pH 9.5 + L-Norleucine,set(),{'PM10:G02'},,,,,C01933
+pH 9.5 + L-Norvaline,set(),{'PM10:G03'},,,,,
+pH 9.5 + Agmatine,set(),{'PM10:G04'},,,,,C00179
+pH 9.5 + Cadaverine,set(),{'PM10:G05'},,,,,C01672
+pH 9.5 + Putrescine,set(),{'PM10:G06'},,,,,C00134
+pH 9.5 + Histamine,set(),{'PM10:G07'},,,,,C00388
+pH 9.5 + b-Phenylethylamine,set(),{'PM10:G08'},,,,,C05332
+pH 9.5 + Tyramine,set(),{'PM10:G09'},,,,,C00483
+pH 9.5 + Creatine,set(),{'PM10:G10'},,,,,C00300
+pH 9.5 + Trimethylamine-N-Oxide,set(),{'PM10:G11'},,,,,C01104
+pH 9.5 + Urea,set(),{'PM10:G12'},,,,,C00086
+X-Caprylate,set(),{'PM10:H01'},,,,,
+X-a-D-Glucoside,set(),{'PM10:H02'},,,,,
+X-b-D-Glucoside,set(),{'PM10:H03'},,,,,
+X-a-D-Galactoside,set(),{'PM10:H04'},,,,,
+X-b-D-Galactoside,set(),{'PM10:H05'},,,,,
+X-a-D-Glucuronide,set(),{'PM10:H06'},,,,,
+X-b-D-Glucuronide,set(),{'PM10:H07'},,,,,
+X-b-D-Glucosaminide,set(),{'PM10:H08'},,,,,
+X-b-D-Galactosaminide,set(),{'PM10:H09'},,,,,
+X-a-D-Mannoside,set(),{'PM10:H10'},,,,,
+X-PO4,set(),{'PM10:H11'},,,,,
+X-SO4,set(),{'PM10:H12'},,,,,
+Amikacin,set(),"{'PM11:A04', 'PM11:A03', 'PM11:A01', 'PM11:A02'}",,,,,C06820
+Chlortetracycline,set(),"{'PM11:A05', 'PM11:A06', 'PM24:C04', 'PM11:A07', 'PM11:A08', 'PM24:C01', 'PM24:C02', 'PM24:C03'}",,,,,C06571
+Lincomycin,set(),"{'PM11:A09', 'PM11:A10', 'PM11:A12', 'PM11:A11'}",,,,,C06812
+Amoxicillin,set(),"{'PM11:B03', 'PM11:B02', 'PM11:B01', 'PM11:B04'}",,,,,C06827
+Cloxacillin,set(),"{'PM11:B08', 'PM11:B06', 'PM11:B07', 'PM11:B05'}",,,,,C06923
+Lomefloxacin ,set(),"{'PM11:B11', 'PM11:B09', 'PM11:B10', 'PM11:B12'}",,,,,C07078
+Bleomycin ,set(),"{'PM11:C02', 'PM11:C01', 'PM11:C04', 'PM11:C03'}",,,,,C06854
+Colistin,set(),"{'PM11:C05', 'PM11:C06', 'PM11:C08', 'PM11:C07'}",,,,,C13768
+Minocycline,set(),"{'PM11:C11', 'PM11:C09', 'PM11:C12', 'PM11:C10'}",,,,,C07225
+Capreomycin ,set(),"{'PM11:D03', 'PM11:D01', 'PM11:D02', 'PM11:D04'}",,,,,C01790
+Demeclocycline,set(),"{'PM11:D05', 'PM11:D06', 'PM11:D07', 'PM11:D08'}",,,,,
+Nafcillin,set(),"{'PM11:D09', 'PM11:D11', 'PM11:D12', 'PM11:D10'}",,,,,C07250
+Cefazolin,set(),"{'PM11:E01', 'PM11:E03', 'PM11:E04', 'PM11:E02'}",,,,,C06880
+Enoxacin,set(),"{'PM11:E05', 'PM11:E06', 'PM11:E08', 'PM11:E07'}",,,,,C06979
+Nalidixic acid ,set(),"{'PM11:E11', 'PM11:E12', 'PM11:E09', 'PM11:E10'}",,,,,C05079
+Erythromycin ,set(),"{'PM11:F07', 'PM11:F06', 'PM11:F08', 'PM11:F05'}",,,,,C01912
+Neomycin,set(),"{'PM11:F12', 'PM21:F08', 'PM21:F07', 'PM11:F10', 'PM21:F05', 'PM11:F11', 'PM21:F06', 'PM11:F09'}",,,,,C00384
+Gentamicin,set(),"{'PM11:G08', 'PM11:G07', 'PM11:G06', 'PM11:G05'}",,,,,C00505
+Potassium tellurite,set(),"{'PM11:G11', 'PM11:G12', 'PM11:G09', 'PM11:G10'}",,,,,
+Cephalothin,set(),"{'PM11:H01', 'PM11:H02', 'PM11:H03', 'PM11:H04'}",,,,,C07761
+Ofloxacin,set(),"{'PM11:H11', 'PM11:H12', 'PM11:H09', 'PM11:H10'}",,,,,C07660
+Penicillin G,set(),"{'PM12:A02', 'PM12:A03', 'PM12:A04', 'PM12:A01'}",,,,,C05551
+Tetracycline,set(),"{'PM12:A05', 'PM12:A08', 'PM12:A06', 'PM12:A07'}",,,,,C06570
+Oxacillin,set(),"{'PM12:B01', 'PM12:B04', 'PM12:B02', 'PM12:B03'}",,,,,C08125
+Penimepicycline,set(),"{'PM12:B08', 'PM12:B05', 'PM12:B07', 'PM12:B06'}",,,,,D07233
+Polymyxin B ,set(),"{'PM12:B09', 'PM12:B11', 'PM12:B12', 'PM12:B10'}",,,,,C11613
+Paromomycin ,set(),"{'PM12:C04', 'PM12:C03', 'PM12:C01', 'PM12:C02'}",,,,,C08048
+Vancomycin,set(),"{'PM12:C08', 'PM12:C06', 'PM12:C05', 'PM12:C07'}",,,,,C06684
+Sisomicin,set(),"{'PM12:D02', 'PM12:D03', 'PM12:D04', 'PM12:D01'}",,,,,C00494
+Sulfamethazine,set(),"{'PM12:D08', 'PM12:D06', 'PM12:D05', 'PM12:D07'}",,,,,D02436
+Novobiocin,set(),"{'PM12:D09', 'PM12:D12', 'PM12:D10', 'PM12:D11'}",,,,,C05080
+"2,4-Diamino-6,7-diisopropylpteridine",set(),"{'PM12:E04', 'PM12:E01', 'PM12:E03', 'PM12:E02'}",,,,,
+Sulfadiazine,set(),"{'PM12:E08', 'PM12:E07', 'PM12:E06', 'PM12:E05'}",,,,,C07658
+Tobramycin,set(),"{'PM12:F02', 'PM25:A06', 'PM12:F04', 'PM25:A07', 'PM12:F03', 'PM25:A08', 'PM12:F01', 'PM25:A05'}",,,,,C00397
+Sulfathiazole,set(),"{'PM12:F08', 'PM12:F07', 'PM12:F05', 'PM12:F06'}",,,,,C11169
+5-Fluoroorotic acid,set(),"{'PM12:F09', 'PM12:F11', 'PM12:F12', 'PM12:F10'}",,,,,
+Spectinomycin,set(),"{'PM12:G02', 'PM12:G03', 'PM12:G04', 'PM12:G01'}",,,,,C08049
+Sulfamethoxazole,set(),"{'PM12:G08', 'PM12:G07', 'PM12:G06', 'PM12:G05'}",,,,,C07315
+L-Aspartic-b-hydroxamate,set(),"{'PM12:G11', 'PM12:G10', 'PM12:G09', 'PM12:G12'}",,,,,C03124
+Spiramycin,set(),"{'PM12:H03', 'PM12:H02', 'PM12:H01', 'PM12:H04'}",,,,,C01754
+Rifampicin,set(),"{'PM12:H08', 'PM12:H05', 'PM12:H07', 'PM12:H06'}",,,,,C06688
+"Ampicillin, Sodium salt",set(),"{'PM13:A01', 'PM13:A04', 'PM13:A03', 'PM13:A02'}",,,,,C06574
+Dequalinium chloride,set(),"{'PM13:A06', 'PM23:B08', 'PM13:A05', 'PM23:B05', 'PM23:B07', 'PM13:A08', 'PM13:A07', 'PM23:B06'}",,,,,D01575
+Azlocillin,set(),"{'PM13:B02', 'PM13:B04', 'PM13:B01', 'PM13:B03'}",,,,,C06839
+"2,2`-Dipyridyl",set(),"{'PM13:B08', 'PM21:A05', 'PM13:B05', 'PM13:B06', 'PM21:A06', 'PM21:A08', 'PM13:B07', 'PM21:A07'}",,,,,
+Oxolinic acid,set(),"{'PM13:B10', 'PM13:B12', 'PM13:B09', 'PM13:B11'}",,,,,C11342
+6-Mercaptopurine monohydrate,set(),"{'PM13:C03', 'PM13:C02', 'PM13:C01', 'PM13:C04'}",,,,,D00161
+Potassium chromate,set(),"{'PM13:C09', 'PM24:D07', 'PM24:D06', 'PM13:C12', 'PM24:D08', 'PM24:D05', 'PM13:C11', 'PM13:C10'}",,,,,
+Cefuroxime,set(),"{'PM13:D03', 'PM13:D02', 'PM13:D04', 'PM13:D01'}",,,,,C06894
+5-Fluorouracil,set(),"{'PM13:D05', 'PM13:D07', 'PM13:D06', 'PM13:D08', 'PM25:H09', 'PM25:H11', 'PM25:H12', 'PM25:H10'}",,,,,C07649
+Rolitetracycline,set(),"{'PM13:D12', 'PM13:D09', 'PM13:D10', 'PM13:D11'}",,,,,C12933
+Cytosine-1-beta-D-arabinofuranoside,set(),"{'PM13:E04', 'PM13:E02', 'PM13:E03', 'PM13:E01'}",,,,,C02961
+Geneticin disulfate (G418),set(),"{'PM13:E05', 'PM13:E06', 'PM13:E08', 'PM13:E07'}",,,,,
+Ruthenium red,set(),"{'PM13:E11', 'PM13:E12', 'PM13:E10', 'PM13:E09'}",,,,,C13932
+Cesium chloride,set(),"{'PM13:F03', 'PM13:F01', 'PM13:F04', 'PM13:F02'}",,,,,D03446
+Glycine HCl,set(),"{'PM13:F07', 'PM13:F05', 'PM13:F08', 'PM13:F06'}",,,,,C00037
+Thallium (I) acetate,set(),"{'PM13:F11', 'PM22:G09', 'PM13:F12', 'PM22:G10', 'PM22:G11', 'PM13:F10', 'PM13:F09', 'PM22:G12'}",,,,,C15226
+Cobalt (II) chloride,set(),"{'PM13:G01', 'PM23:D07', 'PM23:D05', 'PM13:G04', 'PM23:D06', 'PM23:D08', 'PM13:G02', 'PM13:G03'}",,,,,C00175
+Cupric chloride,set(),"{'PM13:H03', 'PM23:D10', 'PM13:H01', 'PM13:H02', 'PM23:D09', 'PM13:H04', 'PM23:D11', 'PM23:D12'}",,,,,C00070
+Moxalactam,set(),"{'PM13:H08', 'PM13:H06', 'PM13:H05', 'PM13:H07'}",,,,,C07231
+Tylosin,set(),"{'PM13:H09', 'PM13:H11', 'PM13:H12', 'PM13:H10'}",,,,,C01457
+Acriflavine,set(),"{'PM14:A02', 'PM14:A04', 'PM14:A01', 'PM14:A03'}",,,,,C11273
+Furaltadone,set(),"{'PM14:A05', 'PM14:A07', 'PM14:A06', 'PM14:A08'}",,,,,D02510
+Sanguinarine chloride,set(),"{'PM14:A11', 'PM14:A10', 'PM14:A12', 'PM14:A09'}",,,,,C06162
+Fusaric acid,set(),"{'PM14:B06', 'PM14:B07', 'PM14:B05', 'PM14:B08'}",,,,,C10146
+Boric acid,set(),"{'PM14:C03', 'PM22:F09', 'PM22:F10', 'PM22:F11', 'PM14:C02', 'PM14:C01', 'PM14:C04', 'PM22:F12'}",,,,,C12486
+1-Hydroxypyridine-2-thione (pyrithione),set(),"{'PM14:C05', 'PM14:C08', 'PM21:D04', 'PM21:D02', 'PM21:D03', 'PM14:C07', 'PM14:C06', 'PM21:D01'}",,,,,
+Cadmium chloride,set(),"{'PM14:D02', 'PM23:B02', 'PM23:B01', 'PM14:D01', 'PM23:B04', 'PM14:D03', 'PM23:B03', 'PM14:D04'}",,,,,C01413
+Iodoacetic acid,set(),"{'PM14:D07', 'PM14:D08', 'PM14:D05', 'PM14:D06'}",,,,,
+Cefoxitin,set(),"{'PM14:E04', 'PM14:E01', 'PM14:E03', 'PM14:E02'}",,,,,C08106
+Nitrofurantoin,set(),"{'PM14:E07', 'PM14:E06', 'PM14:E05', 'PM14:E08'}",,,,,C07268
+Sodium metaborate,set(),"{'PM14:E10', 'PM23:E02', 'PM23:E03', 'PM23:E04', 'PM14:E12', 'PM14:E09', 'PM14:E11', 'PM23:E01'}",,,,,
+Chloramphenicol,set(),"{'PM14:F03', 'PM11:F02', 'PM14:F01', 'PM14:F02', 'PM11:F04', 'PM11:F03', 'PM14:F04', 'PM11:F01'}",,,,,C00918
+Piperacillin,set(),"{'PM14:F07', 'PM14:F05', 'PM14:F08', 'PM14:F06'}",,,,,C07361
+Chelerythrine chloride,set(),"{'PM14:G03', 'PM14:G02', 'PM14:G01', 'PM14:G04'}",,,,,C12227
+Carbenicillin,set(),"{'PM14:G07', 'PM12:A10', 'PM12:A12', 'PM12:A09', 'PM14:G06', 'PM12:A11', 'PM14:G08', 'PM14:G05'}",,,,,C06869
+Sodium Nitrite,set(),"{'PM14:G11', 'PM23:G03', 'PM23:G04', 'PM14:G10', 'PM23:G01', 'PM14:G12', 'PM23:G02', 'PM14:G09'}",,,,,C00088
+Ethylene Glycol-bis(b-Aminoethyl ether)-NNN`N`-Tetraacetic Acid,set(),"{'PM14:H02', 'PM14:H03', 'PM14:H01', 'PM14:H04'}",,,,,
+Sodium orthovanadate,set(),"{'PM14:H09', 'PM14:H11', 'PM14:H10', 'PM14:H12', 'PM23:G05', 'PM23:G07', 'PM23:G06', 'PM23:G08'}",,,,,
+Procaine,set(),"{'PM15:A02', 'PM15:A03', 'PM15:A04', 'PM15:A01'}",,,,,C07894
+Guanidine hydrochloride,set(),"{'PM15:A06', 'PM15:A05', 'PM21:A03', 'PM21:A04', 'PM15:A08', 'PM21:A02', 'PM15:A07', 'PM21:A01'}",,,,,
+Cefmetazole,set(),"{'PM15:A09', 'PM15:A12', 'PM15:A11', 'PM15:A10'}",,,,,C08103
+"5,7-Dichloro-8-hydroxyquinaldine",set(),"{'PM15:B09', 'PM15:B11', 'PM15:B10', 'PM15:B12'}",,,,,
+"5,7-Dichloro-8-hydroxyquinoline",set(),"{'PM15:C03', 'PM15:C04', 'PM15:C02', 'PM15:C01'}",,,,,
+"Fusidic acid, sodium salt",set(),"{'PM15:C08', 'PM15:C05', 'PM15:C06', 'PM15:C07'}",,,,,C06694
+"1,10-Phenanthroline  Monohydrate",set(),"{'PM15:C09', 'PM15:C11', 'PM15:C12', 'PM15:C10'}",,,,,C00604
+Phleomycin,set(),"{'PM15:D03', 'PM15:D02', 'PM15:D04', 'PM15:D01'}",,,,,
+Nordihydroguaiaretic acid,set(),"{'PM15:D11', 'PM15:D10', 'PM15:D12', 'PM15:D09'}",,,,,C10719
+Alexidine,set(),"{'PM15:E01', 'PM15:E04', 'PM15:E03', 'PM15:E02'}",,,,,D02804
+5-Nitro-2-furaldehyde semicarbazone (Nitrofurazone),set(),"{'PM15:E06', 'PM15:E07', 'PM15:E05', 'PM15:E08'}",,,,,C08042
+"3,4-Dimethoxybenzyl alcohol",set(),"{'PM15:F03', 'PM15:F02', 'PM15:F04', 'PM15:F01'}",,,,,
+"Oleandomycin, phosphate salt",set(),"{'PM15:F08', 'PM15:F07', 'PM15:F06', 'PM15:F05'}",,,,,C01946
+Puromycin,set(),"{'PM15:F11', 'PM15:F12', 'PM15:F09', 'PM15:F10'}",,,,,C01610
+Carbonyl-cyanide m-chlorophenylhydrazone (CCCP),set(),"{'PM15:G02', 'PM15:G04', 'PM15:G03', 'PM15:G01'}",,,,,C11164
+Sodium Azide,set(),"{'PM15:G08', 'PM23:F01', 'PM15:G07', 'PM23:F03', 'PM23:F04', 'PM15:G05', 'PM23:F02', 'PM15:G06'}",,,,,
+"Menadione, sodium bisulfite",set(),"{'PM15:G12', 'PM15:G11', 'PM15:G09', 'PM15:G10'}",,,,,C05377
+2-Nitroimidazole,set(),"{'PM15:H03', 'PM15:H01', 'PM15:H02', 'PM15:H04'}",,,,,
+Hydroxyurea,set(),"{'PM15:H06', 'PM25:A01', 'PM15:H05', 'PM25:A03', 'PM15:H07', 'PM25:A02', 'PM25:A04', 'PM15:H08'}",,,,,C07044
+Zinc chloride,set(),"{'PM15:H10', 'PM21:H09', 'PM21:H11', 'PM15:H09', 'PM15:H11', 'PM21:H12', 'PM15:H12', 'PM21:H10'}",,,,,C00038
+Cefotaxime,set(),"{'PM16:A04', 'PM16:A01', 'PM16:A02', 'PM16:A03'}",,,,,C06885
+Phosphomycin,set(),"{'PM16:A08', 'PM16:A05', 'PM16:A06', 'PM16:A07'}",,,,,C06454
+5-Chloro-7-iodo-8-hydroxy-quinoline ,set(),"{'PM16:A10', 'PM16:A12', 'PM16:A09', 'PM16:A11'}",,,,,
+Norfloxacin,set(),"{'PM16:B02', 'PM16:B01', 'PM16:B04', 'PM16:B03'}",,,,,C06687
+Sulfanilamide,set(),"{'PM16:B05', 'PM16:B06', 'PM16:B08', 'PM16:B07'}",,,,,C07458
+Trimethoprim,set(),"{'PM16:B09', 'PM16:B10', 'PM16:B12', 'PM16:B11'}",,,,,C01965
+Dichlofluanid ,set(),"{'PM16:C03', 'PM16:C04', 'PM16:C02', 'PM16:C01'}",,,,,
+Protamine sulfate,set(),"{'PM16:C08', 'PM21:B09', 'PM21:B10', 'PM16:C06', 'PM21:B11', 'PM21:B12', 'PM16:C05', 'PM16:C07'}",,,,,C01609
+Cetylpyridinium chloride ,set(),"{'PM16:C09', 'PM16:C12', 'PM16:C11', 'PM16:C10'}",,,,,C11307
+Chlorodinitrobenzene,set(),"{'PM16:D02', 'PM16:D03', 'PM16:D01', 'PM16:D04'}",,,,,C14397
+Diamide,set(),"{'PM16:D06', 'PM21:H04', 'PM16:D05', 'PM21:H01', 'PM21:H03', 'PM16:D08', 'PM16:D07', 'PM21:H02'}",,,,,
+Cinoxacin,set(),"{'PM16:D09', 'PM16:D10', 'PM16:D12', 'PM16:D11'}",,,,,C08052
+Streptomycin,set(),"{'PM16:E02', 'PM16:E01', 'PM16:E03', 'PM16:E04'}",,,,,C00413
+5-Azacytidine,set(),"{'PM16:E05', 'PM16:E07', 'PM16:E08', 'PM16:E06'}",,,,,C11262
+Rifamycin SV,set(),"{'PM16:E10', 'PM16:E12', 'PM16:E11', 'PM16:E09'}",,,,,C01848
+Potassium tellurite ,set(),"{'PM16:F04', 'PM16:F03', 'PM16:F02', 'PM16:F01'}",,,,,
+Aluminum sulfate ,set(),"{'PM16:F10', 'PM16:F12', 'PM16:F09', 'PM16:F11'}",,,,,
+Ferric chloride ,set(),"{'PM16:G05', 'PM16:G08', 'PM16:G07', 'PM16:G06'}",,,,,C00023
+L-Glutamic acid g-monohydroxamate,set(),"{'PM16:G12', 'PM16:G09', 'PM16:G10', 'PM16:G11'}",,,,,
+"4-Chloro-3,5-dimethyl-phenol ",set(),"{'PM16:H08', 'PM16:H06', 'PM16:H05', 'PM16:H07'}",,,,,C14715
+Sorbic acid,{'C'},"{'PM16:H12', 'PM02:F09', 'PM16:H11', 'PM16:H09', 'PM16:H10'}",,,,,
+D-Serine ,set(),"{'PM17:A02', 'PM17:A03', 'PM17:A01', 'PM17:A04'}",,,,,C00740
+b-Chloro-L-alanine,set(),"{'PM17:A06', 'PM17:A07', 'PM17:A08', 'PM17:A05'}",,,,,C02635
+Thiosalicylate ,set(),"{'PM17:A12', 'PM17:A09', 'PM17:A11', 'PM17:A10'}",,,,,C08171
+"Salicylate, sodium",set(),"{'PM17:B02', 'PM17:B01', 'PM17:B03', 'PM17:B04'}",,,,,C00805
+Ethionamide,set(),"{'PM17:B12', 'PM17:B10', 'PM17:B11', 'PM17:B09'}",,,,,C07665
+Sulfachloropyridazine,set(),"{'PM17:C08', 'PM17:C06', 'PM17:C07', 'PM17:C05'}",,,,,
+Sulfamonomethoxine,set(),"{'PM17:C10', 'PM17:C11', 'PM17:C12', 'PM17:C09'}",,,,,C12540
+Oxycarboxin ,set(),"{'PM17:D03', 'PM17:D02', 'PM17:D01', 'PM17:D04'}",,,,,C10956
+"3-Amino-1,2,4-triazole",set(),"{'PM17:D07', 'PM17:D08', 'PM22:C03', 'PM22:C02', 'PM22:C01', 'PM22:C04', 'PM17:D06', 'PM17:D05'}",,,,,C11261
+Chlorpromazine,set(),"{'PM17:D12', 'PM23:A05', 'PM17:D09', 'PM17:D11', 'PM23:A06', 'PM23:A07', 'PM23:A08', 'PM17:D10'}",,,,,C06906
+Niaproof,set(),"{'PM17:E03', 'PM25:A09', 'PM17:E04', 'PM17:E02', 'PM25:A10', 'PM25:A12', 'PM25:A11', 'PM17:E01'}",,,,,
+Sodium Tungstate,set(),"{'PM17:E10', 'PM17:E11', 'PM17:E09', 'PM17:E12'}",,,,,
+Lithium chloride ,set(),"{'PM17:F04', 'PM17:F03', 'PM17:F01', 'PM17:F02'}",,,,,
+DL-Methionine hydroxamate,set(),"{'PM17:F06', 'PM17:F08', 'PM17:F07', 'PM17:F05'}",,,,,
+Tannic acid,set(),"{'PM17:F12', 'PM17:F11', 'PM17:F10', 'PM17:F09'}",,,,,D01959
+Chlorambucil,set(),"{'PM17:G04', 'PM17:G02', 'PM17:G03', 'PM17:G01'}",,,,,C06900
+Cefamandole nafate,set(),"{'PM17:G08', 'PM17:G06', 'PM17:G05', 'PM17:G07'}",,,,,C08102
+Cefoperazone,set(),"{'PM17:G11', 'PM17:G12', 'PM17:G10', 'PM17:G09'}",,,,,C06883
+Cefsulodin,set(),"{'PM17:H02', 'PM17:H04', 'PM17:H03', 'PM17:H01'}",,,,,C13505
+Oxophenylarsine,set(),"{'PM17:H10', 'PM17:H11', 'PM17:H09', 'PM17:H12'}",,,,,
+Ketoprofen,set(),"{'PM18:A04', 'PM18:A01', 'PM18:A02', 'PM18:A03'}",,,,,C01716
+Sodium pyrophosphate,set(),"{'PM18:A07', 'PM24:E12', 'PM18:A06', 'PM18:A08', 'PM24:E11', 'PM18:A05', 'PM24:E09', 'PM24:E10'}",,,,,C00013
+Thiamphenicol,set(),"{'PM18:A09', 'PM18:A10', 'PM18:A11', 'PM18:A12'}",,,,,C12853
+Trifluorothymidine,set(),"{'PM18:B04', 'PM18:B01', 'PM18:B02', 'PM18:B03'}",,,,,
+Pipemidic Acid,set(),"{'PM18:B07', 'PM18:B05', 'PM18:B06', 'PM18:B08'}",,,,,D01531
+Azathioprine,set(),"{'PM18:B11', 'PM18:B09', 'PM18:B10', 'PM18:B12'}",,,,,C06837
+Poly-L-lysine,set(),"{'PM18:C01', 'PM18:C04', 'PM18:C02', 'PM23:C09', 'PM23:C12', 'PM23:C10', 'PM18:C03', 'PM23:C11'}",,,,,
+Sulfisoxazole,set(),"{'PM18:C07', 'PM18:C05', 'PM18:C06', 'PM18:C08'}",,,,,C07318
+Pentachlorophenol,set(),"{'PM18:C11', 'PM18:C10', 'PM18:C09', 'PM18:C12'}",,,,,C02575
+Sodium Bromate,set(),"{'PM18:D07', 'PM18:D06', 'PM18:D05', 'PM18:D08'}",,,,,
+Lidocaine,set(),"{'PM18:D10', 'PM18:D12', 'PM18:D11', 'PM18:D09'}",,,,,D00358
+Sodium periodate,set(),"{'PM18:E05', 'PM18:E07', 'PM18:E06', 'PM18:E08'}",,,,,
+Antimony (III) chloride,set(),"{'PM18:E09', 'PM18:E12', 'PM18:E10', 'PM18:E11'}",,,,,C15235
+Semicarbazide hydrochloride,set(),"{'PM18:F04', 'PM18:F03', 'PM18:F02', 'PM18:F01'}",,,,,C02077
+Tinidazole,set(),"{'PM18:F05', 'PM18:F06', 'PM18:F08', 'PM18:F07'}",,,,,D01426
+Aztreonam,set(),"{'PM18:F09', 'PM18:F12', 'PM18:F10', 'PM18:F11'}",,,,,C06840
+Triclosan,set(),"{'PM18:G04', 'PM18:G02', 'PM18:G03', 'PM18:G01'}",,,,,C12059
+"3,5- Diamino-1,2,4-triazole (Guanazole)",set(),"{'PM18:G07', 'PM18:G08', 'PM18:G05', 'PM18:G06'}",,,,,
+Myricetin,set(),"{'PM18:G09', 'PM18:G12', 'PM18:G10', 'PM18:G11'}",,,,,C10107
+5-Fluoro-5'-deoxyuridine,set(),"{'PM18:H01', 'PM18:H04', 'PM18:H03', 'PM18:H02'}",,,,,C11736
+2- Phenylphenol,set(),"{'PM18:H08', 'PM18:H07', 'PM18:H05', 'PM18:H06'}",,,,,C02499
+Plumbagin,set(),"{'PM18:H09', 'PM18:H12', 'PM18:H11', 'PM18:H10'}",,,,,C10387
+Josamycin,set(),"{'PM19:A02', 'PM19:A04', 'PM19:A03', 'PM19:A01'}",,,,,C12662
+Gallic acid,set(),"{'PM19:A07', 'PM19:A06', 'PM19:A08', 'PM19:A05'}",,,,,C01424
+Coumarin,set(),"{'PM19:A10', 'PM19:A09', 'PM19:A12', 'PM19:A11'}",,,,,C05851
+Methyltrioctylammonium chloride,set(),"{'PM19:B01', 'PM19:B02', 'PM19:B03', 'PM19:B04'}",,,,,
+Harmane,set(),"{'PM19:B07', 'PM19:B08', 'PM19:B06', 'PM19:B05'}",,,,,
+"2,4-Dintrophenol ",set(),"{'PM19:B11', 'PM19:B12', 'PM19:B10', 'PM19:B09'}",,,,,C02496
+Chlorhexidine diacetate,set(),"{'PM19:C03', 'PM19:C01', 'PM19:C04', 'PM19:C02'}",,,,,C06902
+7-Hydroxycoumarin,set(),"{'PM19:C07', 'PM19:C08', 'PM19:C06', 'PM19:C05'}",,,,,C09315
+trans-Cinnamic acid,set(),"{'PM19:C10', 'PM19:C12', 'PM19:C11', 'PM19:C09'}",,,,,C10438
+Tetraethylthiuram disulfide,set(),"{'PM19:D01', 'PM19:D03', 'PM19:D04', 'PM19:D02'}",,,,,C01692
+INT,set(),"{'PM19:D05', 'PM19:D06', 'PM19:D08', 'PM19:D07'}",,,,,
+Phenyl-methylsulfonyl-fluoride (PMSF),set(),"{'PM19:D12', 'PM19:D09', 'PM19:D11', 'PM19:D10'}",,,,,C06747
+FCCP,set(),"{'PM19:E01', 'PM19:E04', 'PM19:E02', 'PM19:E03'}",,,,,
+DL-Thioctic acid,set(),"{'PM19:E05', 'PM19:E08', 'PM19:E06', 'PM19:E07', 'PM05:H05'}",,,,,C00725
+"2-Hydroxy-1,4-Naphthoqui ",set(),"{'PM19:E10', 'PM19:E12', 'PM19:E09', 'PM19:E11'}",,,,,C10368
+Phenethicilllin ,set(),"{'PM19:F03', 'PM19:F02', 'PM19:F01', 'PM19:F04'}",,,,,
+"Lauryl sulfobetaine (N-Dodecyl-N,N-dimethyl-3- ammonio-1-propanesulfonate)",set(),"{'PM19:G02', 'PM19:G03', 'PM19:G01', 'PM19:G04'}",,,,,
+Dihydrostreptomycin,set(),"{'PM19:G05', 'PM19:G08', 'PM19:G07', 'PM19:G06'}",,,,,C01023
+hydroxylamine,{'N'},"{'PM19:G12', 'PM03:D04', 'PM23:C06', 'PM19:G09', 'PM19:G11', 'PM23:C08', 'PM23:C05', 'PM23:C07', 'PM19:G10'}",ham,EX_ham_e,cpd00165,EX_cpd00165_e0,C00192
+Hexammine cobalt (III) chloride ,set(),"{'PM19:H03', 'PM19:H04', 'PM19:H01', 'PM19:H02'}",,,,,
+a-Monothioglycerol,set(),"{'PM19:H07', 'PM19:H06', 'PM24:E01', 'PM24:E04', 'PM19:H05', 'PM24:E02', 'PM19:H08', 'PM24:E03'}",,,,,
+Amitriptyline,set(),"{'PM20:A03', 'PM20:A01', 'PM25:C05', 'PM20:A02', 'PM20:A04', 'PM25:C08', 'PM25:C07', 'PM25:C06'}",,,,,D00809
+Benserazide,set(),"{'PM20:A09', 'PM20:A11', 'PM20:A12', 'PM20:A10'}",,,,,D01653
+Orphenadrine,set(),"{'PM20:B02', 'PM20:B04', 'PM20:B03', 'PM20:B01'}",,,,,C07935
+DL-Propanolol,set(),"{'PM20:B05', 'PM20:B06', 'PM20:B07', 'PM20:B08'}",,,,,C07386
+Atropine,set(),"{'PM20:C08', 'PM20:C06', 'PM20:C07', 'PM20:C05'}",,,,,C01479
+Ornidazole,set(),"{'PM20:C09', 'PM20:C12', 'PM20:C10', 'PM20:C11'}",,,,,
+Proflavine,set(),"{'PM20:D04', 'PM20:D01', 'PM20:D03', 'PM20:D02'}",,,,,C11181
+Ciprofloxacin,set(),"{'PM20:D06', 'PM20:D08', 'PM20:D05', 'PM20:D07'}",,,,,C05349
+18-Crown-6 ether,set(),"{'PM20:D09', 'PM20:D10', 'PM20:D11', 'PM20:D12'}",,,,,
+Crystal violet,set(),"{'PM20:E03', 'PM20:E02', 'PM20:E04', 'PM20:E01'}",,,,,C11167
+Dodine (n-Dodecylguanidine),set(),"{'PM20:E08', 'PM20:E05', 'PM20:E07', 'PM20:E06'}",,,,,
+Hexachlorophene ,set(),"{'PM20:E11', 'PM20:E09', 'PM20:E10', 'PM20:E12'}",,,,,C08039
+4-Hydroxycoumarin ,set(),"{'PM20:F04', 'PM20:F01', 'PM20:F02', 'PM20:F03'}",,,,,
+Oxytetracycline,set(),"{'PM20:F07', 'PM20:F08', 'PM20:F06', 'PM20:F05'}",,,,,C06624
+Pridinol,set(),"{'PM20:F09', 'PM20:F11', 'PM20:F12', 'PM20:F10'}",,,,,D02064
+Captan,set(),"{'PM20:G03', 'PM20:G04', 'PM20:G01', 'PM20:G02'}",,,,,C14438
+"3,5-Dinitrobenzoic acid",set(),"{'PM20:G06', 'PM20:G08', 'PM20:G07', 'PM20:G05'}",,,,,
+8-Hydroxyquinoline,set(),"{'PM20:G11', 'PM20:G09', 'PM20:G10', 'PM20:G12'}",,,,,
+Patulin,set(),"{'PM20:H04', 'PM20:H01', 'PM20:H03', 'PM20:H02'}",,,,,
+Tolylfluanid ,set(),"{'PM20:H06', 'PM20:H05', 'PM20:H07', 'PM20:H08'}",,,,,
+Troleandomycin,set(),"{'PM20:H11', 'PM20:H10', 'PM20:H12', 'PM20:H09'}",,,,,C01946
+Promethazine,set(),"{'PM21:A11', 'PM21:A09', 'PM14:H07', 'PM14:H05', 'PM21:A12', 'PM14:H08', 'PM21:A10', 'PM14:H06'}",,,,,D00480
+Nystatin,set(),"{'PM21:B04', 'PM21:B03', 'PM21:B02', 'PM21:B01'}",,,,,C06572
+Dodecyltrimethyl ammonium bromide,set(),"{'PM21:B05', 'PM21:B07', 'PM21:B06', 'PM21:B08', 'PM12:H12', 'PM12:H11', 'PM12:H09', 'PM12:H10'}",,,,,
+Cetylpyridinium chloride,set(),"{'PM21:C01', 'PM21:C04', 'PM21:C02', 'PM21:C03'}",,,,,C11307
+Domiphen bromide,set(),"{'PM21:C08', 'PM21:C05', 'PM15:D08', 'PM21:C06', 'PM21:C07', 'PM15:D05', 'PM15:D07', 'PM15:D06'}",,,,,D01588
+L-Aspartic acid b-hydroxamate,set(),"{'PM21:C10', 'PM21:C11', 'PM21:C12', 'PM21:C09'}",,,,,C03124
+EDTA,set(),"{'PM21:D06', 'PM21:D05', 'PM15:B06', 'PM21:D07', 'PM21:D08', 'PM15:B07', 'PM15:B05', 'PM15:B08'}",,,,,C00284
+Sodium Dichromate,set(),"{'PM21:D09', 'PM14:D09', 'PM21:D10', 'PM14:D12', 'PM21:D11', 'PM21:D12', 'PM14:D11', 'PM14:D10'}",,,,,C15227
+Compound 48/80,set(),"{'PM21:E01', 'PM17:E07', 'PM17:E05', 'PM17:E06', 'PM21:E02', 'PM21:E03', 'PM17:E08', 'PM21:E04'}",,,,,
+Manganese chloride,set(),"{'PM21:E05', 'PM13:G05', 'PM13:G08', 'PM13:G07', 'PM21:E07', 'PM21:E06', 'PM21:E08', 'PM13:G06'}",,,,,C00034
+Magnesium chloride,set(),"{'PM21:E12', 'PM21:E10', 'PM21:E11', 'PM21:E09'}",,,,,C07755
+Copper (II) sulfate,set(),"{'PM21:F01', 'PM21:F02', 'PM21:F03', 'PM21:F04'}",,,,,C00070
+D-Cycloserine,set(),"{'PM21:F12', 'PM15:B03', 'PM21:F10', 'PM21:F09', 'PM15:B04', 'PM15:B02', 'PM15:B01', 'PM21:F11'}",,,,,C08057
+Sodium Selenite,set(),"{'PM21:G04', 'PM21:G02', 'PM16:F08', 'PM21:G01', 'PM21:G03', 'PM16:F07', 'PM16:F05', 'PM16:F06'}",,,,,C05684
+Nickel chloride,set(),"{'PM21:G08', 'PM13:A11', 'PM21:G05', 'PM21:G06', 'PM21:G07', 'PM13:A10', 'PM13:A12', 'PM13:A09'}",,,,,C00291
+Trifluoperazine,set(),"{'PM21:G09', 'PM21:G11', 'PM13:G10', 'PM21:G12', 'PM13:G12', 'PM13:G11', 'PM13:G09', 'PM21:G10'}",,,,,C07168
+Thiourea,{'S'},"{'PM21:H08', 'PM04:H02', 'PM21:H07', 'PM21:H05', 'PM21:H06'}",,,,,C14415
+L-Glutamic acid g-hydroxamate,set(),"{'PM22:A04', 'PM22:A01', 'PM22:A03', 'PM22:A02'}",,,,,
+Sodium metavanadate,set(),"{'PM22:A05', 'PM22:A08', 'PM14:F09', 'PM22:A07', 'PM22:A06', 'PM14:F11', 'PM14:F12', 'PM14:F10'}",,,,,
+Caffeine,set(),"{'PM22:A09', 'PM17:H06', 'PM17:H08', 'PM17:H05', 'PM22:A12', 'PM22:A10', 'PM22:A11', 'PM17:H07'}",,,,,C07481
+L-Arginine hydroxamate,set(),"{'PM22:B02', 'PM22:B03', 'PM22:B01', 'PM22:B04'}",,,,,
+Glycine hydroxamate,set(),"{'PM22:B06', 'PM16:H04', 'PM22:B08', 'PM16:H02', 'PM16:H03', 'PM16:H01', 'PM22:B07', 'PM22:B05'}",,,,,
+Potassium iodide,set(),"{'PM22:B09', 'PM22:B10', 'PM22:B11', 'PM22:B12'}",,,,,C08219
+Miltefosine,set(),"{'PM22:C06', 'PM22:C07', 'PM22:C05', 'PM22:C08'}",,,,,
+DL-Serine hydroxamate,set(),"{'PM22:C11', 'PM22:C12', 'PM12:C09', 'PM12:C11', 'PM22:C10', 'PM12:C10', 'PM12:C12', 'PM22:C09'}",,,,,C00716
+Polymyxin B,set(),"{'PM22:D04', 'PM19:H11', 'PM22:D01', 'PM19:H12', 'PM22:D03', 'PM19:H09', 'PM19:H10', 'PM22:D02'}",,,,,C11613
+Urea hydrogen peroxide,set(),"{'PM22:D07', 'PM22:D06', 'PM22:D08', 'PM22:D05'}",,,,,
+Sodium Arsenate,set(),"{'PM22:D09', 'PM14:B10', 'PM14:B09', 'PM22:D10', 'PM22:D11', 'PM22:D12', 'PM14:B11', 'PM14:B12'}",,,,,C01478
+Ceftriaxone,set(),"{'PM22:E03', 'PM22:E02', 'PM11:G04', 'PM11:G03', 'PM11:G01', 'PM22:E01', 'PM22:E04', 'PM11:G02'}",,,,,C06683
+BAPTA,set(),"{'PM22:E05', 'PM22:E07', 'PM22:E06', 'PM22:E08'}",,,,,
+D-Serine,"{'C', 'N'}","{'PM22:E10', 'PM03:C08', 'PM22:E09', 'PM22:E11', 'PM01:B01', 'PM22:E12'}",ser__D,EX_ser__D_e,cpd00550,EX_cpd00550_e0,C00740
+Azaserine,set(),"{'PM22:F03', 'PM22:F04', 'PM22:F01', 'PM22:F02'}",,,,,
+Lithium chloride,set(),"{'PM22:F05', 'PM22:F06', 'PM22:F07', 'PM22:F08'}",,,,,
+Benzamidine,set(),"{'PM22:G01', 'PM22:G02', 'PM22:G04', 'PM22:G03'}",,,,,C01784
+Cycloheximide,set(),"{'PM22:G07', 'PM22:G08', 'PM22:G06', 'PM22:G05'}",,,,,C06685
+Cephalotin,set(),"{'PM22:H01', 'PM22:H04', 'PM22:H02', 'PM22:H03'}",,,,,C07761
+Paromomycin,set(),"{'PM22:H07', 'PM22:H06', 'PM22:H08', 'PM22:H05'}",,,,,C08048
+Myclobutanil,set(),"{'PM22:H10', 'PM22:H12', 'PM22:H11', 'PM22:H09'}",,,,,
+Benzethonium Chloride,set(),"{'PM23:A03', 'PM12:E12', 'PM12:E11', 'PM23:A02', 'PM12:E10', 'PM12:E09', 'PM23:A04', 'PM23:A01'}",,,,,D01140
+Ammonium Sulfate,set(),"{'PM23:A11', 'PM23:A09', 'PM23:A10', 'PM23:A12'}",,,,,
+Doxycycline,set(),"{'PM23:B09', 'PM13:C05', 'PM13:C06', 'PM13:C07', 'PM23:B12', 'PM23:B10', 'PM23:B11', 'PM13:C08'}",,,,,C06973
+Glycine hydrochloride,set(),"{'PM23:C02', 'PM23:C03', 'PM23:C01', 'PM23:C04'}",,,,,C00037
+Chromium (III) chloride,set(),"{'PM23:D04', 'PM23:D02', 'PM23:D03', 'PM23:D01', 'PM16:G02', 'PM16:G01', 'PM16:G04', 'PM16:G03'}",,,,,C06268
+Sodium metaperiodate,set(),"{'PM23:E07', 'PM23:E08', 'PM23:E06', 'PM23:E05'}",,,,,
+Sodium Arsenite,set(),"{'PM23:E12', 'PM23:E11', 'PM23:E10', 'PM18:D02', 'PM18:D01', 'PM23:E09', 'PM18:D04', 'PM18:D03'}",,,,,
+Sodium Caprylate,set(),"{'PM23:F07', 'PM19:F10', 'PM23:F06', 'PM19:F11', 'PM19:F09', 'PM23:F08', 'PM19:F12', 'PM23:F05'}",,,,,C06423
+Sodium Cyanate,set(),"{'PM23:F09', 'PM14:C12', 'PM23:F12', 'PM14:C09', 'PM14:C10', 'PM14:C11', 'PM23:F11', 'PM23:F10'}",,,,,C01417
+2-Deoxy-D-glucose,set(),"{'PM23:G10', 'PM23:G09', 'PM23:G12', 'PM23:G11'}",,,,,C00586
+Sodium Selenate,set(),"{'PM23:H01', 'PM23:H03', 'PM23:H02', 'PM23:H04'}",,,,,C05697
+Sodium Cyanide,set(),"{'PM23:H06', 'PM23:H07', 'PM23:H05', 'PM23:H08'}",,,,,C00177
+Sodium Thiosulfate,set(),"{'PM23:H09', 'PM23:H11', 'PM23:H10', 'PM23:H12'}",,,,,C00320
+Apramycin,set(),"{'PM24:A01', 'PM24:A02', 'PM20:A08', 'PM20:A06', 'PM20:A05', 'PM20:A07', 'PM24:A03', 'PM24:A04'}",,,,,C01555
+9-Aminoacridine,set(),"{'PM24:A05', 'PM14:B03', 'PM14:B02', 'PM24:A08', 'PM24:A07', 'PM14:B01', 'PM14:B04', 'PM24:A06'}",,,,,D02905
+Zaragozic acid A,set(),"{'PM24:A11', 'PM24:A09', 'PM24:A12', 'PM24:A10'}",,,,,
+Blasticidin S,set(),"{'PM24:B03', 'PM24:B02', 'PM19:F05', 'PM19:F06', 'PM24:B04', 'PM19:F08', 'PM19:F07', 'PM24:B01'}",,,,,C02010
+Thioridazine,set(),"{'PM24:B07', 'PM20:C04', 'PM24:B05', 'PM20:C03', 'PM20:C02', 'PM24:B08', 'PM20:C01', 'PM24:B06'}",,,,,D00798
+Sodium Benzoate,set(),"{'PM24:B10', 'PM24:B09', 'PM24:B12', 'PM24:B11'}",,,,,C00180
+Sodium metasilicate,set(),"{'PM24:C05', 'PM18:E03', 'PM24:C06', 'PM24:C08', 'PM18:E02', 'PM24:C07', 'PM18:E01', 'PM18:E04'}",,,,,
+Pentamidine Isethionate,set(),"{'PM24:C11', 'PM24:C10', 'PM24:C12', 'PM24:C09'}",,,,,C07420
+6-Azauracil,set(),"{'PM24:D02', 'PM24:D03', 'PM24:D01', 'PM24:D04'}",,,,,
+Thialysine,set(),"{'PM24:D09', 'PM24:D11', 'PM24:D10', 'PM24:D12'}",,,,,
+EGTA,set(),"{'PM24:E07', 'PM24:E06', 'PM24:E08', 'PM24:E05'}",,,,,
+Propiconazole,set(),"{'PM24:F03', 'PM24:F01', 'PM24:F04', 'PM24:F02'}",,,,,C11121
+Methyl viologen,set(),"{'PM24:F08', 'PM15:E10', 'PM24:F06', 'PM24:F07', 'PM15:E12', 'PM24:F05', 'PM15:E09', 'PM15:E11'}",,,,,C00225
+Sodium Fluoride,set(),"{'PM24:F09', 'PM24:F12', 'PM24:F11', 'PM24:F10'}",,,,,C08142
+Cisplatin,set(),"{'PM24:G03', 'PM24:G01', 'PM24:G02', 'PM24:G04'}",,,,,C06911
+Aluminum sulfate,set(),"{'PM24:G05', 'PM24:G08', 'PM24:G06', 'PM24:G07'}",,,,,
+Berberine Chloride,set(),"{'PM24:G11', 'PM24:G10', 'PM24:G09', 'PM24:G12'}",,,,,C00757
+Isoniazid,set(),"{'PM24:H03', 'PM24:H02', 'PM24:H01', 'PM24:H04'}",,,,,C07054
+Amphotericin B,set(),"{'PM24:H08', 'PM24:H07', 'PM24:H05', 'PM24:H06'}",,,,,C06573
+Miconazole Nitrate,set(),"{'PM24:H12', 'PM24:H11', 'PM24:H10', 'PM24:H09'}",,,,,C08070
+Chloroalanine hydrochloride,set(),"{'PM25:B02', 'PM25:B04', 'PM25:B03', 'PM25:B01'}",,,,,
+Tetrazolium violet,set(),"{'PM25:B08', 'PM20:B11', 'PM20:B09', 'PM25:B05', 'PM20:B10', 'PM20:B12', 'PM25:B07', 'PM25:B06'}",,,,,
+Kanamycin,set(),"{'PM25:B12', 'PM25:B10', 'PM11:H08', 'PM11:H07', 'PM25:B09', 'PM11:H06', 'PM11:H05', 'PM25:B11'}",,,,,C08046
+4-Aminopyridine,set(),"{'PM25:C02', 'PM25:C01', 'PM25:C04', 'PM17:C04', 'PM17:C03', 'PM25:C03', 'PM17:C01', 'PM17:C02'}",,,,,C13728
+Citric acid Trisodium Salt,set(),"{'PM25:C09', 'PM25:C11', 'PM25:C12', 'PM25:C10'}",,,,,C00158
+Mechlorethamine hydrochloride,set(),"{'PM25:D03', 'PM25:D04', 'PM25:D02', 'PM25:D01'}",,,,,C07115
+Hygromycin B,set(),"{'PM25:D08', 'PM17:B07', 'PM17:B06', 'PM25:D05', 'PM25:D06', 'PM17:B05', 'PM17:B08', 'PM25:D07'}",,,,,C01925
+Fluorodeoxyuridine,set(),"{'PM25:D12', 'PM25:D09', 'PM25:D10', 'PM25:D11'}",,,,,C11736
+Sodium Salicylate,set(),"{'PM25:E04', 'PM25:E03', 'PM25:E01', 'PM25:E02'}",,,,,C00805
+Succinic Acid,{'C'},"{'PM25:E07', 'PM25:E08', 'PM25:E06', 'PM25:E05', 'PM01:A05'}",succ,EX_succ_e,cpd00036,EX_cpd00036_e0,C00042
+Ferulic acid,set(),"{'PM25:E11', 'PM25:E12', 'PM25:E10', 'PM25:E09'}",,,,,C06917
+Malic acid,set(),"{'PM25:F03', 'PM25:F02', 'PM25:F04', 'PM25:F01'}",,,,,C00497
+Tartaric acid,set(),"{'PM25:F08', 'PM25:F05', 'PM25:F07', 'PM25:F06'}",,,,,C02107
+Fumaric Acid,{'C'},"{'PM25:F10', 'PM25:F12', 'PM25:F09', 'PM25:F11', 'PM01:F05'}",fum,EX_fum_e,cpd00106,EX_cpd00106_e0,C00122
+5-Fluorocytosine,set(),"{'PM25:G04', 'PM25:G02', 'PM25:G01', 'PM25:G03'}",,,,,D00323
+Palladium(II) Chloride,set(),"{'PM25:G05', 'PM25:G07', 'PM25:G06', 'PM25:G08'}",,,,,
+Ibuprofen,set(),"{'PM25:G12', 'PM25:G09', 'PM25:G10', 'PM25:G11'}",,,,,C01588
+Chloroquine,set(),"{'PM25:H03', 'PM25:H01', 'PM25:H02', 'PM25:H04'}",,,,,C07625
+Cinnamic acid,set(),"{'PM25:H07', 'PM25:H08', 'PM25:H06', 'PM25:H05'}",,,,,C10438

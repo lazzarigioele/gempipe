@@ -1,0 +1,99 @@
+
+subgraph Part_1[Part 1]
+
+Input_proteomes{{-p/--proteomes}} --> Proteomes --> BRH
+Input_genbanks{{-gb/--genbanks}} --> Proteomes
+Input_genomes{{-g/--genomes}} --> initial_Genomes
+Input_taxids{{-t/--taxids}} --> NCBI_download --> initial_Genomes{{initial_Genomes}}
+Input_ref_proteome{{-rp/--refproteome}} --> BRH
+Input_ref_model{{-rm/--refmodel}} --> BRH --> translated_ref{{translated_ref}}
+Input_manual_corrections{{-mc/--mancor}} --> expanded_RB_recon
+
+initial_Genomes --> CDS_prediction --> initial_Proteomes{{initial_Proteomes}} --> Bio_metrics --> Busco(Busco)
+initial_Genomes --> Tech_metrics --> N50(N50) & n_contigs(n_contigs)
+N50 & n_contigs & Busco & initial_Genomes & initial_Proteomes --> Filtering 
+Filtering --> Genomes{{Genomes}} & Proteomes{{Proteomes}}
+Busco_db{{Busco_db}} --> Bio_metrics
+
+Proteomes --> Clustering --> initial_PAM{{initial_PAM}} & initial_Ref_seqs{{initial_Ref_seqs}}
+initial_PAM & initial_Ref_seqs & Proteomes & Genomes --> Gene_recovery
+
+
+Gene_recovery --> PAM{{PAM}} & Ref_seqs{{Ref_seqs}}
+Ref_seqs --> Func_annot --> Gene_functions{{Gene_functions}} --> RF_recon
+BiGG_genes{{BiGG_genes}} & Ref_seqs & Universe{{Universe}} --> RF_recon --> RF_draft_panmodel{{RF_draft_panmodel}}
+eggNOG_db{{eggNOG_db}} --> Func_annot
+
+RF_draft_panmodel & translated_ref --> expanded_RB_recon --> Initial_draft_panmodel{{Initial_draft_panmodel}}
+RF_draft_panmodel -. reference not provided .-> Initial_draft_panmodel
+Initial_draft_panmodel --> TCDB_expansion --> reannotation["reannotation"] --> deduplication --> draft_panmodel{{draft_panmodel}}
+
+end
+
+
+
+click Input_proteomes href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#starting-from-proteomes" "Link"
+click Input_genomes href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#starting-from-genomes" "Link"
+click Input_taxids href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#starting-from-genomes" "Link"
+click Input_genbanks href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#starting-from-genbanks" "Link"
+
+
+click Filtering href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#filtering-the-genomes" "Link"
+click Gene_recovery href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#gene-recovery" "Link"
+click RF_recon href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#draft-pan-gsmm-reference-free-reconstruction" "Link"
+click expanded_RB_recon href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#draft-pan-gsmm--expanded-reference-based-reconstruction" "Link"
+click TCDB_expansion href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#transport-reactions-expansion-with-tcdb" "Link"
+click reannotation href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#annotation-and-duplicates-removal" "Link"
+click deduplication href "https://gempipe.readthedocs.io/en/latest/part_1_gempipe_recon.html#annotation-and-duplicates-removal" "Link"
+
+
+style Part_1 fill:white
+
+
+
+
+style Input_proteomes fill:lightgreen
+style Input_genomes fill:lightgreen
+style Input_taxids fill:lightgreen
+style Input_genbanks fill:lightgreen
+style Input_ref_proteome fill:lightgreen
+style Input_ref_model fill:lightgreen
+style Input_manual_corrections fill:lightgreen
+
+style initial_Genomes fill:lightblue 
+style Busco fill:lightsalmon
+style N50 fill:lightsalmon
+style n_contigs fill:lightsalmon
+style Genomes fill:lightblue
+style initial_Proteomes fill:lightblue
+style Proteomes fill:lightblue
+style initial_PAM fill:lightblue
+style initial_Ref_seqs fill:lightblue
+style PAM fill:gold
+style Ref_seqs fill:lightblue
+style BiGG_genes fill:violet
+style Busco_db fill:violet
+style Universe fill:violet
+style eggNOG_db fill:violet
+style RF_draft_panmodel fill:lightblue
+style translated_ref fill:lightblue
+style Initial_draft_panmodel fill:lightblue
+style draft_panmodel fill:lightblue
+style Gene_functions fill:lightblue
+
+
+style Gene_recovery fill:whitesmoke
+style NCBI_download fill:whitesmoke
+style CDS_prediction fill:whitesmoke
+style Filtering fill:whitesmoke
+style Bio_metrics fill:whitesmoke
+style Tech_metrics fill:whitesmoke
+style Clustering fill:whitesmoke
+style BRH fill:whitesmoke
+style RF_recon fill:whitesmoke
+style expanded_RB_recon fill:whitesmoke
+style Func_annot fill:whitesmoke
+style TCDB_expansion fill:whitesmoke
+style reannotation fill:whitesmoke
+style deduplication fill:whitesmoke 
+

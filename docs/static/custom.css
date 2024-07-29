@@ -1,0 +1,7 @@
+/* Enable horizontal scrolling for tables */
+table {
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
+    font-size: 0.8rem !important;
+}
