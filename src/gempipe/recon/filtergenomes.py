@@ -84,13 +84,28 @@ def compute_bmetrics(logger, cores, buscodb):
         accession = file.replace('working/bmetrics/', '')
         accession = accession.replace(f'/run_{buscodb}/short_summary.json', '')
         jsonout = json.load(open(file, 'r'))
+        
+        
+        # handle different versions of busco
+        try: C = jsonout['results']['Complete']
+        except: C = jsonout['results']['Complete percentage']
+        try: sC = jsonout['results']['Single copy']
+        except: sC = jsonout['results']['Single copy percentage']
+        try: mC = jsonout['results']['Multi copy']
+        except: mC = jsonout['results']['Multi copy percentage']
+        try: F = jsonout['results']['Fragmented']
+        except: F = jsonout['results']['Fragmented percentage']
+        try: M = jsonout['results']['Missing']
+        except: M = jsonout['results']['Missing percentage']
+        
+        
         bmetrics_df.append({
             'accession': accession,
-            'C': jsonout['results']['Complete'],
-            'Single copy': jsonout['results']['Single copy'],
-            'Multi copy': jsonout['results']['Multi copy'],
-            'F': jsonout['results']['Fragmented'],
-            'M': jsonout['results']['Missing'],
+            'C': C,
+            'Single copy': sC,
+            'Multi copy': mC,
+            'F': F,
+            'M': M,
             'n_markers': jsonout['results']['n_markers']
         })
     bmetrics_df = pnd.DataFrame.from_records(bmetrics_df)
