@@ -7,7 +7,7 @@ package:
 
 source:
     url: https://github.com/lazzarigioele/gempipe/archive/v{{ version }}.tar.gz
-    sha256: d2cd0f2df7304c44d3c52293001e7cb0202d863dc2d251c574aed404ce074443
+    sha256: 547e812764177ba1171740e1b4ea564784dee6c395618ae125ffb0f28fe196f3
 
 
 build:
@@ -25,8 +25,12 @@ requirements:
     host:
         - python >=3.9
         - pip
+        - poetry >=1.7.1
+        - poetry-core >=1.8.1
+        - ipython >=8.7.0
     run:
         - python >=3.9
+        - ipython >=8.7.0
         - cobra >=0.29
         - pandas >=2.0.0
         - openpyxl >=3.1.0
