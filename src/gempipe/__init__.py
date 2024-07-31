@@ -20,8 +20,14 @@ from .curate.medium import *
 
 
 # cobra was already imported from other statements above
-try: cobra.Configuration().solver = "cplex"
-except:  cobra.Configuration().solver = "glpk" # "glpk_exact"
+# set the global solver:
+#try: cobra.Configuration().solver = "cplex"
+#except:  cobra.Configuration().solver = "glpk" # "glpk_exact"
+# get the global solver:
+cobra_config = cobra.Configuration()
+solver_name = str(cobra_config.solver.log).split(' ')[1]
+solver_name = solver_name.replace("optlang.", '')
+solver_name = solver_name.replace("_interface", '')
 
 
 from .flowchart import Flowchart
@@ -163,6 +169,7 @@ def main():
     current_date_time = datetime.now()
     formatted_date = current_date_time.strftime("%Y-%m-%d")
     logger.info(f"Welcome to gempipe! Launching the pipeline on {formatted_date}...")
+    logger.info(f'COBRApy started with solver: {solver_name}.')
     try: 
         # choose which subcommand to lauch: 
         if args.subcommand == 'recon':
