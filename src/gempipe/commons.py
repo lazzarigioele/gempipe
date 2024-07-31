@@ -78,6 +78,14 @@ def gather_results(results):
     for result in results: 
         if isinstance(result, pnd.DataFrame):
             all_df_combined.append(result)
+    
+    # handle the following pandas future warning:
+    # """FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. \
+    # In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. \
+    # To retain the old behavior, exclude the relevant entries before the concat operation."""
+    # To handle this: (1) Filter out empty DataFrames. (2) Filter out DataFrames that contain only NA values.
+    all_df_combined = [df for df in all_df_combined if not df.empty and not df.isna().all().all()]
+
     all_df_combined = pnd.concat(all_df_combined, axis=0)
     
     

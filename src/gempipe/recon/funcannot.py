@@ -11,7 +11,7 @@ from ..commons import get_outdir
 
 
 
-def func_annot(logger, cores, outdir, dbs): 
+def func_annot(logger, cores, outdir, dbs, dbmem): 
     
     
     # create subdirs without overwriting
@@ -100,7 +100,7 @@ def func_annot(logger, cores, outdir, dbs):
             -m diamond \
             --itype proteins \
             --trans_table 11 \
-            --excel \
+            --excel {'--dbmem' if dbmem else ''} \
             --output pan; mv pan.* working/annotation/"""
         process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
         process.wait()

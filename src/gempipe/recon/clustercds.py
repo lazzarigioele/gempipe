@@ -247,7 +247,7 @@ def create_pam(logger):
         
     # create the cluster to relative frequency dictionary: 
     # with the following binary expression, eventual '_stop' are included.
-    cluster_to_absfreq = pam.applymap(lambda x: 1 if (type(x) != float and x != '') else 0 ).sum(axis=1)
+    cluster_to_absfreq = pam.apply(lambda col: col.map(lambda x: 1 if (type(x) != float and x != '') else 0)).sum(axis=1)
     cluster_to_relfreq = round(cluster_to_absfreq / len(pam.columns) * 100, 1)
     cluster_to_relfreq = cluster_to_relfreq.to_dict()
     with open('working/clustering/cluster_to_relfreq.pickle', 'wb') as handler:

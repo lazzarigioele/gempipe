@@ -153,7 +153,7 @@ def draft_reconstruction(args, logger):
     ### PART 4. Reconstruction of the reference-free reaction network.
     
     # perform functional annotation
-    response = func_annot(logger, args.cores, outdir, args.dbs)
+    response = func_annot(logger, args.cores, outdir, args.dbs, args.dbmem)
     if response == 1: return 1
 
     # define the final annotation in the current directory: 

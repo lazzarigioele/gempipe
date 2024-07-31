@@ -97,6 +97,7 @@ def main():
         subparser.add_argument("--tcdb", action='store_true', help="Experimental feature: try to build transport reactions using TCDB.")
         subparser.add_argument("--dedup", action='store_true', help="Try to remove duplicate metabolites and reactions using MNX annotation, when a reference is provided.")
         subparser.add_argument("--norec", action='store_true', help="Skip gene recovery when starting from genomes.")
+        subparser.add_argument("--dbmem", action='store_true', help="Load the entire eggNOG-mapper database into memory (should speed up the functional annotation step).")
     
     
     # add arguments specifically for the 'autopilot' command

@@ -74,7 +74,16 @@ def derive_rpam(logger, outdir, cores, panmodel):
     
     # save the rpam
     rpam = all_df_combined
-    rpam = rpam.fillna(0)  # replace missing values with 0.
+    # now replace missing values with 0. 
+    # In 'older' pandas versions, fillna() was doing silent dowcasting (see https://medium.com/@felipecaballero/deciphering-the-cryptic-futurewarning-for-fillna-in-pandas-2-01deb4e411a1)
+    # In 'future' pandas versions, silent downcasting will be forbidden. 
+    # In 'middle' pandas versions, there is an option to simulate the future behaviour.
+    # What follows should guarantee the old behaviour in 'older' and 'middle' pandas versions:
+    try:
+        with pnd.option_context('future.no_silent_downcasting', True):
+            rpam = rpam.fillna(0).infer_objects()   # infer_objects() will do downcasting like in 'older' pandas versions
+    except: # OptionError: "No such keys(s): 'future.no_silent_downcasting'" ==> 'older' pandas version
+        rpam = rpam.fillna(0)  
     rpam = rpam.astype(int)  # force from float to int.
     rpam = rpam.T  # transpose: reactions as rows.
     rpam.to_csv(outdir + 'rpam.csv')
