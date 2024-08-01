@@ -7,6 +7,9 @@ import pickle
 import pandas as pnd
 
 
+import cobra
+
+
 from .getgenomes import download_genomes
 from .getgenomes import handle_manual_genomes
 from .extractcds import extract_cds
@@ -270,6 +273,15 @@ def recon_command(args, logger):
     # apply some automated curation (duplicates removal, ...)
     response = automated_curation(args, logger)
     if response == 1: return 1
+
+
+    # make a SBML copy of the final draft panmodel if requested
+    if args.sbml: 
+        outdir = get_outdir(args.outdir)
+        # load the final draft panmdoel
+        draft_panmodel = cobra.io.load_json_model(outdir + 'draft_panmodel.json')
+        # create a SBML copy
+        cobra.io.write_sbml_model(draft_panmodel, outdir + 'draft_panmodel.xml')
     
     
     return 0

@@ -13,18 +13,18 @@ from .species import derive_species_specific
 
 
 
-def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog):
+def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml):
     
     
     ### PART 1: derive strain-specific models
     
-    response = derive_strain_specific(logger, outdir, cores, panmodel, pam, report, gannots)
+    response = derive_strain_specific(logger, outdir, cores, panmodel, pam, report, gannots, sbml)
     if response == 1: return 1
 
 
     ### PART 2: gap-fill strain-specific models
     
-    response = strain_filler(logger, outdir, cores, panmodel, media_filepath, minflux)
+    response = strain_filler(logger, outdir, cores, panmodel, media_filepath, minflux, sbml)
     if response == 1: return 1
     
 
@@ -39,7 +39,7 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
     response = derive_rpam(logger, outdir, cores, panmodel)
     if response == 1: return 1
     
-    response = derive_species_specific(logger, outdir, cores, panmodel)
+    response = derive_species_specific(logger, outdir, cores, panmodel, sbml)
     if response == 1: return 1
 
 
@@ -95,7 +95,7 @@ def derive_command(args, logger):
     
     
     logger.info("Deriving strain- and species-specific metabolic models...")
-    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog)
+    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml)
     if response == 1: return 1
     
     

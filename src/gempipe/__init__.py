@@ -68,6 +68,7 @@ def main():
     derive_parser.add_argument("-m", "--media", metavar='', type=str, default='-', help="Medium definition file or folder containing media definitions, to be used during the automatic gap-filling.")
     derive_parser.add_argument("--minflux", metavar='', type=float, default=0.1, help="Minimum flux through the objective of strain-specific models.")
     derive_parser.add_argument("--biolog", action='store_true', help="Simulate Biolog's utilization tests on strain-specific models.")
+    derive_parser.add_argument("--sbml", action='store_true', help="Save the output GSMMs in SBML format (L3V1 FBC2) in addition to JSON.")
     
     
     # add arguments for the 'recon'/'autopilot' command
@@ -98,6 +99,7 @@ def main():
         subparser.add_argument("--dedup", action='store_true', help="Try to remove duplicate metabolites and reactions using MNX annotation, when a reference is provided.")
         subparser.add_argument("--norec", action='store_true', help="Skip gene recovery when starting from genomes.")
         subparser.add_argument("--dbmem", action='store_true', help="Load the entire eggNOG-mapper database into memory (should speed up the functional annotation step).")
+        subparser.add_argument("--sbml", action='store_true', help="Save the output GSMMs in SBML format (L3V1 FBC2) in addition to JSON.")
     
     
     # add arguments specifically for the 'autopilot' command

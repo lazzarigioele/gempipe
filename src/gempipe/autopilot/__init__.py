@@ -50,6 +50,15 @@ def autopilot_command(args, logger):
     if response == 1: return 1
 
 
+    # make a SBML copy of the final draft panmodel if requested
+    if args.sbml: 
+        outdir = get_outdir(args.outdir)
+        # load the final draft panmodel (prio-gapfilled)
+        draft_panmodel = cobra.io.load_json_model(outdir + 'draft_panmodel.json')
+        # create a SBML copy
+        cobra.io.write_sbml_model(draft_panmodel, outdir + 'draft_panmodel.xml')
+
+
     # now we have an already gap-filled and (partially) curated panmodel.
     # apply the derivation of strain- and species-specific metabolic models:
     # load input files:
@@ -68,7 +77,7 @@ def autopilot_command(args, logger):
     else: gannots = None
 
     
-    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog)
+    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml)
     if response == 1: return 1
     
     

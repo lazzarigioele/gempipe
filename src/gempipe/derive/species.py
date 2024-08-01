@@ -101,6 +101,7 @@ def task_derivespecies(spp, args):
     panmodel = args['panmodel']
     outdir = args['outdir']
     rpam = args['rpam']
+    sbml = args['sbml']
     
     
     # filter accessions for this spp
@@ -139,6 +140,7 @@ def task_derivespecies(spp, args):
     # save species specific model to disk
     spp_filename = spp.replace(' ', '_')  # remove spaces for the filename
     cobra.io.save_json_model(spp_model, f'{outdir}/{spp_filename}.json')
+    if sbml: cobra.io.write_sbml_model(spp_model, f'{outdir}/{spp_filename}.xml')
 
     
     # compose the new row
@@ -146,7 +148,7 @@ def task_derivespecies(spp, args):
 
 
 
-def derive_species_specific(logger, outdir, cores, panmodel):
+def derive_species_specific(logger, outdir, cores, panmodel, sbml):
 
 
     # log some messages
@@ -186,7 +188,7 @@ def derive_species_specific(logger, outdir, cores, panmodel):
             itertools.repeat('species'), 
             itertools.repeat(logger), 
             itertools.repeat(task_derivespecies),  # will return a new sequences dataframe (to be concat).
-            itertools.repeat({'strains_table': strains_table, 'panmodel': panmodel, 'outdir': outdir + 'species_model/', 'rpam': rpam}),
+            itertools.repeat({'strains_table': strains_table, 'panmodel': panmodel, 'outdir': outdir + 'species_model/', 'rpam': rpam, 'sbml': sbml}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
     

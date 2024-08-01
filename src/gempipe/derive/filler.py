@@ -32,6 +32,7 @@ def task_strainfiller(file, args):
     minflux = args['minflux']
     outdir = args['outdir']
     media = args['media']
+    sbml = args['sbml']
     
     
     # load the strain-specific model
@@ -154,6 +155,7 @@ def task_strainfiller(file, args):
     # save strain specific model to disk
     n_R = len(ss_model.reactions)
     cobra.io.save_json_model(ss_model, f'{outdir}/{accession}.json')
+    if sbml: cobra.io.write_sbml_model(ss_model, f'{outdir}/{accession}.xml')
     
     
     # compose the new row:
@@ -193,7 +195,7 @@ def get_gapfilling_matrix(results_df, outdir):
             
 
 
-def strain_filler(logger, outdir, cores, panmodel, media_filepath, minflux):
+def strain_filler(logger, outdir, cores, panmodel, media_filepath, minflux, sbml):
     
     
     # log some messages:
@@ -240,7 +242,7 @@ def strain_filler(logger, outdir, cores, panmodel, media_filepath, minflux):
             itertools.repeat('accession'), 
             itertools.repeat(logger), 
             itertools.repeat(task_strainfiller),  # will return a new sequences dataframe (to be concat).
-            itertools.repeat({'panmodel': panmodel, 'minflux': minflux, 'outdir': outdir + 'strain_models_gf', 'media': media}),
+            itertools.repeat({'panmodel': panmodel, 'minflux': minflux, 'outdir': outdir + 'strain_models_gf', 'media': media, 'sbml': sbml}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
     

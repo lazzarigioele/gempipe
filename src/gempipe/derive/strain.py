@@ -153,6 +153,7 @@ def task_derivestrain(accession, args):
     outdir = args['outdir']
     gannots = args['gannots']
     logger = args['logger']
+    sbml = args['sbml']
     
     
     # define key objects: 
@@ -194,6 +195,7 @@ def task_derivestrain(accession, args):
     
     # save strain specific model to disk
     cobra.io.save_json_model(ss_model, f'{outdir}/{accession}.json')
+    if sbml: cobra.io.write_sbml_model(ss_model, f'{outdir}/{accession}.xml')
     
     
     # compose the new row:
@@ -201,7 +203,7 @@ def task_derivestrain(accession, args):
 
 
 
-def  derive_strain_specific(logger, outdir, cores, panmodel, pam, report, gannots):
+def  derive_strain_specific(logger, outdir, cores, panmodel, pam, report, gannots, sbml):
 
     
     # log some messages
@@ -238,7 +240,7 @@ def  derive_strain_specific(logger, outdir, cores, panmodel, pam, report, gannot
             itertools.repeat('accession'), 
             itertools.repeat(logger), 
             itertools.repeat(task_derivestrain),  # will return a new sequences dataframe (to be concat).
-            itertools.repeat({'panmodel': panmodel, 'pam': pam, 'report': report, 'outdir': outdir + 'strain_models', 'gannots': gannots, 'logger': logger}),
+            itertools.repeat({'panmodel': panmodel, 'pam': pam, 'report': report, 'outdir': outdir + 'strain_models', 'gannots': gannots, 'logger': logger, 'sbml': sbml}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
     

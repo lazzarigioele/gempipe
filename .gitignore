@@ -54,6 +54,9 @@ validation/03_pseudomonas/validation_36/ss36_gempipe/working.old/rec_overlap/seq
 validation/dbs/eggnog_proteins.dmnd
 validation/dbs/eggnog.taxa.db
 validation/dbs/eggnog.db
+testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
+testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
+testing/09_aphidicola_auto2/working/dbs/eggnog.db
 dist/
 poetry.lock
 

@@ -52,3 +52,6 @@
 8.7G	./validation/dbs/eggnog_proteins.dmnd
 266M	./validation/dbs/eggnog.taxa.db
 39G	./validation/dbs/eggnog.db
+8.7G	./testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
+266M	./testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
+39G	./testing/09_aphidicola_auto2/working/dbs/eggnog.db
