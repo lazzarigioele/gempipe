@@ -15,6 +15,9 @@ import cobra
 from ..commons import get_blast_header
 from ..commons import get_retained_accessions
 from ..commons import read_refmodel
+
+
+from ..curate.gaps import import_from_universe
     
 
     
@@ -772,6 +775,12 @@ def network_rec(logger, cores, staining, identity, coverage, refmodel, refproteo
     
     # run gene recovery via functional annotation reading
     draft_panmodel = eggnogg_gpr_inflator(logger, draft_panmodel) 
+    
+    
+    # add the ATPM reaction for reference-free reconstructions
+    if refmodel == '-' and refproteome == '-':
+        universe = get_universe_template(logger, staining)   # reload to assure ATPM presence
+        import_from_universe(draft_panmodel, universe, 'ATPM')        
     
     
     # save draft pan-model to disk
