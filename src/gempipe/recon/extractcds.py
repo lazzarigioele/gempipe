@@ -73,7 +73,7 @@ def task_annotation(genome, args):
     os.remove(f'working/proteomes/{accession}.tbl')
     os.remove(f'working/proteomes/{accession}.tsv')
     os.remove(f'working/proteomes/{accession}.txt')
-    os.remove(f'working/proteomes/{accession}.gff')
+    shutil.move(f'working/proteomes/{accession}.gff', f'working/gff/{accession}.gff')
         
     
     # return a row for the dataframe
@@ -161,6 +161,7 @@ def extract_cds(logger, cores):
     logger.info("Extracting the CDSs from the genomes...")
     os.makedirs('working/proteomes/', exist_ok=True)
     os.makedirs('working/coordinates/', exist_ok=True)
+    os.makedirs('working/gff/', exist_ok=True)
 
 
     # load the previously created species_to_genome: 
