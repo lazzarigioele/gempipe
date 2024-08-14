@@ -13,7 +13,7 @@ from .species import derive_species_specific
 
 
 
-def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml):
+def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml, skipgf):
     
     
     ### PART 1: derive strain-specific models
@@ -23,20 +23,21 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
 
 
     ### PART 2: gap-fill strain-specific models
-    
-    response = strain_filler(logger, outdir, cores, panmodel, media_filepath, minflux, sbml)
-    if response == 1: return 1
+    if skipgf: logger.info("Skipping the strain-specific gap-filling step (--skipgf)...")
+    if not skipgf:
+        response = strain_filler(logger, outdir, cores, panmodel, media_filepath, minflux, sbml)
+        if response == 1: return 1
     
 
     ### PART 2bis: simulations
     if biolog:
-        response = strain_biolog_tests(logger, outdir, cores, pam, panmodel)
+        response = strain_biolog_tests(logger, outdir, cores, pam, panmodel, skipgf)
         if response == 1: return 1
     
     
     ### PART 3: derive species-specific models
     
-    response = derive_rpam(logger, outdir, cores, panmodel)
+    response = derive_rpam(logger, outdir, cores, panmodel, skipgf)
     if response == 1: return 1
     
     response = derive_species_specific(logger, outdir, cores, panmodel, sbml)
@@ -95,7 +96,7 @@ def derive_command(args, logger):
     
     
     logger.info("Deriving strain- and species-specific metabolic models...")
-    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml)
+    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml, args.skipgf)
     if response == 1: return 1
     
     

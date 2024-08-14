@@ -104,9 +104,13 @@ def task_biolog(accession, args):
     # retrive the arguments:
     biolog_mappings = args['biolog_mappings']
     outdir = args['outdir']
+    skipgf = args['skipgf']
     
     # read json/sbml file:
-    ss_model = cobra.io.load_json_model(outdir + f'strain_models_gf/{accession}.json')
+    if not skipgf:
+        ss_model = cobra.io.load_json_model(outdir + f'strain_models_gf/{accession}.json')
+    else:  # user asked to skip the strain-specific gapfilling step
+        ss_model = cobra.io.load_json_model(outdir + f'strain_models/{accession}.json')
     
     # perform the simulations: 
     outfile = outdir + 'biolog/' + accession + '.csv'
@@ -118,7 +122,7 @@ def task_biolog(accession, args):
 
 
 
-def strain_biolog_tests(logger, outdir, cores, pam, panmodel):
+def strain_biolog_tests(logger, outdir, cores, pam, panmodel, skipgf):
     
     
     # log some messages
@@ -168,7 +172,7 @@ def strain_biolog_tests(logger, outdir, cores, pam, panmodel):
             itertools.repeat('accession'), 
             itertools.repeat(logger), 
             itertools.repeat(task_biolog),  # will return a new sequences dataframe (to be concat).
-            itertools.repeat({'biolog_mappings': biolog_mappings, 'outdir': outdir}),
+            itertools.repeat({'biolog_mappings': biolog_mappings, 'outdir': outdir, 'skipgf': skipgf}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
     

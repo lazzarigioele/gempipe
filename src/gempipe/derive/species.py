@@ -19,10 +19,14 @@ def task_deriverpam(accession, args):
     
     # get the arguments
     outdir = args['outdir']
+    skipgf = args['skipgf']
     
     
     # extract the reactions for this model
-    ss_model = cobra.io.load_json_model(outdir + f'strain_models_gf/{accession}.json')
+    if not skipgf:
+        ss_model = cobra.io.load_json_model(outdir + f'strain_models_gf/{accession}.json')
+    else:  # user requested to skip the strain-specific gap-filling
+        ss_model = cobra.io.load_json_model(outdir + f'strain_models/{accession}.json')
     row_dict = {'accession': accession}
     for r in ss_model.reactions:
         row_dict[r.id] = 1
@@ -33,7 +37,7 @@ def task_deriverpam(accession, args):
 
 
 
-def derive_rpam(logger, outdir, cores, panmodel):
+def derive_rpam(logger, outdir, cores, panmodel, skipgf):
 
     
     # log some messages
@@ -62,7 +66,7 @@ def derive_rpam(logger, outdir, cores, panmodel):
             itertools.repeat('accession'), 
             itertools.repeat(logger), 
             itertools.repeat(task_deriverpam),  # will return a new sequences dataframe (to be concat).
-            itertools.repeat({'outdir': outdir}),
+            itertools.repeat({'outdir': outdir, 'skipgf': skipgf}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
     
