@@ -117,7 +117,7 @@ def task_derivespecies(spp, args):
     
     
     # get rids not present in all the strains of this species:
-    to_delete = rpam.index[rpam.sum(axis=1) != len(species_table)].to_list()
+    to_delete = species_rpam.index[species_rpam.sum(axis=1) != len(species_table)].to_list()
     
     
     # convert rid to panmodel's reaction
@@ -204,10 +204,6 @@ def derive_species_specific(logger, outdir, cores, panmodel, sbml):
     
     # save tabular output:
     all_df_combined.to_csv(outdir + 'derive_species.csv')
-    
-    
-    # cleaning
-    #os.remove(outdir + 'rpam.csv')
     
     
     return 0
