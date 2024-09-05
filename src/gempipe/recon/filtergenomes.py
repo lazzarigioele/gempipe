@@ -243,7 +243,7 @@ def compute_tmetrics(logger, cores):
     
 
 
-def filter_genomes(logger, cores, buscodb, buscoM, ncontigs, N50):
+def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50):
     
     
     # compoute biological metrics: 
@@ -265,18 +265,21 @@ def filter_genomes(logger, cores, buscodb, buscoM, ncontigs, N50):
     n_sco = list(set(bmetrics_df['n_markers'].to_list()))[0]
     
     
-    # check the inputted buscoM
-    if buscoM.endswith('%'): 
-        buscoM = buscoM[:-1]
-        buscoM = int(buscoM)
-    else: 
-        buscoM = int(buscoM)
-        buscoM = buscoM / n_sco * 100
-
+    # check the inputted buscoM / buscoF
+    busco_metrics = {'buscoM': buscoM, 'buscoF': buscoF}
+    for metric, value in busco_metrics.items():
+        if value.endswith('%'): 
+            value = value[:-1]
+            value = int(value)
+        else: 
+            value = int(value)
+            value = value / n_sco * 100
+        busco_metrics[metric] = value
+        
         
     # filter genomes and proteomes based on metrics
     all_genomes = set(tmetrics_df['accession'].to_list())
-    bmetrics_good = set(bmetrics_df[bmetrics_df['M'] <= buscoM]['accession'].to_list())
+    bmetrics_good = set(bmetrics_df[(bmetrics_df['M'] <= busco_metrics['buscoM']) & (bmetrics_df['F'] <= busco_metrics['buscoF'])]['accession'].to_list())
     tmetrics_good = set(tmetrics_df[(tmetrics_df['ncontigs'] <= ncontigs) & (tmetrics_df['N50'] >= N50)]['accession'].to_list())
     good_genomes = bmetrics_good.intersection(tmetrics_good)
     bad_genomes = all_genomes - good_genomes
