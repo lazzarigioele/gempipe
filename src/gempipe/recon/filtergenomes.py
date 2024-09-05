@@ -252,7 +252,6 @@ def figure_bmetrics(logger, outdir, bad_genomes):
     
     logger.info("Producing figure for biological metrics in working/figures/busco.png...")
     
-    
     df = get_allmeta_df()
 
     # create new col to show filtering: 
@@ -292,7 +291,40 @@ def figure_bmetrics(logger, outdir, bad_genomes):
 def figure_tmetrics(logger, outdir, bad_genomes): 
     
     
-    pass
+    for tmetric in ['ncontigs', 'N50', 'sum_len']: 
+        logger.info(f"Producing figure for technical metric {tmetric} in working/figures/{tmetric}.png...")
+    
+    
+        df = get_allmeta_df()
+        df['sum_len'] = df['sum_len'].apply(lambda x: x / 1000 / 1000)  # convert to Mb
+        
+        # create new col to show filtering: 
+        df['excluded'] = 0
+        for accession, row in df.iterrows(): 
+            if accession in bad_genomes: 
+                df.loc[accession, 'excluded'] = df.loc[accession, tmetric]
+
+        # define colors:
+        df = df.set_index('strain_isolate', drop=False)
+        colors = df['organism_name'].map({species: f'C{number}' for number, species in enumerate(df['organism_name'].unique())}).to_dict()
+
+        # draw bars:
+        fig, ax = plt.subplots()
+        _ = sb.barplot(df, x='strain_isolate', y=tmetric, hue='strain_isolate', legend=False, palette=colors, ax=ax)
+        _ = sb.barplot(df, x='strain_isolate', y='excluded', color='white', alpha=0.55, ax=ax)
+
+        # set tick labels:
+        ax.tick_params(axis='x', labelrotation=90)
+        [label.set_color(colors[label.get_text()]) for label in ax.get_xticklabels()]
+
+        # set legend:
+        plt.legend(handles=[Patch(color=f'C{number}', label=species) for number, species in enumerate(df['organism_name'].unique())], title='', loc='center left', bbox_to_anchor=(1.05, 0.5))
+
+        ax.figure.set_size_inches(0.2*len(df), 4)
+        ax.set_ylabel(tmetric)
+        sb.despine()
+
+        plt.savefig(outdir + f'figures/{tmetric}.png', dpi=300, bbox_inches='tight')
     
 
 
