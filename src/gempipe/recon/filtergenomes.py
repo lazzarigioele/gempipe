@@ -9,11 +9,15 @@ import shutil
 
 
 import pandas as pnd
+import seaborn as sb
+import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 
 
 from ..commons import chunkize_items
 from ..commons import load_the_worker
 from ..commons import gather_results
+from ..commons import get_allmeta_df
 
 
 
@@ -241,9 +245,54 @@ def compute_tmetrics(logger, cores):
     
     return 0
     
+    
+    
+def figure_bmetrics(logger, outdir, bad_genomes): 
+    
+    logger.info("Producing figure for biological metrics in working/figures/busco.png...")
+    df = get_allmeta_df()
+
+    # create new col to show filtering: 
+    df['excluded'] = 0
+    for accession, row in df.iterrows(): 
+        if accession in bad_genomes: 
+            df.loc[accession, 'excluded'] = 100
+    
+    # define colors:
+    df = df.set_index('strain_isolate', drop=False)
+    colors = df['organism_name'].map({species: f'C{number}' for number, species in enumerate(df['organism_name'].unique())}).to_dict()
+    
+    # draw bars:
+    ax = sb.barplot(df, x='strain_isolate', y='C', color='C8')
+    ax = sb.barplot(df, x='strain_isolate', y='F', color='C9', bottom=df['C'])
+    ax = sb.barplot(df, x='strain_isolate', y='M', color='C4', bottom=df['C']+df['F'])
+    ax = sb.barplot(df, x='strain_isolate', y='excluded', color='white', alpha=0.55)
+    
+    # set tick labels:
+    ax.tick_params(axis='x', labelrotation=90)
+    [label.set_color(colors[label.get_text()]) for label in ax.get_xticklabels()]
+    
+    # set legends:
+    l1 = plt.legend(handles=[Patch(color=color, label=metric) for color, metric in zip(['C8','C9','C4'], ['BUSCO C','BUSCO F','BUSCO M'])], title='', loc='upper left', bbox_to_anchor=(1.05, 0.5))
+    l2 = plt.legend(handles=[Patch(color=f'C{number}', label=species) for number, species in enumerate(df['organism_name'].unique())], title='', loc='lower left', bbox_to_anchor=(1.05, 0.5))
+    ax.add_artist(l1)  # l2 implicitly replaces l1
+    
+    ax.figure.set_size_inches(0.2*len(df), 4)
+    ax.set_ylabel('%')
+    sb.despine()
+    
+    plt.savefig(outdir + 'figures/bmetrics.png', dpi=300, bbox_inches='tight')
 
 
-def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50):
+
+def figure_tmetrics(logger, outdir, bad_genomes): 
+    
+    
+    pass
+    
+
+
+def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50, outdir):
     
     
     # compoute biological metrics: 
@@ -283,7 +332,7 @@ def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50):
     tmetrics_good = set(tmetrics_df[(tmetrics_df['ncontigs'] <= ncontigs) & (tmetrics_df['N50'] >= N50)]['accession'].to_list())
     good_genomes = bmetrics_good.intersection(tmetrics_good)
     bad_genomes = all_genomes - good_genomes
-    
+        
     
     # load the previously created dictionaries: 
     with open('working/genomes/species_to_genome.pickle', 'rb') as handler:
@@ -310,6 +359,12 @@ def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50):
         pickle.dump(species_to_genome_new, file)
     with open('working/proteomes/species_to_proteome.pickle', 'wb') as file:
         pickle.dump(species_to_proteome_new, file)
+        
+        
+    # produce plot for genome filtering 
+    os.makedirs(outdir + 'figures/', exist_ok=True)
+    figure_bmetrics(logger, outdir, bad_genomes)
+    figure_tmetrics(logger, outdir, bad_genomes)
     
     
     return 0

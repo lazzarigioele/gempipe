@@ -97,7 +97,7 @@ def draft_reconstruction(args, logger):
         if response == 1: return 1    
     
         # filter the genomes based on technical/biological metrics:
-        response = filter_genomes(logger, args.cores, args.buscodb, args.buscoM, args.buscoF, args.ncontigs, args.N50)
+        response = filter_genomes(logger, args.cores, args.buscodb, args.buscoM, args.buscoF, args.ncontigs, args.N50, outdir)
         if response == 1: return 1  
     
     elif args.taxids != '-':
@@ -110,7 +110,7 @@ def draft_reconstruction(args, logger):
         if response == 1: return 1 
     
         # filter the genomes based on technical/biological metrics:
-        response = filter_genomes(logger, args.cores, args.buscodb, args.buscoM, args.buscoF, args.ncontigs, args.N50)
+        response = filter_genomes(logger, args.cores, args.buscodb, args.buscoM, args.buscoF, args.ncontigs, args.N50, outdir)
         if response == 1: return 1  
     
     else:

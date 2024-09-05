@@ -55,4 +55,5 @@
 8.7G	./testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
 266M	./testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
 39G	./testing/09_aphidicola_auto2/working/dbs/eggnog.db
-183M	./applications/dacicola/gempipe/working/clustering/combined.faa
+88M	./applications/dacicola/gempipe/working/clustering/sequences.csv
+90M	./applications/dacicola/gempipe/working/clustering/combined.faa

@@ -419,3 +419,22 @@ def strenghten_uptakes(model):
                 r.lower_bound = -1000
 
     return exr_ori
+
+
+
+def get_allmeta_df(): 
+    
+    
+    genomes_df = pnd.read_csv('working/genomes/genomes.csv', index_col=0)
+    genomes_df = genomes_df.set_index('assembly_accession', drop=True, verify_integrity=True)
+
+    bmetrics_df = pnd.read_csv('working/filtering/bmetrics.csv', index_col=0)
+    bmetrics_df = bmetrics_df.set_index('accession', drop=True, verify_integrity=True)
+
+    tmetrics_df = pnd.read_csv('working/filtering/tmetrics.csv', index_col=0)
+    tmetrics_df = tmetrics_df.set_index('accession', drop=True, verify_integrity=True)
+    
+    allmeta_df = pnd.concat([genomes_df, bmetrics_df, tmetrics_df], axis=1)
+    
+    allmeta_df = allmeta_df[['organism_name', 'strain_isolate', 'C', 'F', 'M', 'ncontigs', 'sum_len', 'N50']]
+    return allmeta_df
