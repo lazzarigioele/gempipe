@@ -57,8 +57,14 @@ validation/dbs/eggnog.db
 testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
 testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
 testing/09_aphidicola_auto2/working/dbs/eggnog.db
+applications/dacicola/gempipe/working/rec_broken/sequences.csv
+applications/dacicola/gempipe/working/rec_masking/sequences.csv
 applications/dacicola/gempipe/working/clustering/sequences.csv
 applications/dacicola/gempipe/working/clustering/combined.faa
+applications/dacicola/gempipe/working/rec_overlap/sequences.csv
+applications/dacicola/gempipe/working/dbs/eggnog_proteins.dmnd
+applications/dacicola/gempipe/working/dbs/eggnog.taxa.db
+applications/dacicola/gempipe/working/dbs/eggnog.db
 dist/
 poetry.lock
 

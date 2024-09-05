@@ -4,9 +4,13 @@ import subprocess
 import multiprocessing
 import itertools
 import shutil
+import glob
 
 
 import pandas as pnd
+import seaborn as sb
+import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 
 
 from ..commons import chunkize_items
@@ -155,7 +159,51 @@ def create_seq_to_coords(logger):
     
 
 
-def extract_cds(logger, cores):
+def figure_cds(logger, outdir):
+    
+    
+    logger.info("Producing figure for extracted CDSs in working/figures/n_cds.png...")
+    
+    # create summary dataframe  (should be equivalent to 'all_df_combined'): 
+    prodigal_summary = []
+    for file in glob.glob(f"working/proteomes/*.faa"):
+        accession = file.replace('working/proteomes/', '').replace('.faa', '')
+        n_cds = open(file).read().count('>')
+        prodigal_summary.append({'assembly_accession': accession, 'n_cds': n_cds})
+    prodigal_summary = pnd.DataFrame.from_records(prodigal_summary)
+    prodigal_summary = prodigal_summary.set_index('assembly_accession', drop=True, verify_integrity=True)
+    
+    # load the genomes_df to have the 'strain_isolate' and 'organism_name' columns:
+    genomes_df = pnd.read_csv('working/genomes/genomes.csv', index_col=0)
+    genomes_df = genomes_df.set_index('assembly_accession', drop=True, verify_integrity=True)
+    
+    # concat the dataframes:
+    df = pnd.concat([genomes_df, prodigal_summary], axis=1)
+    
+    
+    # define colors:
+    df = df.set_index('strain_isolate', drop=False)
+    colors = df['organism_name'].map({species: f'C{number}' for number, species in enumerate(df['organism_name'].unique())}).to_dict()
+        
+    # draw bars:
+    fig, ax = plt.subplots()
+    _ = sb.barplot(df, x='strain_isolate', y='n_cds', palette=colors, hue='strain_isolate', legend=False, ax=ax)
+    
+    # set tick labels
+    ax.tick_params(axis='x', labelrotation=90)
+    [label.set_color(colors[label.get_text()]) for label in ax.get_xticklabels()]
+    
+    # set legend:
+    plt.legend(handles=[Patch(color=f'C{number}', label=species) for number, species in enumerate(df['organism_name'].unique())], title='', loc='center left', bbox_to_anchor=(1.05, 0.5))
+    
+    ax.figure.set_size_inches(0.2*len(df), 4)
+    sb.despine()
+
+    plt.savefig(outdir + 'figures/n_cds.png', dpi=300, bbox_inches='tight')
+    
+    
+    
+def extract_cds(logger, cores, outdir):
     
     
     # create sub-directory without overwriting:
@@ -163,6 +211,7 @@ def extract_cds(logger, cores):
     os.makedirs('working/proteomes/', exist_ok=True)
     os.makedirs('working/coordinates/', exist_ok=True)
     os.makedirs('working/gff/', exist_ok=True)
+    os.makedirs(outdir + 'figures/', exist_ok=True)
 
 
     # load the previously created species_to_genome: 
@@ -189,6 +238,8 @@ def extract_cds(logger, cores):
         # save the species_to_proteome and seq_to_coords dicts
         create_species_to_proteome(logger)
         create_seq_to_coords(logger)
+        
+        figure_cds(logger, outdir)
         return 0
     
 
@@ -224,6 +275,7 @@ def extract_cds(logger, cores):
     create_seq_to_coords(logger)
     
     
+    figure_cds(logger, outdir)
     return 0
 
 

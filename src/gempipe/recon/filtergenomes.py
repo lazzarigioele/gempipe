@@ -249,7 +249,10 @@ def compute_tmetrics(logger, cores):
     
 def figure_bmetrics(logger, outdir, bad_genomes): 
     
+    
     logger.info("Producing figure for biological metrics in working/figures/busco.png...")
+    
+    
     df = get_allmeta_df()
 
     # create new col to show filtering: 
@@ -263,10 +266,11 @@ def figure_bmetrics(logger, outdir, bad_genomes):
     colors = df['organism_name'].map({species: f'C{number}' for number, species in enumerate(df['organism_name'].unique())}).to_dict()
     
     # draw bars:
-    ax = sb.barplot(df, x='strain_isolate', y='C', color='C8')
-    ax = sb.barplot(df, x='strain_isolate', y='F', color='C9', bottom=df['C'])
-    ax = sb.barplot(df, x='strain_isolate', y='M', color='C4', bottom=df['C']+df['F'])
-    ax = sb.barplot(df, x='strain_isolate', y='excluded', color='white', alpha=0.55)
+    fig, ax = plt.subplots()
+    _ = sb.barplot(df, x='strain_isolate', y='C', color='C8', ax=ax)
+    _ = sb.barplot(df, x='strain_isolate', y='F', color='C9', bottom=df['C'], ax=ax)
+    _ = sb.barplot(df, x='strain_isolate', y='M', color='C4', bottom=df['C']+df['F'], ax=ax)
+    _ = sb.barplot(df, x='strain_isolate', y='excluded', color='white', alpha=0.55, ax=ax)
     
     # set tick labels:
     ax.tick_params(axis='x', labelrotation=90)

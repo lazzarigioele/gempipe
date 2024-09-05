@@ -93,7 +93,7 @@ def draft_reconstruction(args, logger):
         if response == 1: return 1
     
         # extract the CDSs from the genomes:
-        response = extract_cds(logger, args.cores)
+        response = extract_cds(logger, args.cores, outdir)
         if response == 1: return 1    
     
         # filter the genomes based on technical/biological metrics:
@@ -106,7 +106,7 @@ def draft_reconstruction(args, logger):
         if response == 1: return 1 
     
         # extract the CDSs from the genomes:
-        response = extract_cds(logger, args.cores)
+        response = extract_cds(logger, args.cores, outdir)
         if response == 1: return 1 
     
         # filter the genomes based on technical/biological metrics:
