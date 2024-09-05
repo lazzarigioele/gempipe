@@ -1,12 +1,49 @@
 import pickle
 import os
 import subprocess
+import multiprocessing
+import itertools
 import glob
 import json
 import shutil 
 
 
 import pandas as pnd
+
+
+from ..commons import chunkize_items
+from ..commons import load_the_worker
+from ..commons import gather_results
+
+
+
+def task_bmetrics(proteome, args): 
+        
+        
+    # retrive the arguments:
+    buscodb = args['buscodb']
+
+
+    # get the basename without extension:
+    basename = os.path.basename(proteome)
+    accession, _ = os.path.splitext(basename)
+
+
+    # launch the command
+    with open(f'working/logs/stdout_bmetrics_{accession}.txt', 'w') as stdout, open(f'working/logs/stderr_bmetrics_{accession}.txt', 'w') as stderr: 
+        command = f"""busco -f --cpu 1 \
+            -i {proteome} \
+            --mode proteins \
+            --lineage_dataset {buscodb} \
+            --download_path working/bmetrics/db/ \
+            --out_path working/bmetrics/ \
+            --out {accession}"""
+        process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
+        process.wait()
+
+
+    # return a row for the dataframe
+    return [{'accession': accession, 'completed': True}]
 
 
 
@@ -37,40 +74,59 @@ def compute_bmetrics(logger, cores, buscodb):
             return 0
     
     
+    # create the worlder for biological metrics: 
+    os.makedirs('working/bmetrics/', exist_ok=True)
+    
+    
     # check if the user specified a database
     if buscodb == 'bacteria_odb10': 
         logger.warning("We strongly suggest to set a more specific Busco database instead of 'bacteria_odb10' (use -b/--buscodb). To show the available Busco databases type 'gempipe recon -b show'.")
     
     
-    # create the worlder for biological metrics: 
-    os.makedirs('working/bmetrics/', exist_ok=True)
+    # assuring the presence of the specified database
+    logger.debug("Downloading the specified BUSCO database...")
+    with open(f'working/logs/stdout_bmetrics_dbdownload.txt', 'w') as stdout, open(f'working/logs/stderr_bmetrics_dbdownload.txt', 'w') as stderr: 
+        command = f"""busco -f \
+            --download {buscodb} \
+            --download_path working/bmetrics/db/ \
+            --out_path working/bmetrics/"""
+        process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
+        process.wait()
+    logger.debug(f"Download completed for {buscodb}.")
         
-        
-    # execute busco over each genome: 
+      
+    # create items for parallelization: 
+    items = []
     for species in species_to_proteome.keys(): 
         for proteome in species_to_proteome[species]: 
+            items.append(proteome)
             
             
-            # get the basename without extension:
-            basename = os.path.basename(proteome)
-            accession, _ = os.path.splitext(basename)
-            
-            
-            # launch the command
-            with open(f'working/logs/stdout_bmetrics_{accession}.txt', 'w') as stdout, open(f'working/logs/stderr_bmetrics_{accession}.txt', 'w') as stderr: 
-                command = f"""busco -f --cpu {cores} \
-                    -i {proteome} \
-                    --mode proteins \
-                    --lineage_dataset {buscodb} \
-                    --download_path working/bmetrics/db/ \
-                    --out_path working/bmetrics/ \
-                    --out {accession}"""
-                process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
-                process.wait()
-                
-                
-            # logger message:
-            logger.debug(f"Done for {accession}.")
+    # randomize and divide in chunks: 
+    chunks = chunkize_items(items, cores)
+    
+    
+    # initialize the globalpool:
+    globalpool = multiprocessing.Pool(processes=cores, maxtasksperchild=1)
+    
+    
+    # start the multiprocessing: 
+    results = globalpool.imap(
+        load_the_worker, 
+        zip(chunks, 
+            range(cores), 
+            itertools.repeat(['accession', 'completed']), 
+            itertools.repeat('accession'), 
+            itertools.repeat(logger), 
+            itertools.repeat(task_bmetrics),
+            itertools.repeat({'buscodb': buscodb}),
+        ), chunksize = 1)
+    all_df_combined = gather_results(results)  # all_df_combined can be ignored.
+    
+    
+    # empty the globalpool
+    globalpool.close() # prevent the addition of new tasks.
+    globalpool.join() 
             
     
     # logger message

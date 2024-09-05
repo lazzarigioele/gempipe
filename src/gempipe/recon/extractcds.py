@@ -73,6 +73,7 @@ def task_annotation(genome, args):
     os.remove(f'working/proteomes/{accession}.tbl')
     os.remove(f'working/proteomes/{accession}.tsv')
     os.remove(f'working/proteomes/{accession}.txt')
+    # gff files could be useful for pangenome analysis like Raory/Panaroo:
     shutil.move(f'working/proteomes/{accession}.gff', f'working/gff/{accession}.gff')
         
     
