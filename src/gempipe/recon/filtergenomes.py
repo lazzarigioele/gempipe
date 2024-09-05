@@ -31,7 +31,7 @@ def task_bmetrics(proteome, args):
 
     # launch the command
     with open(f'working/logs/stdout_bmetrics_{accession}.txt', 'w') as stdout, open(f'working/logs/stderr_bmetrics_{accession}.txt', 'w') as stderr: 
-        command = f"""busco -f --cpu 1 \
+        command = f"""busco -f --cpu 1 --offline \
             -i {proteome} \
             --mode proteins \
             --lineage_dataset {buscodb} \
@@ -87,9 +87,9 @@ def compute_bmetrics(logger, cores, buscodb):
     logger.debug("Downloading the specified BUSCO database...")
     with open(f'working/logs/stdout_bmetrics_dbdownload.txt', 'w') as stdout, open(f'working/logs/stderr_bmetrics_dbdownload.txt', 'w') as stderr: 
         command = f"""busco -f \
-            --download {buscodb} \
             --download_path working/bmetrics/db/ \
-            --out_path working/bmetrics/"""
+            --out_path working/bmetrics/ \
+            --download {buscodb}"""
         process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
         process.wait()
     logger.debug(f"Download completed for {buscodb}.")
