@@ -36,6 +36,7 @@ def get_metadata_table(logger, rawmeta_filepath):
     
     
     # select desired columns:
+    # Warning: the same columns are used in handle_manual_genomes()
     metadata = metadata[['assembly_accession', 'bioproject', 'biosample', 'excluded_from_refseq', 'refseq_category', 'relation_to_type_material', 'species_taxid', 'organism_name', 'strain_isolate', 'version_status', 'seq_rel_date', 'submitter' ]] 
     
     
@@ -215,6 +216,22 @@ def handle_manual_genomes(logger, genomes):
     logger.debug(f"Saved the species-to-genome dictionary to file: ./working/genomes/species_to_genome.pickle.")
     
     
+    # Create the genomes/genomes.csv like if genomes were downloaded from NCBI.
+    # Useful during plot generation.
+    # Warning: the same columns are used in get_metadata_table(). But here only 2 can be filled: 'organism_name' and 'strain_isolate'.
+    metadata = []  # list of dicsts, future df.
+    for species in species_to_genome.keys(): 
+        for genome in species_to_genome[species]:
+            basename = os.path.basename(genome)
+            accession, _ = os.path.splitext(basename)
+            metadata.append({'assembly_accession': accession, 'strain_isolate': accession, 'organism_name': species})
+    metadata = pnd.DataFrame.from_records(metadata)
+    columns = ['assembly_accession', 'bioproject', 'biosample', 'excluded_from_refseq', 'refseq_category', 'relation_to_type_material', 'species_taxid', 'organism_name', 'strain_isolate', 'version_status', 'seq_rel_date', 'submitter' ]
+    for col in columns:  # add missing columns: 
+        if col not in metadata.columns: 
+            metadata[col] = None
+    # save the metadata table to disk:
+    metadata.to_csv("working/genomes/genomes.csv")
     
     
     return 0
