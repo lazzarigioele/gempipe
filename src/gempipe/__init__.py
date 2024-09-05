@@ -88,7 +88,7 @@ def main():
         subparser.add_argument("-s", "--staining", metavar='', type=str, default='neg', help="Gram staining, 'pos' or 'neg'.")
         subparser.add_argument("-b", "--buscodb", metavar='', type=str, default='bacteria_odb10', help="Busco database to use ('show' to see the list of available databases).")
         subparser.add_argument("--buscoM", metavar='', type=str, default='2%', help="Maximum number of missing Busco's single copy orthologs (absolute or percentage).")
-        subparser.add_argument("--buscoF", metavar='', type=str, default='5%', help="Maximum number of fragmented Busco's single copy orthologs (absolute or percentage).")
+        subparser.add_argument("--buscoF", metavar='', type=str, default='100%', help="Maximum number of fragmented Busco's single copy orthologs (absolute or percentage).")
         subparser.add_argument("--ncontigs", metavar='', type=int, default=200, help="Maximum number of contigs allowed per genome.")
         subparser.add_argument("--N50", metavar='', type=int, default=50000, help="Minimum N50 allowed per genome.")
         subparser.add_argument("--identity", metavar='', type=int, default=30, help="Minimum percentage amino acidic sequence identity to use when aligning against the BiGG gene database.")
