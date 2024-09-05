@@ -11,6 +11,9 @@ testing/
 validation/
 
 
+applications/
+
+
 src/generated/metanetx_4_4/
 src/generated/mnx_dicts_M/
 src/generated/mnx_dicts_R/
