@@ -23,7 +23,7 @@ def close_boundaries(model):
 
 
 
-def verify_egc(model, mid, escher=False, threshold=1e-5): 
+def verify_egc(model, mid, escher=False, threshold=1e-5, verbose=True): 
     """Test the presence of energy-generating cycles (EGCs). 
     
     Can also output a model for Escher, with just the reactions composing the cycle. 
@@ -33,7 +33,10 @@ def verify_egc(model, mid, escher=False, threshold=1e-5):
         mid (str): metabolite ID for which the EGC must be checked. Warning: must be without compartment, so for example ``atp`` instead of ``atp_c``. 
         escher (bool): save a reduced ``cobra.Model`` in the current directory. To be loaded in Escher. 
         threshold (float): values below this treshold are considered as 0.
+        verbose (bool): if True, show results of the test even if no EGC was detected.
         
+    Returns:
+        bool: ``True`` if an EGC is detected.
     """
     
     # changes as not permament: 
@@ -96,31 +99,57 @@ def verify_egc(model, mid, escher=False, threshold=1e-5):
         
         
         # log some messages
-        print(dissip.reaction)
-        print(obj_value , ':', res.status )
-    
-    
-        # get suspect !=0 fluxes (if any)
+        if obj_value != 0 or verbose:
+            print(dissip.reaction)
+            print(obj_value , ':', res.status )
+
+
+            # get suspect !=0 fluxes (if any)
+            if obj_value != 0: 
+                fluxes = res.fluxes
+                print()  # skip a line befor printing the EGC members
+
+                # get interesting fluxes (0.001 tries to take into account the approximation in glpk and cplex solvers)
+                fluxes_interesting = fluxes[((fluxes > 0.001) | (fluxes < -0.001)) & (fluxes.index != f'__dissip__{mid}')]
+                print(fluxes_interesting.to_string())
+
+
+                # create a model for escher
+                if escher:  
+                    model_copy = model.copy()
+                    all_rids = [r.id for r in model_copy.reactions]
+                    to_delete = set(all_rids) - set(fluxes_interesting.index)
+                    model_copy.remove_reactions(to_delete)
+                    cobra.io.save_json_model(model_copy, f'__dissip__{mid}' + '.json')
+                    print(f'__dissip__{mid}' + '.json', "saved in current directory.")
+                    
         if obj_value != 0: 
-            fluxes = res.fluxes
-            print()  # skip a line befor printing the EGC members
-            
-            # get interesting fluxes (0.001 tries to take into account the approximation in glpk and cplex solvers)
-            fluxes_interesting = fluxes[((fluxes > 0.001) | (fluxes < -0.001)) & (fluxes.index != f'__dissip__{mid}')]
-            print(fluxes_interesting.to_string())
-            
-            
-            # create a model for escher
-            if escher:  
-                model_copy = model.copy()
-                all_rids = [r.id for r in model_copy.reactions]
-                to_delete = set(all_rids) - set(fluxes_interesting.index)
-                model_copy.remove_reactions(to_delete)
-                cobra.io.save_json_model(model_copy, f'__dissip__{mid}' + '.json')
-                print(f'__dissip__{mid}' + '.json', "saved in current directory.")
-                
+            return True
+        else: return False
+
+
+
+def verify_egc_all(model):
+    """Quickly check the presence of EGCs for the main metabolites.
+    
+    Internally calls `verify_egc()` over a list of metabolite IDs.
+    
+    Args:
+        model (cobra.Model): target model.
+    """
+    
+    mids_to_check = ['atp','ctp','gtp','utp','itp','nadh','nadph','fadh2','accoa','glu__L','q8h2']
+    all_results = []
+    for mid in mids_to_check:
+        result = verify_egc(model, mid, verbose=False)
+        all_results.append(~result)
+    if all(all_results):
+        print("No energy-generating cycles (EGCs) found.")
+        
+        
                 
 
+    
 def check_sink_demand(model, verbose=True):
     """Check presence of sink and demand reactions.
     

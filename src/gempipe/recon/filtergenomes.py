@@ -380,6 +380,7 @@ def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50, outdir
     # re-writes the dictionaries:
     species_to_genome_new = {}
     species_to_proteome_new = {}
+    bad_quality = []
     for species in species_to_genome.keys(): 
         species_to_genome_new[species] = []
         species_to_proteome_new[species] = []
@@ -390,7 +391,10 @@ def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50, outdir
                 species_to_genome_new[species].append(genome)
                 species_to_proteome_new[species].append(proteome)
             else: 
-                logger.info("Found a bad quality genome: " + genome + ". Will be ignored in subsequent analysis.")
+                logger.debug("Found a bad quality genome: " + genome + ". Will be ignored in subsequent analysis.")
+                bad_quality.append(genome)
+    logger.info(f"Found {len(bad_quality)} bad quality genomes. They will be ignored in subsequent analysis. Use --verbose to see the list.")
+                
     with open('working/genomes/species_to_genome.pickle', 'wb') as file:
         pickle.dump(species_to_genome_new, file)
     with open('working/proteomes/species_to_proteome.pickle', 'wb') as file:
