@@ -250,7 +250,7 @@ def compute_tmetrics(logger, cores):
 def figure_bmetrics(logger, outdir, bad_genomes): 
     
     
-    logger.info("Producing figure for biological metrics in working/figures/busco.png...")
+    logger.info("Producing figure for biological metrics in {outdir}/figures/busco.png...")
     
     df = get_allmeta_df()
 
@@ -292,7 +292,7 @@ def figure_tmetrics(logger, outdir, bad_genomes):
     
     
     for tmetric in ['ncontigs', 'N50', 'sum_len']: 
-        logger.info(f"Producing figure for technical metric {tmetric} in working/figures/{tmetric}.png...")
+        logger.info(f"Producing figure for technical metric {tmetric} in {{outdir}}/figures/{tmetric}.png...")
     
     
         df = get_allmeta_df()

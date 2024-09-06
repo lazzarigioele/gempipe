@@ -30,6 +30,7 @@ from .pimp import denovo_annotation
 from .duplicates import solve_duplicates
 from .reporting import create_panmodel_proteome
 from .reporting import create_report
+from .reporting import create_recon_plots
 
 
 from ..commons import get_md5_string
@@ -73,6 +74,15 @@ def draft_reconstruction(args, logger):
     
     # assure the output directory
     outdir = get_outdir(args.outdir)
+    
+    
+    #########
+    #########
+    ## TMP ##
+    #########
+    #########
+    _ = create_recon_plots(logger, outdir)
+    
     
     
     ### PART 1. Obtain the preoteomes. 
@@ -243,6 +253,10 @@ def automated_curation(args, logger):
     
     # create a report table
     response = create_report(logger, outdir)
+    if response == 1: return 1
+
+    # create plots showing >>>preliminar<<< reconstruction metrics
+    create_recon_plots(logger, outdir)
     if response == 1: return 1
 
     

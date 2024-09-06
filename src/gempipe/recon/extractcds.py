@@ -162,7 +162,7 @@ def create_seq_to_coords(logger):
 def figure_cds(logger, outdir):
     
     
-    logger.info("Producing figure for extracted CDSs in working/figures/n_cds.png...")
+    logger.info("Producing figure for extracted CDSs in {outdir}/figures/n_cds.png...")
     
     # create summary dataframe  (should be equivalent to 'all_df_combined'): 
     prodigal_summary = []
