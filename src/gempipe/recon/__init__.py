@@ -76,15 +76,6 @@ def draft_reconstruction(args, logger):
     outdir = get_outdir(args.outdir)
     
     
-    #########
-    #########
-    ## TMP ##
-    #########
-    #########
-    _ = create_recon_plots(logger, outdir)
-    
-    
-    
     ### PART 1. Obtain the preoteomes. 
     
     if args.genbanks != '-':
@@ -255,8 +246,8 @@ def automated_curation(args, logger):
     response = create_report(logger, outdir)
     if response == 1: return 1
 
-    # create plots showing >>>preliminar<<< reconstruction metrics
-    create_recon_plots(logger, outdir)
+    # create plots showing >preliminar< reconstruction metrics
+    create_recon_plots(logger, outdir, args.cores)
     if response == 1: return 1
 
     
