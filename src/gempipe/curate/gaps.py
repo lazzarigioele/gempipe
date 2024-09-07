@@ -610,7 +610,7 @@ def query_pam(name=[], ko=[], kr=[], km=[], kt=[], ec=[], des=[], pfam=[], annot
     # mark clusters that are already modeled:
     if model != None: 
         results_columns = list(results.columns)
-        results['modeled'] = False
+        results['modeled'] = 'False'
         for cluster in results.index:
             if cluster in [g.id for g in model.genes]:
                 results.loc[cluster, 'modeled'] = ', '.join([r.id for r in model.genes.get_by_id(cluster).reactions])
