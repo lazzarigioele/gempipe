@@ -127,7 +127,7 @@ def remove_rids(model, rids, inverse=False):
 
 
         
-def perform_gapfilling(model, universe, mid=None, slim=None, minflux=1.0, exr=False, nsol=3, penalties=None, verbose=True, timeout=None, logger=None): 
+def perform_gapfilling(model, universe, mid=None, slim=None, minflux=1.0, exr=False, nsol=3, penalties=None, verbose=True, timeout=None, logger=None, boost=False): 
     """Propose gap-filling solutions for the specified objective. 
     
     It's possible to gap-fill also for the biosynthesis of a specific metabolite.
@@ -144,6 +144,7 @@ def perform_gapfilling(model, universe, mid=None, slim=None, minflux=1.0, exr=Fa
         verbose (bool): if False, just return the lisr of reaction IDs without printing any further information.
         timeout (int): max seconds to wait for the gapfilling step. If ``None``, gap-filling won't be temporized. 
         logger (logging.Logger): write exception on a logger instad of using print().
+        boost (bool): if ``True``, consider the current nutritive sources as unlimited (for example, if LB of ``EX_fe3_e`` is -0.0075, it will be raised to -1000).
         
     Returns:
         list: IDs of reactions proposed during the 1st solution.
@@ -180,6 +181,13 @@ def perform_gapfilling(model, universe, mid=None, slim=None, minflux=1.0, exr=Fa
         if mid != None:
             model.objective = add_demand(model, mid)
             universe.objective = add_demand(universe, mid)
+            
+            
+        # if requested, boost the actual sources:
+        for r in model.reactions: 
+            if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'): # if exchange reaction
+                if r.lower_bound < 0: 
+                    r.lower_bound = -1000
 
 
         # if requested, try to reduce the universe complexity:
