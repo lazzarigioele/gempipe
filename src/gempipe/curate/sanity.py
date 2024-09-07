@@ -303,7 +303,7 @@ def check_artificial_atoms(model, preview=None, verbose=True):
         # Matches any uppercase letter (A-Z) followed by zero or more lowercase letters (a-z)
         atoms = set(re.findall(r'[A-Z][a-z]*', formula))
         base = set(['C', 'H', 'O', 'N', 'P', 'S'])
-        metals = set(['Fe', 'Co', 'As', 'Ca', 'Cd', 'Cl', 'Cu', 'Hg', 'K', 'Mg', 'Mo', 'Na', 'Ni', 'Se', 'Zn', 'Mn'])
+        metals = set(['Ag', 'Fe', 'Co', 'As', 'Ca', 'Cd', 'Cl', 'Cu', 'Hg', 'K', 'Mg', 'Mo', 'Na', 'Ni', 'Se', 'Zn', 'Mn'])
         safe_atoms = base.union(metals)
         strange = atoms - safe_atoms
         
