@@ -4,6 +4,7 @@ import os
 from importlib import resources
 
 
+from IPython.display import display
 import pandas as pnd
 import cobra
 from cobra.flux_analysis.gapfilling import GapFiller
@@ -652,7 +653,8 @@ def import_from_universe(model, universe, rid, bounds=None, gpr=None):
                     to_remove.append(g)
             cobra.manipulation.delete.remove_genes(model, to_remove, remove_reactions=True)
 
-                
+
+
 def ss_preview(panmodel, accession):
     """Create a preview of a strain-specific model given its accession and the starting draft pan-GSMM.
     
@@ -780,3 +782,96 @@ def add_metabolite(model, mid, formula=None, charge=None, name=''):
     m.charge = charge
     m.compartment = mid.rsplit('_')[-1]
         
+
+
+def search_similar(panmodel, rid, field='ko', unmod=False, species=None, showgpr=False, forceshow=False):
+    """Search the PAM for gene clusters having functional annotation similar to that of gene clusters involved in the specified reaction of the pan-GSMM.
+    
+    First, the reaction `rid` is extracted from the `panmodel`. 
+    Then, gene clusters are extracted from its GPR.
+    The PAM is finally searched for all the gene clusters having the same functional annotation in one of the following fields: 'ko', 'pfam', 'kt', and 'ec'.
+    
+    Args:
+        panmodel (cobra.Model): a pan-GSMM having the reaction `rid`.
+        rid (str): ID of the reaction using the gene clusters on which to focus the search.
+        field (str): functional annotation field to be used to extract similar gene clusters.
+        unmod (bool): if ``True``, show only gene clusters that are not yet part of the `panmodel` (unmodeled).
+        species (str): show only columns (genomes) having this substring in thier name (useful to filter for particular species or strains).
+        showgpr (bool): if ``True``, show the pan-GSMM GPR of the selected reaction `rid`.
+        forceshow (bool): if ``True``, display the results table with no limits on the number of displayable rows and columns. 
+    
+    Returns:
+        pandas.DataFrame: PAM-derived results table, mixing presence/absence of gene clusters together with their functional annotation.
+
+    """
+    
+    # check the selected feat: 
+    available_fields = ['ko', 'pfam', 'kt', 'ec']
+    if field not in available_fields: 
+        print(f"field not recognized. Please use one of {available_fields}.")
+        return
+    results = None
+    
+    
+    # show GPR in panmodel
+    if showgpr: 
+        print(f'GPR for {rid}:', panmodel.reactions.get_by_id(rid).gene_reaction_rule)
+    involved_genes = [g.id for g in panmodel.reactions.get_by_id(rid).genes]
+    
+    
+    if field == 'pfam': 
+        terms = list(set(query_pam(annot=True).loc[involved_genes, ]['PFAMs'].to_list()))
+        if terms == ['-']: return None
+        presence_absence = query_pam(pfam=terms, model=panmodel)
+        func_annot = query_pam(pfam=terms, annot=True)[['Description', 'KEGG_ko', 'PFAMs']]
+        
+        
+    if field == 'ko': 
+        terms = list(set(query_pam(annot=True).loc[involved_genes, ]['KEGG_ko'].to_list()))
+        if terms == ['-']: return None
+        terms = [i.replace('ko:', '') for i in terms]
+        presence_absence = query_pam(ko=terms, model=panmodel)
+        func_annot = query_pam(ko=terms, annot=True)[['Description', 'KEGG_ko', 'PFAMs']]
+        
+        
+    if field == 'kt': 
+        terms = list(set(query_pam(annot=True).loc[involved_genes, ]['KEGG_TC'].to_list()))
+        if terms == ['-']: return None
+        presence_absence = query_pam(kt=terms, model=panmodel)
+        func_annot = query_pam(kt=terms, annot=True)[['Description', 'KEGG_TC', 'PFAMs']]
+        
+        
+    if field == 'ec': 
+        terms = list(set(query_pam(annot=True).loc[involved_genes, ]['EC'].to_list()))
+        if terms == ['-']: return None
+        presence_absence = query_pam(ec=terms, model=panmodel)
+        func_annot = query_pam(ec=terms, annot=True)[['Description', 'EC', 'KEGG_ko', 'PFAMs']]
+            
+    
+    # filter for desired columns: 
+    if species != None: 
+        presence_absence = presence_absence[['modeled']+[i for i in presence_absence.columns if species in i]]
+
+    
+    # merge presence/absence table and functional annootation table:
+    results = pnd.concat([presence_absence, func_annot], axis=1)
+    
+    
+    # exclude gene clusters already modeled: 
+    if unmod: 
+        results = results[results['modeled']=='False']
+    
+    
+    # compute percentage of genomes with no representative (among this selection of gene clusters)
+    empty_columns = results.columns[results.isnull().all()]
+    structure_cols = ['modeled', 'Description', 'EC', 'KEGG_ko', 'PFAMs', 'KEGG_TC']  # cols not related to input genomes
+    empty_columns = set(empty_columns) - set(structure_cols)
+    all_columns = set(list(results.columns)) - set(structure_cols)
+    print(f'Empty columns: {len(empty_columns)}/{len(all_columns)} ({round(len(empty_columns)/len(all_columns)*100,1)}%); {field} terms considered: {str(terms)}.')
+
+    
+    if forceshow:   # temporary allow pandas/jupyter to display with no row/col limits: 
+        with pnd.option_context('display.max_rows', None, 'display.max_columns', None):
+            display(results)
+    
+    return results
