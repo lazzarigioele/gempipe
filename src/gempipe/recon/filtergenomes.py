@@ -284,8 +284,12 @@ def figure_bmetrics(logger, outdir, bad_genomes):
     ax.set_ylabel('%')
     sb.despine()
     
-    plt.savefig(outdir + 'figures/bmetrics.png', dpi=300, bbox_inches='tight')
-
+    try: 
+        plt.savefig(outdir + 'figures/bmetrics.png', dpi=300, bbox_inches='tight')
+    except:  # the png image could be too large, so we produce svg
+        logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/bmetrics.svg...")
+        plt.savefig(outdir + 'figures/bmetrics.svg', bbox_inches='tight')
+        
 
 
 def figure_tmetrics(logger, outdir, bad_genomes): 
@@ -324,8 +328,12 @@ def figure_tmetrics(logger, outdir, bad_genomes):
         ax.set_ylabel(tmetric)
         sb.despine()
 
-        plt.savefig(outdir + f'figures/{tmetric}.png', dpi=300, bbox_inches='tight')
-    
+        try: 
+            plt.savefig(outdir + f'figures/{tmetric}.png', dpi=300, bbox_inches='tight')
+        except:  # the png image could be too large, so we produce svg
+            logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/{tmetric}.svg...")
+            plt.savefig(outdir + f'figures/{tmetric}.svg', bbox_inches='tight')
+            
 
 
 def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50, outdir, nofig):

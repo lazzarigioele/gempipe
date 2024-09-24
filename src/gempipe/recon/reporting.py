@@ -217,7 +217,11 @@ def figure_genes_recovered(logger, outdir, pam_modeled):
     ax.set_ylabel('modeled gene clusters')
     sb.despine()
 
-    plt.savefig(outdir + 'figures/genes_recovered.png', dpi=300, bbox_inches='tight')
+    try: 
+        plt.savefig(outdir + 'figures/genes_recovered.png', dpi=300, bbox_inches='tight')
+    except:  # the png image could be too large, so we produce svg
+        logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/genes_recovered.svg...")
+        plt.savefig(outdir + 'figures/genes_recovered.svg', bbox_inches='tight')
 
 
     
@@ -370,8 +374,12 @@ def figure_modeled_genes(logger, outdir, pam_modeled, report, draft_panmodel):
     ax.set_ylabel('modeled gene clusters')
     sb.despine()
 
-    plt.savefig(outdir + 'figures/genes_modeled.png', dpi=300, bbox_inches='tight')
-
+    try: 
+        plt.savefig(outdir + 'figures/genes_modeled.png', dpi=300, bbox_inches='tight')
+    except:  # the png image could be too large, so we produce svg
+        logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/genes_modeled.svg...")
+        plt.savefig(outdir + 'figures/genes_modeled.svg', bbox_inches='tight')
+        
     
 
 def task_rpam_parse_column(accession, args): 
@@ -594,8 +602,12 @@ def figure_modeled_reactions(logger, outdir, cores, pam_modeled, report, draft_p
     ax.set_ylabel('modeled reactions')
     sb.despine()
 
-    plt.savefig(outdir + 'figures/reactions_modeled.png', dpi=300, bbox_inches='tight')
-    
+    try: 
+        plt.savefig(outdir + 'figures/reactions_modeled.png', dpi=300, bbox_inches='tight')
+    except:  # the png image could be too large, so we produce svg
+        logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/reactions_modeled.svg...")
+        plt.savefig(outdir + 'figures/reactions_modeled.svg', bbox_inches='tight')
+            
 
     
 def create_recon_plots(logger, outdir, cores, nofig):
