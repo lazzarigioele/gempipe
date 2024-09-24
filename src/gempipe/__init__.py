@@ -102,7 +102,8 @@ def main():
         subparser.add_argument("--norec", action='store_true', help="Skip gene recovery when starting from genomes.")
         subparser.add_argument("--dbmem", action='store_true', help="Load the entire eggNOG-mapper database into memory (should speed up the functional annotation step).")
         subparser.add_argument("--sbml", action='store_true', help="Save the output GSMMs in SBML format (L3V1 FBC2) in addition to JSON.")
-    
+        subparser.add_argument("--nofig", action='store_true', help="Skip the generation of figures.")
+        
     
     # add arguments specifically for the 'autopilot' command
     autopilot_parser.add_argument("-m", "--media", metavar='', type=str, default='-', help="Medium definition file or folder containing media definitions, to be used during the automatic gap-filling.")

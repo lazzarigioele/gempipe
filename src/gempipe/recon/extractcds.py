@@ -199,11 +199,16 @@ def figure_cds(logger, outdir):
     ax.figure.set_size_inches(0.2*len(df), 4)
     sb.despine()
 
-    plt.savefig(outdir + 'figures/n_cds.png', dpi=300, bbox_inches='tight')
+    try: 
+        plt.savefig(outdir + 'figures/n_cds.png', dpi=300, bbox_inches='tight')
+    except:  # the png image could be too large, so we produce svg
+        logger.info("PNG was too large: producing the SVG version instead {outdir}/figures/n_cds.svg...")
+        plt.savefig(outdir + 'figures/n_cds.svg', bbox_inches='tight')
+        
     
     
     
-def extract_cds(logger, cores, outdir):
+def extract_cds(logger, cores, outdir, nofig):
     
     
     # create sub-directory without overwriting:
@@ -239,7 +244,8 @@ def extract_cds(logger, cores, outdir):
         create_species_to_proteome(logger)
         create_seq_to_coords(logger)
         
-        figure_cds(logger, outdir)
+        if not nofig:
+            figure_cds(logger, outdir)
         return 0
     
 
@@ -275,7 +281,8 @@ def extract_cds(logger, cores, outdir):
     create_seq_to_coords(logger)
     
     
-    figure_cds(logger, outdir)
+    if not nofig:
+        figure_cds(logger, outdir)
     return 0
 
 

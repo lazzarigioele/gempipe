@@ -598,7 +598,7 @@ def figure_modeled_reactions(logger, outdir, cores, pam_modeled, report, draft_p
     
 
     
-def create_recon_plots(logger, outdir, cores):
+def create_recon_plots(logger, outdir, cores, nofig):
     
     
     logger.info("Producing figures for preliminary reconstruction metrics...")
@@ -615,9 +615,10 @@ def create_recon_plots(logger, outdir, cores):
     
     
     # make 3 plots:
-    figure_genes_recovered(logger, outdir, pam_modeled)
-    figure_modeled_genes(logger, outdir, pam_modeled, report, draft_panmodel)
-    figure_modeled_reactions(logger, outdir, cores, pam_modeled, report, draft_panmodel)
+    if not nofig: 
+        figure_genes_recovered(logger, outdir, pam_modeled)
+        figure_modeled_genes(logger, outdir, pam_modeled, report, draft_panmodel)
+        figure_modeled_reactions(logger, outdir, cores, pam_modeled, report, draft_panmodel)
     
     
     return 0

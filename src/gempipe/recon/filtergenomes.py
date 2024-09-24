@@ -328,7 +328,7 @@ def figure_tmetrics(logger, outdir, bad_genomes):
     
 
 
-def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50, outdir):
+def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50, outdir, nofig):
     
     
     # compoute biological metrics: 
@@ -402,9 +402,10 @@ def filter_genomes(logger, cores, buscodb, buscoM, buscoF, ncontigs, N50, outdir
         
         
     # produce plot for genome filtering 
-    os.makedirs(outdir + 'figures/', exist_ok=True)
-    figure_bmetrics(logger, outdir, bad_genomes)
-    figure_tmetrics(logger, outdir, bad_genomes)
+    if not nofig: 
+        os.makedirs(outdir + 'figures/', exist_ok=True)
+        figure_bmetrics(logger, outdir, bad_genomes)
+        figure_tmetrics(logger, outdir, bad_genomes)
     
     
     return 0

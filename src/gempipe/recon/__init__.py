@@ -94,11 +94,11 @@ def draft_reconstruction(args, logger):
         if response == 1: return 1
     
         # extract the CDSs from the genomes:
-        response = extract_cds(logger, args.cores, outdir)
+        response = extract_cds(logger, args.cores, outdir, args.nofig)
         if response == 1: return 1    
     
         # filter the genomes based on technical/biological metrics:
-        response = filter_genomes(logger, args.cores, args.buscodb, args.buscoM, args.buscoF, args.ncontigs, args.N50, outdir)
+        response = filter_genomes(logger, args.cores, args.buscodb, args.buscoM, args.buscoF, args.ncontigs, args.N50, outdir, args.nofig)
         if response == 1: return 1  
     
     elif args.taxids != '-':
@@ -107,11 +107,11 @@ def draft_reconstruction(args, logger):
         if response == 1: return 1 
     
         # extract the CDSs from the genomes:
-        response = extract_cds(logger, args.cores, outdir)
+        response = extract_cds(logger, args.cores, outdir, args.nofig)
         if response == 1: return 1 
     
         # filter the genomes based on technical/biological metrics:
-        response = filter_genomes(logger, args.cores, args.buscodb, args.buscoM, args.buscoF, args.ncontigs, args.N50, outdir)
+        response = filter_genomes(logger, args.cores, args.buscodb, args.buscoM, args.buscoF, args.ncontigs, args.N50, outdir, args.nofig)
         if response == 1: return 1  
     
     else:
@@ -247,7 +247,7 @@ def automated_curation(args, logger):
     if response == 1: return 1
 
     # create plots showing >preliminar< reconstruction metrics
-    create_recon_plots(logger, outdir, args.cores)
+    create_recon_plots(logger, outdir, args.cores, args.nofig)
     if response == 1: return 1
 
     
