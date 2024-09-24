@@ -283,16 +283,16 @@ def populate_results_df(logger):
                 # get the contig
                 couple_contigs = set([seq_to_coords[seq]['contig'] for seq in cds_ids])
                 if len(couple_contigs) != 1:
-                    logger.error(f"Found different contigs in this couple: {cds_ids}.")
-                    return 1
+                    logger.info(f"Found different contigs in this couple: {cds_ids} (accession {couple_accession}).")
+                    #return 1
                 couple_contig = list(couple_contigs)[0]
                 
                 
                 # get the strand
                 couple_strands = set([seq_to_coords[seq]['strand'] for seq in cds_ids])
                 if len(couple_strands) != 1:
-                    logger.error(f"Found different strands in this couple: {cds_ids}.")
-                    return 1
+                    logger.info(f"Found different strands in this couple: {cds_ids} (accession {couple_accession}).")
+                    #return 1
                 couple_strand = list(couple_strands)[0]
                 
                 
@@ -302,11 +302,11 @@ def populate_results_df(logger):
                 end_1 = seq_to_coords[cds_ids[0]]['end']
                 end_2 = seq_to_coords[cds_ids[1]]['end']
                 if start_1 > end_1: 
-                    logger.error(f"Found start_1 < end_1 in this couple: {cds_ids}.")
-                    return 1
+                    logger.info(f"Found start_1 < end_1 in this couple: {cds_ids} (accession {couple_accession}).")
+                    #return 1
                 if start_2 > end_2: 
-                    logger.error(f"Found start_2 < end_2 in this couple: {cds_ids}.")
-                    return 1
+                    logger.info(f"Found start_2 < end_2 in this couple: {cds_ids} (accession {couple_accession}).")
+                    #return 1
                 couple_start = min([start_1, start_2])
                 couple_end = max([end_1, end_2])
                 

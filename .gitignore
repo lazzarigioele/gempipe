@@ -44,6 +44,7 @@ testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
 testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
 testing/09_aphidicola_auto2/working/dbs/eggnog.db
 applications/lacticaseibacillus/working/coordinates/seq_to_coords.pickle
+applications/lacticaseibacillus/working/rec_broken/pam.csv
 applications/lacticaseibacillus/working/clustering/representatives.faa.clstr
 applications/lacticaseibacillus/working/clustering/pam.csv
 applications/lacticaseibacillus/working/clustering/acc_to_seqs.pickle
