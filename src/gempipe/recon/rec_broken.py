@@ -121,7 +121,7 @@ def alignment_to_couples(accession, cluster_to_relfreq, seq_to_cluster):
 
 
     
-def get_updated_column(pam, accession, df_couples, cluster_to_relfreq, seq_to_cluster):
+def get_updated_column(pam, accession, df_couples, cluster_to_relfreq, seq_to_cluster, seq_to_coords):
     
     
     # this module will release a new updated pam.
@@ -151,6 +151,15 @@ def get_updated_column(pam, accession, df_couples, cluster_to_relfreq, seq_to_cl
             cds_ids = couple['qseqid'].to_list()
             cds_prognums = sorted([i.rsplit('_', 1)[1] for i in cds_ids]) 
             prefix = cds_ids[0].split('_', 1)[0]
+            
+            
+            # determine if the two CDSs are coming from the same contig AND the same strand.
+            # WIth the following implementation, broken proteins are recovered only if they come from the same contig. 
+            # Further controls are applied during populate_results_df(), raising errors.
+            if seq_to_coords[cds_ids[0]]['contig'] != seq_to_coords[cds_ids[1]]['contig']:
+                continue
+            if seq_to_coords[cds_ids[0]]['strand'] != seq_to_coords[cds_ids[1]]['strand']:
+                continue
 
 
             # remove eventual pieces from the gained cluster cell, then add the glued protein
@@ -198,6 +207,7 @@ def task_recbroken(genome, args):
     pam = args['pam']
     cluster_to_relfreq = args['cluster_to_relfreq']
     seq_to_cluster = args['seq_to_cluster']
+    seq_to_coords = args['seq_to_coords']
     
     
     # get the accession and proteome file:
@@ -230,7 +240,7 @@ def task_recbroken(genome, args):
     
     
     # parse the good couples to update the pam column:
-    pam_column = get_updated_column(pam, accession, df_couples, cluster_to_relfreq, seq_to_cluster)
+    pam_column = get_updated_column(pam, accession, df_couples, cluster_to_relfreq, seq_to_cluster, seq_to_coords)
 
     
     # return new rows for load_the_worker():
@@ -283,16 +293,16 @@ def populate_results_df(logger):
                 # get the contig
                 couple_contigs = set([seq_to_coords[seq]['contig'] for seq in cds_ids])
                 if len(couple_contigs) != 1:
-                    logger.info(f"Found different contigs in this couple: {cds_ids} (accession {couple_accession}).")
-                    #return 1
+                    logger.error(f"Found different contigs in this couple: {cds_ids} (accession {couple_accession}).")
+                    return 1
                 couple_contig = list(couple_contigs)[0]
                 
                 
                 # get the strand
                 couple_strands = set([seq_to_coords[seq]['strand'] for seq in cds_ids])
                 if len(couple_strands) != 1:
-                    logger.info(f"Found different strands in this couple: {cds_ids} (accession {couple_accession}).")
-                    #return 1
+                    logger.error(f"Found different strands in this couple: {cds_ids} (accession {couple_accession}).")
+                    return 1
                 couple_strand = list(couple_strands)[0]
                 
                 
@@ -303,10 +313,10 @@ def populate_results_df(logger):
                 end_2 = seq_to_coords[cds_ids[1]]['end']
                 if start_1 > end_1: 
                     logger.info(f"Found start_1 < end_1 in this couple: {cds_ids} (accession {couple_accession}).")
-                    #return 1
+                    return 1
                 if start_2 > end_2: 
                     logger.info(f"Found start_2 < end_2 in this couple: {cds_ids} (accession {couple_accession}).")
-                    #return 1
+                    return 1
                 couple_start = min([start_1, start_2])
                 couple_end = max([end_1, end_2])
                 
@@ -511,6 +521,8 @@ def recovery_broken(logger, cores):
         cluster_to_relfreq = pickle.load(handler)
     with open('working/clustering/seq_to_cluster.pickle', 'rb') as handler:
         seq_to_cluster = pickle.load(handler)
+    with open('working/coordinates/seq_to_coords.pickle', 'rb') as handler:
+        seq_to_coords = pickle.load(handler)
     
     
     # load the previously created species_to_proteome: 
@@ -542,7 +554,7 @@ def recovery_broken(logger, cores):
             itertools.repeat('accession'), 
             itertools.repeat(logger), 
             itertools.repeat(task_recbroken),  # will return a new updated pam.
-            itertools.repeat({'pam': pam, 'cluster_to_relfreq': cluster_to_relfreq, 'seq_to_cluster': seq_to_cluster, }),
+            itertools.repeat({'pam': pam, 'cluster_to_relfreq': cluster_to_relfreq, 'seq_to_cluster': seq_to_cluster, 'seq_to_coords': seq_to_coords}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
     
