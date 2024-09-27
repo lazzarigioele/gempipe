@@ -43,6 +43,7 @@
 170M	./applications/lacticaseibacillus/working/coordinates/seq_to_coords.pickle
 69M	./applications/lacticaseibacillus/working/rec_broken/pam.csv
 135M	./applications/lacticaseibacillus/working/rec_broken/seq_to_coords.pickle
+862M	./applications/lacticaseibacillus/working/rec_broken/sequences.csv
 105M	./applications/lacticaseibacillus/working/clustering/representatives.faa.clstr
 73M	./applications/lacticaseibacillus/working/clustering/pam.csv
 45M	./applications/lacticaseibacillus/working/clustering/acc_to_seqs.pickle

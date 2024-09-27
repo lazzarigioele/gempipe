@@ -208,6 +208,8 @@ def task_recbroken(genome, args):
     cluster_to_relfreq = args['cluster_to_relfreq']
     seq_to_cluster = args['seq_to_cluster']
     seq_to_coords = args['seq_to_coords']
+    # WARNING: seq_to_coords can be really heavy (eg 200 MB) when genomes are hundreds.
+    # This can significanlty slow down the creation of child processess, and RAM comsumption can be really high.
     
     
     # get the accession and proteome file:
@@ -289,20 +291,25 @@ def populate_results_df(logger):
                     return 1
                 couple_accession = list(couple_accessions)[0]
                 
+                # repeating controls for contigs and strands, first time in get_updated_column(),
+                # is needed because, while the generation of working/rec_broken/edits can take into account contigs/strands,
+                # the generation of working/rec_broken/couples (used here) cannot. 
                 
                 # get the contig
                 couple_contigs = set([seq_to_coords[seq]['contig'] for seq in cds_ids])
-                if len(couple_contigs) != 1:
-                    logger.error(f"Found different contigs in this couple: {cds_ids} (accession {couple_accession}).")
-                    return 1
+                if len(couple_contigs) != 1:  # same control implemented in get_updated_column()
+                    #logger.debug(f"Found different contigs in this couple: {cds_ids} (accession {couple_accession}).")
+                    #return 1
+                    continue
                 couple_contig = list(couple_contigs)[0]
                 
                 
                 # get the strand
                 couple_strands = set([seq_to_coords[seq]['strand'] for seq in cds_ids])
-                if len(couple_strands) != 1:
-                    logger.error(f"Found different strands in this couple: {cds_ids} (accession {couple_accession}).")
-                    return 1
+                if len(couple_strands) != 1:  # same control implemented in get_updated_column()
+                    #logger.debug(f"Found different strands in this couple: {cds_ids} (accession {couple_accession}).")
+                    #return 1
+                    continue
                 couple_strand = list(couple_strands)[0]
                 
                 
@@ -580,15 +587,15 @@ def recovery_broken(logger, cores):
 
     
     # update the squence to coordinates dict (removing filtered genomes, and protein frags)
-    update_seq_to_coords(logger)
+    update_seq_to_coords(logger)  # creates 'working/rec_broken/seq_to_coords.pickle'
     
     
     # update the sequences dataframe (removing protein frags)
-    update_sequences(logger)
+    update_sequences(logger)  # creates 'working/rec_broken/sequences.csv'
     
     
     # join together all the strain specific edits dicts
-    join_edits_dict(logger)
+    join_edits_dict(logger)  # creates 'working/rec_broken/edits_dict.pickle'
     
     
     # create a summary for this module reading the results dataframes: 

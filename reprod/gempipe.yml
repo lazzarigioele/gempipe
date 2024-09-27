@@ -661,12 +661,13 @@ dependencies:
       - deprecated==1.2.14
       - docplex==2.25.236
       - exceptiongroup==1.2.0
-      - gempipe==1.35.2
+      - gempipe==1.35.3
       - gitdb==4.0.11
       - gitpython==3.1.41
       - iniconfig==2.0.0
       - jsonschema==4.20.0
       - jsonschema-specifications==2023.12.1
+      - matplotlib-venn==1.1.1
       - memote==0.17.0
       - multimethod==1.10
       - mypy-extensions==1.0.0
