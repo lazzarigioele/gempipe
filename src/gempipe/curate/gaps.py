@@ -880,7 +880,7 @@ def search_similar(panmodel, rid, field='ko', unmod=False, species=None, showgpr
     structure_cols = ['modeled', 'Description', 'EC', 'KEGG_ko', 'PFAMs', 'KEGG_TC']  # cols not related to input genomes
     empty_columns = set(empty_columns) - set(structure_cols)
     all_columns = set(list(results.columns)) - set(structure_cols)
-    print(f'Empty columns: {len(empty_columns)}/{len(all_columns)} ({round(len(empty_columns)/len(all_columns)*100,1)}%); {field} terms considered: {str(terms)}.')
+    print(f'Non-empty columns: {len(all_columns)-len(empty_columns)}/{len(all_columns)} ({round((len(all_columns)-len(empty_columns))/len(all_columns)*100,1)}%); {field} terms considered: {str(terms)}.')
 
     
     if forceshow:   # temporary allow pandas/jupyter to display with no row/col limits: 
