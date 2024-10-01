@@ -192,8 +192,7 @@ def figure_genes_recovered(logger, outdir, pam_modeled):
     genomes_df = genomes_df.set_index('assembly_accession', drop=True, verify_integrity=True)
     # retain only quality-filtered genomes retaining the original order: 
     genomes_df = genomes_df.loc[[i for i in genomes_df.index if i in rec_summary.index.to_list()], ]   
-    df = pnd.concat([genomes_df, rec_summary], axis=1)
-                                
+    df = pnd.concat([genomes_df, rec_summary], axis=1)                          
     
     # define colors:
     df = df.set_index('strain_isolate', drop=False)

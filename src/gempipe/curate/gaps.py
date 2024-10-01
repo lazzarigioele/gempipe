@@ -848,6 +848,13 @@ def search_similar(panmodel, rid, field='ko', unmod=False, species=None, showgpr
         func_annot = query_pam(ec=terms, annot=True)[['Description', 'EC', 'KEGG_ko', 'PFAMs']]
             
     
+    # expand terms as they could be multiple (eg: ['K01620', 'K01620,K20801'])
+    terms_exp = [] 
+    for i in terms: 
+        terms_exp = terms_exp + i.split(',')
+    terms_exp = list(set(terms_exp))
+            
+    
     # filter for desired columns: 
     if species != None: 
         presence_absence = presence_absence[['modeled']+[i for i in presence_absence.columns if species in i]]
@@ -867,7 +874,7 @@ def search_similar(panmodel, rid, field='ko', unmod=False, species=None, showgpr
     structure_cols = ['modeled', 'Description', 'EC', 'KEGG_ko', 'PFAMs', 'KEGG_TC']  # cols not related to input genomes
     empty_columns = set(empty_columns) - set(structure_cols)
     all_columns = set(list(results.columns)) - set(structure_cols)
-    print(f'Empty columns: {len(empty_columns)}/{len(all_columns)} ({round(len(empty_columns)/len(all_columns)*100,1)}%); {field} terms considered: {str(terms)}.')
+    print(f'Empty columns: {len(empty_columns)}/{len(all_columns)} ({round(len(empty_columns)/len(all_columns)*100,1)}%); {field} terms considered: {str(terms_exp)}.')
 
     
     if forceshow:   # temporary allow pandas/jupyter to display with no row/col limits: 
