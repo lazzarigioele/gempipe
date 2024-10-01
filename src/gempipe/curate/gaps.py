@@ -819,9 +819,19 @@ def search_similar(panmodel, rid, field='ko', unmod=False, species=None, showgpr
     involved_genes = [g.id for g in panmodel.reactions.get_by_id(rid).genes]
     
     
+    def expand_terms(terms):
+        # expand terms as they could be multiple (eg: ['K01620', 'K01620,K20801'])
+        terms_exp = [] 
+        for i in terms: 
+            terms_exp = terms_exp + i.split(',')
+        terms_exp = list(set(terms_exp))
+        return terms_exp
+    
+    
     if field == 'pfam': 
         terms = list(set(query_pam(annot=True).loc[involved_genes, ]['PFAMs'].to_list()))
         if terms == ['-']: return None
+        terms = expand_terms(terms)
         presence_absence = query_pam(pfam=terms, model=panmodel)
         func_annot = query_pam(pfam=terms, annot=True)[['Description', 'KEGG_ko', 'PFAMs']]
         
@@ -830,6 +840,7 @@ def search_similar(panmodel, rid, field='ko', unmod=False, species=None, showgpr
         terms = list(set(query_pam(annot=True).loc[involved_genes, ]['KEGG_ko'].to_list()))
         if terms == ['-']: return None
         terms = [i.replace('ko:', '') for i in terms]
+        terms = expand_terms(terms)
         presence_absence = query_pam(ko=terms, model=panmodel)
         func_annot = query_pam(ko=terms, annot=True)[['Description', 'KEGG_ko', 'PFAMs']]
         
@@ -837,6 +848,7 @@ def search_similar(panmodel, rid, field='ko', unmod=False, species=None, showgpr
     if field == 'kt': 
         terms = list(set(query_pam(annot=True).loc[involved_genes, ]['KEGG_TC'].to_list()))
         if terms == ['-']: return None
+        terms = expand_terms(terms)
         presence_absence = query_pam(kt=terms, model=panmodel)
         func_annot = query_pam(kt=terms, annot=True)[['Description', 'KEGG_TC', 'PFAMs']]
         
@@ -844,15 +856,9 @@ def search_similar(panmodel, rid, field='ko', unmod=False, species=None, showgpr
     if field == 'ec': 
         terms = list(set(query_pam(annot=True).loc[involved_genes, ]['EC'].to_list()))
         if terms == ['-']: return None
+        terms = expand_terms(terms)
         presence_absence = query_pam(ec=terms, model=panmodel)
         func_annot = query_pam(ec=terms, annot=True)[['Description', 'EC', 'KEGG_ko', 'PFAMs']]
-            
-    
-    # expand terms as they could be multiple (eg: ['K01620', 'K01620,K20801'])
-    terms_exp = [] 
-    for i in terms: 
-        terms_exp = terms_exp + i.split(',')
-    terms_exp = list(set(terms_exp))
             
     
     # filter for desired columns: 
@@ -874,7 +880,7 @@ def search_similar(panmodel, rid, field='ko', unmod=False, species=None, showgpr
     structure_cols = ['modeled', 'Description', 'EC', 'KEGG_ko', 'PFAMs', 'KEGG_TC']  # cols not related to input genomes
     empty_columns = set(empty_columns) - set(structure_cols)
     all_columns = set(list(results.columns)) - set(structure_cols)
-    print(f'Empty columns: {len(empty_columns)}/{len(all_columns)} ({round(len(empty_columns)/len(all_columns)*100,1)}%); {field} terms considered: {str(terms_exp)}.')
+    print(f'Empty columns: {len(empty_columns)}/{len(all_columns)} ({round(len(empty_columns)/len(all_columns)*100,1)}%); {field} terms considered: {str(terms)}.')
 
     
     if forceshow:   # temporary allow pandas/jupyter to display with no row/col limits: 
