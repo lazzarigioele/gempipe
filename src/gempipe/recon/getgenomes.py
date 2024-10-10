@@ -9,6 +9,7 @@ import pandas as pnd
 
 
 from ..commons import get_genomes_csv
+from ..commons import update_metadata_manual
 
 
 
@@ -144,6 +145,7 @@ def download_genomes(logger, taxids, cores):
             # create metadata table and genomes dictionary: 
             get_metadata_table(logger, f'working/genomes/{meta_basename}.csv')
             create_genomes_dictionary(logger)
+            update_metadata_manual(logger, metadata, source='species_to_genome')
 
 
             return 0    
@@ -156,6 +158,7 @@ def download_genomes(logger, taxids, cores):
     # create the metadata table and the genomes dictionary
     get_metadata_table(logger, f'working/genomes/{meta_basename}.csv')
     create_genomes_dictionary(logger)
+    update_metadata_manual(logger, metadata, source='species_to_genome')
     
     
     return 0 
@@ -224,6 +227,7 @@ def handle_manual_genomes(logger, genomes):
     # Useful during plot generation.
     # Warning: the same columns are used in get_metadata_table(). But here only 2 can be filled: 'organism_name' and 'strain_isolate'.
     get_genomes_csv(source='species_to_genome')
+    update_metadata_manual(logger, metadata, source='species_to_genome')
     
     
     

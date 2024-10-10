@@ -16,7 +16,10 @@ from matplotlib.patches import Patch
 from ..commons import chunkize_items
 from ..commons import load_the_worker
 from ..commons import gather_results
+
 from ..commons import get_genomes_csv
+from ..commons import update_metadata_manual
+
 
 
 
@@ -347,6 +350,8 @@ def handle_manual_proteomes(logger, proteomes):
     # Useful during plot generation.
     # Warning: the same columns are used in get_metadata_table(). But here only 2 can be filled: 'organism_name' and 'strain_isolate'.
     get_genomes_csv(source='species_to_proteome')
+    update_metadata_manual(logger, metadata, source='species_to_proteome')
+    
     
     
     return 0

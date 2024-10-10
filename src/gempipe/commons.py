@@ -473,3 +473,11 @@ def get_genomes_csv(source='species_to_genome'):
     # save the metadata table to disk:
     os.makedirs("working/genomes/", exist_ok=True)
     metadata.to_csv("working/genomes/genomes.csv")
+    
+    
+    
+def update_metadata_manual(logger, metadata, source='species_to_genomes'):
+    
+    # TODO
+    
+    return 0
