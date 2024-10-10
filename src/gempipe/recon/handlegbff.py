@@ -8,6 +8,10 @@ import pandas as pnd
 from Bio import SeqIO, SeqRecord, Seq
 
 
+from ..commons import get_genomes_csv
+
+
+
 
 def get_sequences_and_source(gbff_file, ):
 
@@ -447,6 +451,12 @@ def handle_manual_genbanks(logger, genbanks, outdir):
     with open('working/proteomes/species_to_proteome.pickle', 'wb') as file:
         pickle.dump(species_to_proteome, file)
     logger.debug(f"Saved the species-to-proteome dictionary to file: ./working/proteomes/species_to_proteome.pickle.")
+    
+    
+    # Create the genomes/genomes.csv like if genomes were downloaded from NCBI.
+    # Useful during plot generation.
+    # Warning: the same columns are used in get_metadata_table(). But here only 2 can be filled: 'organism_name' and 'strain_isolate'.
+    get_genomes_csv(source='species_to_proteome')
     
     
     return 0

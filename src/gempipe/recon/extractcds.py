@@ -16,6 +16,8 @@ from matplotlib.patches import Patch
 from ..commons import chunkize_items
 from ..commons import load_the_worker
 from ..commons import gather_results
+from ..commons import get_genomes_csv
+
 
 
             
@@ -339,6 +341,12 @@ def handle_manual_proteomes(logger, proteomes):
     with open('working/proteomes/species_to_proteome.pickle', 'wb') as file:
         pickle.dump(species_to_proteome, file)
     logger.debug(f"Saved the species-to-proteome dictionary to file: ./working/proteomes/species_to_proteome.pickle.")
+    
+    
+    # Create the genomes/genomes.csv like if genomes were downloaded from NCBI.
+    # Useful during plot generation.
+    # Warning: the same columns are used in get_metadata_table(). But here only 2 can be filled: 'organism_name' and 'strain_isolate'.
+    get_genomes_csv(source='species_to_proteome')
     
     
     return 0

@@ -103,6 +103,8 @@ def main():
         subparser.add_argument("--dbmem", action='store_true', help="Load the entire eggNOG-mapper database into memory (should speed up the functional annotation step).")
         subparser.add_argument("--sbml", action='store_true', help="Save the output GSMMs in SBML format (L3V1 FBC2) in addition to JSON.")
         subparser.add_argument("--nofig", action='store_true', help="Skip the generation of figures.")
+        subparser.add_argument("-md", "--metadata", metavar='', type=str, default='-', help="Table for manual correction of genome metadata.")
+        
         
     
     # add arguments specifically for the 'autopilot' command

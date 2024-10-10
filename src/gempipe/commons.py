@@ -438,3 +438,38 @@ def get_allmeta_df():
     
     allmeta_df = allmeta_df[['organism_name', 'strain_isolate', 'C', 'F', 'M', 'ncontigs', 'sum_len', 'N50']]
     return allmeta_df
+
+
+
+def get_genomes_csv(source='species_to_genome'):
+    # Create the genomes/genomes.csv like if genomes were downloaded from NCBI.
+    # Useful during plot generation.
+    # Warning: the same columns are used in get_metadata_table(). But here only 2 can be filled: 'organism_name' and 'strain_isolate'.
+    
+    
+    if   source == 'species_to_genome':
+        # load the previously created species_to_genome: 
+        with open('working/genomes/species_to_genome.pickle', 'rb') as handler:
+            species_to_gp = pickle.load(handler)   # species_to_genome  OR species_to_proteome
+    elif source == 'species_to_proteome':
+        # load the previously created species_to_proteome: 
+        with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+            species_to_gp = pickle.load(handler)   # species_to_genome  OR species_to_proteome
+    
+    
+    metadata = []  # list of dicsts, future df.
+    for species in species_to_gp.keys(): 
+        for gp in species_to_gp[species]:  # genome OR proteome
+            basename = os.path.basename(gp)
+            accession, _ = os.path.splitext(basename)
+            metadata.append({'assembly_accession': accession, 'strain_isolate': accession, 'organism_name': species})
+    metadata = pnd.DataFrame.from_records(metadata)
+    columns = ['assembly_accession', 'bioproject', 'biosample', 'excluded_from_refseq', 'refseq_category', 'relation_to_type_material', 'species_taxid', 'organism_name', 'strain_isolate', 'version_status', 'seq_rel_date', 'submitter' ]
+    for col in columns:  # add missing columns: 
+        if col not in metadata.columns: 
+            metadata[col] = None
+            
+            
+    # save the metadata table to disk:
+    os.makedirs("working/genomes/", exist_ok=True)
+    metadata.to_csv("working/genomes/genomes.csv")
