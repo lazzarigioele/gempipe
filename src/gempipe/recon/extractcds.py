@@ -292,7 +292,7 @@ def extract_cds(logger, cores, outdir, nofig):
 
 
 
-def handle_manual_proteomes(logger, proteomes):
+def handle_manual_proteomes(logger, proteomes, metadata):
     
     
     # create a species-to-genome dictionary
@@ -350,7 +350,8 @@ def handle_manual_proteomes(logger, proteomes):
     # Useful during plot generation.
     # Warning: the same columns are used in get_metadata_table(). But here only 2 can be filled: 'organism_name' and 'strain_isolate'.
     get_genomes_csv(source='species_to_proteome')
-    update_metadata_manual(logger, metadata, source='species_to_proteome')
+    response = update_metadata_manual(logger, metadata, source='species_to_proteome')
+    if response==1: return 1
     
     
     

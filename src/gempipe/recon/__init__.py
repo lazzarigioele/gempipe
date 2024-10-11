@@ -80,17 +80,17 @@ def draft_reconstruction(args, logger):
     
     if args.genbanks != '-':
         # handle the manually defined genbanks: 
-        response = handle_manual_genbanks(logger, args.genbanks, outdir)
+        response = handle_manual_genbanks(logger, args.genbanks, outdir, args.metadata)
         if response == 1: return 1
     
     elif args.proteomes != '-':
         # handle the manually defined proteomes: 
-        response = handle_manual_proteomes(logger, args.proteomes)
+        response = handle_manual_proteomes(logger, args.proteomes, args.metadata)
         if response == 1: return 1
     
     elif args.genomes != '-':
         # handle the manually defined genomes: 
-        response = handle_manual_genomes(logger, args.genomes)
+        response = handle_manual_genomes(logger, args.genomes, args.metadata)
         if response == 1: return 1
     
         # extract the CDSs from the genomes:
@@ -103,7 +103,7 @@ def draft_reconstruction(args, logger):
     
     elif args.taxids != '-':
         # download the genomes according to the specified taxids: 
-        response = download_genomes(logger, args.taxids, args.cores)
+        response = download_genomes(logger, args.taxids, args.cores, args.metadata)
         if response == 1: return 1 
     
         # extract the CDSs from the genomes:

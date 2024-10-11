@@ -459,7 +459,7 @@ def get_genomes_csv(source='species_to_genome'):
     
     metadata = []  # list of dicsts, future df.
     for species in species_to_gp.keys(): 
-        for gp in species_to_gp[species]:  # genome OR proteome
+        for gp in species_to_gp[species]:  # genome OR proteome file
             basename = os.path.basename(gp)
             accession, _ = os.path.splitext(basename)
             metadata.append({'assembly_accession': accession, 'strain_isolate': accession, 'organism_name': species})
@@ -478,6 +478,111 @@ def get_genomes_csv(source='species_to_genome'):
     
 def update_metadata_manual(logger, metadata, source='species_to_genomes'):
     
-    # TODO
+    
+    # no manual corrections provided, exit: 
+    if metadata == '-':
+        return 0
+    else: 
+        logger.info("Applying manual corrections to metadata...")
+    
+    
+    # load the previously created species_to_genome / species_to_proteome
+    if   source == 'species_to_genome':
+        with open('working/genomes/species_to_genome.pickle', 'rb') as handler:
+            species_to_gp = pickle.load(handler)   # species_to_genome  OR species_to_proteome
+    elif source == 'species_to_proteome':
+        with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
+            species_to_gp = pickle.load(handler)   # species_to_genome  OR species_to_proteome
+            
+    
+    # load the file: 
+    if metadata.endswith('.xlsx') or metadata.endswith('.xls'):
+        metadata = pnd.read_excel(metadata)
+    elif metadata.endswith('.csv'):
+        metadata = pnd.read_csv(metadata)
+    elif metadata.endswith('.tsv'):
+        metadata = pnd.read_csv(metadata, sep='\t')
+    else: 
+        logger.error(f"Unrecognized extension in --metadata: {metadata} (allowed: .xlsx, .xls, .csv, .tsv).")
+        return 1
+    
+    
+    # search the 'assembly' column to be set as index
+    logger.debug("Searching for columns 'assembly', 'species', 'strain' and 'niche'...")
+    if 'assembly' not in metadata.columns: 
+        logger.error(f"Table provided with --metadata does not contain an 'assembly' column.")
+        return 1
+    metadata = metadata.set_index('assembly', drop=True, verify_integrity=True)
+    # Columns allowed: 'accession', 'species', 'strain', 'niche'.
+    if 'species' not in metadata.columns:
+        logger.debug(f"Table provided with --metadata does not contain a 'species' column.")
+    if 'strain' not in metadata.columns:
+        logger.debug(f"Table provided with --metadata does not contain a 'strain' column.")
+    if 'niche' not in metadata.columns:
+        logger.debug(f"Table provided with --metadata does not contain a 'niche' column.")
+    
+    
+    # load the original metadata table: 
+    metadata_ori = pnd.read_csv("working/genomes/genomes.csv", index_col=0)
+    metadata_ori = metadata_ori.set_index('assembly_accession', drop=True, verify_integrity=True)
+    
+    
+    # columns allowed: 'accession', 'species', 'strain', 'niche'.
+    metadata_updated = metadata_ori.copy()
+    if 'niche' not in metadata_updated.columns:
+        metadata_updated['niche'] = '-'
+    for accession, row in metadata_updated.iterrows():
+        # 'assembly_accession' <-> 'accession'
+        # 'organism_name' <-> 'species'
+        # 'strain_isolate' <-> 'strain'
+        # 'niche' <-> 'niche'
+        try:
+            species = metadata.loc[accession, 'species']
+            metadata_updated.loc[accession, 'organism_name'] = species
+        except: pass
+        try:
+            strain = metadata.loc[accession, 'strain']
+            metadata_updated.loc[accession, 'strain_isolate'] = strain
+        except: pass
+        try:
+            niche = metadata.loc[accession, 'niche']
+            metadata_updated.loc[accession, 'niche'] = niche
+        except: pass
+                
+        
+    # create update dictionaries:
+    species_to_gp_updated = {}
+    for species in species_to_gp.keys():
+        for gp in species_to_gp[species]:  # genome OR proteome file
+            basename = os.path.basename(gp)
+            accession, _ = os.path.splitext(basename)
+            
+            
+            # populate the new dictionary with the updated species
+            species_updated = metadata_updated.loc[accession, 'organism_name']
+            if species_updated not in species_to_gp_updated.keys():
+                species_to_gp_updated[species_updated] = []
+            species_to_gp_updated[species_updated].append(gp)
+            
+            
+    # save updated dictionaries (replace old ones):
+    if   source == 'species_to_genome':
+        with open('working/genomes/species_to_genome.pickle', 'wb') as handler:
+            pickle.dump(species_to_gp_updated, handler)
+    elif source == 'species_to_proteome':
+        with open('working/proteomes/species_to_proteome.pickle', 'wb') as handler:
+            pickle.dump(species_to_gp_updated, handler)
+
+        
+    # save the updated table:
+    # 'assembly_accession' has to reamin a dedicated column: 
+    metadata_updated = metadata_updated.reset_index(drop=False)  
+    metadata_updated = metadata_updated.sort_values(by=['organism_name', 'strain_isolate'], ascending=True)
+    metadata_updated = metadata_updated.reset_index(drop=True) 
+    metadata_updated.to_csv("working/genomes/genomes.csv")
+    
     
     return 0
+    
+    
+    
