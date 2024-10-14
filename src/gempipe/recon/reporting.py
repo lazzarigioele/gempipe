@@ -208,7 +208,7 @@ def figure_genes_recovered(logger, outdir, pam_modeled):
     [label.set_color(colors[label.get_text()]) for label in ax.get_xticklabels()]
     
     # set legends:
-    l1 = plt.legend(handles=[Patch(color=color, label=metric) for color, metric in zip(['grey','lightgrey'], ['Recovered','Healthy'])], title='', loc='upper left', bbox_to_anchor=(1.05, 0.5))
+    l1 = plt.legend(handles=[Patch(color=color, label=metric) for color, metric in zip(['grey','lightgrey'], ['Recovered','Normal'])], title='', loc='upper left', bbox_to_anchor=(1.05, 0.5))
     l2 = plt.legend(handles=[Patch(color=f'C{number}', label=species) for number, species in enumerate(df['organism_name'].unique())], title='', loc='lower left', bbox_to_anchor=(1.05, 0.5))
     ax.add_artist(l1)  # l2 implicitly replaces l1
     

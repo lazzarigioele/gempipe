@@ -77,7 +77,7 @@ def autopilot_command(args, logger):
     else: gannots = None
 
     
-    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml, skipgf=False)
+    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml, skipgf=False, args.nofig)
     if response == 1: return 1
     
     

@@ -70,6 +70,8 @@ def main():
     derive_parser.add_argument("--biolog", action='store_true', help="Simulate Biolog's utilization tests on strain-specific models.")
     derive_parser.add_argument("--sbml", action='store_true', help="Save the output GSMMs in SBML format (L3V1 FBC2) in addition to JSON.")
     derive_parser.add_argument("--skipgf", action='store_true', help="Skip the gap-filling step applied to the strain-specific models.")
+    derive_parser.add_argument("--nofig", action='store_true', help="Skip the generation of figures.")
+        
     
     
     # add arguments for the 'recon'/'autopilot' command

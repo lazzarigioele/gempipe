@@ -13,7 +13,7 @@ from .species import derive_species_specific
 
 
 
-def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml, skipgf):
+def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml, skipgf, nofig):
     
     
     ### PART 1: derive strain-specific models
@@ -36,13 +36,15 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
     
     
     ### PART 3: derive species-specific models
-    
     response = derive_rpam(logger, outdir, cores, panmodel, skipgf)
     if response == 1: return 1
     
     response = derive_species_specific(logger, outdir, cores, panmodel, sbml)
     if response == 1: return 1
-
+    
+    
+    ### PART 4: make some plots
+    
 
     return 0
 
@@ -96,7 +98,7 @@ def derive_command(args, logger):
     
     
     logger.info("Deriving strain- and species-specific metabolic models...")
-    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml, args.skipgf)
+    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml, args.skipgf, args.nofig)
     if response == 1: return 1
     
     
