@@ -217,10 +217,10 @@ def figure_genes_recovered(logger, outdir, pam_modeled):
     sb.despine()
 
     try: 
-        plt.savefig(outdir + 'figures/genes_recovered.png', dpi=300, bbox_inches='tight')
+        plt.savefig(outdir + 'figures/gene_clusters_recovered.png', dpi=300, bbox_inches='tight')
     except:  # the png image could be too large, so we produce svg
         logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/genes_recovered.svg...")
-        plt.savefig(outdir + 'figures/genes_recovered.svg', bbox_inches='tight')
+        plt.savefig(outdir + 'figures/gene_clusters_recovered.svg', bbox_inches='tight')
 
 
     
@@ -374,10 +374,10 @@ def figure_modeled_genes(logger, outdir, pam_modeled, report, draft_panmodel):
     sb.despine()
 
     try: 
-        plt.savefig(outdir + 'figures/genes_modeled.png', dpi=300, bbox_inches='tight')
+        plt.savefig(outdir + 'figures/gene_clusters_modeled.png', dpi=300, bbox_inches='tight')
     except:  # the png image could be too large, so we produce svg
         logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/genes_modeled.svg...")
-        plt.savefig(outdir + 'figures/genes_modeled.svg', bbox_inches='tight')
+        plt.savefig(outdir + 'figures/gene_clusters_modeled.svg', bbox_inches='tight')
         
     
 
@@ -602,10 +602,10 @@ def figure_modeled_reactions(logger, outdir, cores, pam_modeled, report, draft_p
     sb.despine()
 
     try: 
-        plt.savefig(outdir + 'figures/reactions_modeled.png', dpi=300, bbox_inches='tight')
+        plt.savefig(outdir + 'figures/prel_reactions_modeled.png', dpi=300, bbox_inches='tight')
     except:  # the png image could be too large, so we produce svg
         logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/reactions_modeled.svg...")
-        plt.savefig(outdir + 'figures/reactions_modeled.svg', bbox_inches='tight')
+        plt.savefig(outdir + 'figures/prel_reactions_modeled.svg', bbox_inches='tight')
             
 
     

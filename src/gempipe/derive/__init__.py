@@ -10,6 +10,7 @@ from .filler import strain_filler
 from .biolog import strain_biolog_tests
 from .species import derive_rpam
 from .species import derive_species_specific
+from .reporting import create_derive_plots
 
 
 
@@ -44,7 +45,9 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
     
     
     ### PART 4: make some plots
-    
+    create_derive_plots(logger, outdir, nofig)
+    if response == 1: return 1
+
 
     return 0
 
