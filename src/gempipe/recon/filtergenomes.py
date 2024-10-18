@@ -250,7 +250,7 @@ def compute_tmetrics(logger, cores):
 def figure_bmetrics(logger, outdir, bad_genomes): 
     
     
-    logger.info("Producing figure for biological metrics in {outdir}/figures/busco.png...")
+    logger.info("Producing figure for biological metrics in {outdir}/figures/bmetrics.png...")
     
     df = get_allmeta_df()
 
@@ -284,11 +284,13 @@ def figure_bmetrics(logger, outdir, bad_genomes):
     ax.set_ylabel('% of BUSCOs')
     sb.despine()
     
-    try: 
+    
+    if len(df) <= 100:
         plt.savefig(outdir + 'figures/bmetrics.png', dpi=300, bbox_inches='tight')
-    except:  # the png image could be too large, so we produce svg
-        logger.info("PNG was too large: producing the SVG version instead {outdir}/figures/bmetrics.svg...")
+    else:
+        logger.info("Number of genomes is >100: producing the SVG version instead {outdir}/figures/bmetrics.svg...")
         plt.savefig(outdir + 'figures/bmetrics.svg', bbox_inches='tight')
+
         
 
 
@@ -328,11 +330,13 @@ def figure_tmetrics(logger, outdir, bad_genomes):
         ax.set_ylabel(tmetric)
         sb.despine()
 
-        try: 
+        
+        if len(df) <= 100:
             plt.savefig(outdir + f'figures/{tmetric}.png', dpi=300, bbox_inches='tight')
-        except:  # the png image could be too large, so we produce svg
-            logger.info("PNG was too large: producing the SVG version instead {outdir}/figures/" + f"{tmetric}.svg...")
+        else:
+            logger.info("Number of genomes is >100: producing the SVG version instead {outdir}/figures/" + f"{tmetric}.svg...")
             plt.savefig(outdir + f'figures/{tmetric}.svg', bbox_inches='tight')
+
             
 
 

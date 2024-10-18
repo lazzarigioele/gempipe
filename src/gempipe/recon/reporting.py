@@ -159,6 +159,7 @@ def task_pam_modeled_parse_column_recovery(accession, args):
                     new_row['recovered'] += 1
 
     return [new_row]
+ 
     
     
 def get_accession_to_recovery(logger, cores, pam_modeled):
@@ -220,9 +221,7 @@ def figure_genes_recovered(logger, cores, outdir, pam_modeled):
     genomes_df = genomes_df.set_index('assembly_accession', drop=True, verify_integrity=True)
     # retain only quality-filtered genomes retaining the original order: 
     genomes_df = genomes_df.loc[[i for i in genomes_df.index if i in rec_summary.index.to_list()], ]   
-    genomes_df = genomes_df[genomes_df.index.isin(rec_summary.index.to_list())]   # keep only filtered genomes
-    df = pnd.concat([rec_summary, genomes_df], axis=1)
-    df.to_csv('df.tmp.csv')
+    df = pnd.concat([genomes_df, rec_summary], axis=1)
     
     # define colors:
     df = df.set_index('strain_isolate', drop=False)
@@ -233,7 +232,7 @@ def figure_genes_recovered(logger, cores, outdir, pam_modeled):
     _ = sb.barplot(df, x='strain_isolate', y='healthy', color='lightgrey', ax=ax)
     _ = sb.barplot(df, x='strain_isolate', y='recovered', color='grey', bottom=df['healthy'], ax=ax)
     
-    # set tick labels
+    # set tick labelsxw
     ax.tick_params(axis='x', labelrotation=90)
     [label.set_color(colors[label.get_text()]) for label in ax.get_xticklabels()]
     
@@ -246,15 +245,16 @@ def figure_genes_recovered(logger, cores, outdir, pam_modeled):
     ax.set_ylabel('modeled gene clusters')
     sb.despine()
 
-    try: 
+    if len(df) <= 100:
         plt.savefig(outdir + 'figures/gene_clusters_recovered.png', dpi=300, bbox_inches='tight')
-    except:  # the png image could be too large, so we produce svg
-        logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/genes_recovered.svg...")
+    else:
+        logger.info("Number of genomes is >100: producing the SVG version instead {outdir}/figures/genes_recovered.svg...")
         plt.savefig(outdir + 'figures/gene_clusters_recovered.svg', bbox_inches='tight')
 
 
     
-def get_species_to_core(pam_modeled, report):
+def get_species_to_core(logger, pam_modeled, report):
+    logger.info("Getting the core gene clusters for each species...")
     
     # get core genes of each species (dict of sets)
     species_to_core = {}
@@ -286,7 +286,8 @@ def get_species_to_core(pam_modeled, report):
     
     
 
-def get_overall_core(pam_modeled):
+def get_overall_core(logger, pam_modeled):
+    logger.info("Getting the common core of gene clusters...")
     
     # get core genes (considering all quality-filtered genomes in input)
     overall_core = set()
@@ -311,7 +312,8 @@ def get_overall_core(pam_modeled):
 
 
 
-def get_accession_to_genes(pam_modeled):
+def get_accession_to_genes(logger, pam_modeled):
+    logger.info("Getting the gene clusters for each accession...")
 
     # get all gene clusters of each quality-filtered genome (dict of sets): 
     strain_to_genes = {}
@@ -339,9 +341,9 @@ def figure_modeled_genes(logger, outdir, pam_modeled, report, draft_panmodel):
     
     
     # get main assets:
-    overall_core = get_overall_core(pam_modeled)
-    species_to_core = get_species_to_core(pam_modeled, report)
-    acc_to_genes = get_accession_to_genes(pam_modeled)
+    overall_core = get_overall_core(logger, pam_modeled)
+    species_to_core = get_species_to_core(logger, pam_modeled, report)
+    acc_to_genes = get_accession_to_genes(logger, pam_modeled)
     
 
     # plotting-dataframe generation: 
@@ -403,10 +405,11 @@ def figure_modeled_genes(logger, outdir, pam_modeled, report, draft_panmodel):
     ax.set_ylabel('modeled gene clusters')
     sb.despine()
 
-    try: 
+    
+    if len(df) <= 100:
         plt.savefig(outdir + 'figures/gene_clusters_modeled.png', dpi=300, bbox_inches='tight')
-    except:  # the png image could be too large, so we produce svg
-        logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/genes_modeled.svg...")
+    else:
+        logger.info("Number of genomes is >100: producing the SVG version instead {outdir}/figures/gene_clusters_modeled.svg...")
         plt.savefig(outdir + 'figures/gene_clusters_modeled.svg', bbox_inches='tight')
         
     
@@ -631,11 +634,13 @@ def figure_modeled_reactions(logger, outdir, cores, pam_modeled, report, draft_p
     ax.set_ylabel('modeled reactions')
     sb.despine()
 
-    try: 
+    
+    if len(df) <= 100:
         plt.savefig(outdir + 'figures/prel_reactions_modeled.png', dpi=300, bbox_inches='tight')
-    except:  # the png image could be too large, so we produce svg
-        logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/reactions_modeled.svg...")
+    else:
+        logger.info("Number of genomes is >100: producing the SVG version instead {outdir}/figures/prel_reactions_modeled.svg...")
         plt.savefig(outdir + 'figures/prel_reactions_modeled.svg', bbox_inches='tight')
+
             
 
     

@@ -203,10 +203,11 @@ def figure_cds(logger, outdir):
     ax.figure.set_size_inches(0.2*len(df), 4)
     sb.despine()
 
-    try: 
+    
+    if len(df) <= 100:
         plt.savefig(outdir + 'figures/n_cds.png', dpi=300, bbox_inches='tight')
-    except:  # the png image could be too large, so we produce svg
-        logger.info("PNG was too large: producing the SVG version instead {outdir}/figures/n_cds.svg...")
+    else:
+        logger.info("Number of genomes is >100: producing the SVG version instead {outdir}/figures/n_cds.svg...")
         plt.savefig(outdir + 'figures/n_cds.svg', bbox_inches='tight')
         
     
