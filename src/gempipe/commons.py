@@ -6,6 +6,7 @@ import glob
 import subprocess
 import hashlib
 import json
+import collections
 
 
 import cobra
@@ -476,6 +477,28 @@ def get_genomes_csv(source='species_to_genome'):
     
     
     
+def remove_duplicated_strain_ids(df):
+    
+    # Strains of different species can be equally named.
+    # This would ruin figure generation.
+    freqs = dict(collections.Counter(df['strain_isolate'].to_list()))
+    for index, row in df.iterrows(): 
+        if freqs[row['strain_isolate']] > 1:
+            df.loc[index, 'strain_isolate'] = df.loc[index, 'organism_name']  + ' ' + df.loc[index, 'strain_isolate']
+    
+    
+    # There could be different genomes for the same strain ID.
+    # This would ruin figure generation.
+    freqs = dict(collections.Counter(df['strain_isolate'].to_list()))
+    for index, row in df.iterrows(): 
+        if freqs[row['strain_isolate']] > 1:
+            df.loc[index, 'strain_isolate'] = df.loc[index, 'strain_isolate'] + f" (dup.{freqs[row['strain_isolate']]-1})"
+            freqs[row['strain_isolate']] -= 1
+            
+    return df
+
+    
+    
 def update_metadata_manual(logger, metadata, source='species_to_genomes'):
     
     
@@ -577,6 +600,7 @@ def update_metadata_manual(logger, metadata, source='species_to_genomes'):
     # save the updated table:
     # 'assembly_accession' has to reamin a dedicated column: 
     metadata_updated = metadata_updated.reset_index(drop=False)  
+    metadata_updated = remove_duplicated_strain_ids(metadata_updated)
     metadata_updated = metadata_updated.sort_values(by=['organism_name', 'strain_isolate'], ascending=True)
     metadata_updated = metadata_updated.reset_index(drop=True) 
     metadata_updated.to_csv("working/genomes/genomes.csv")

@@ -9,6 +9,7 @@ import pandas as pnd
 
 
 from ..commons import get_genomes_csv
+from ..commons import remove_duplicated_strain_ids
 from ..commons import update_metadata_manual
 
 
@@ -45,6 +46,8 @@ def get_metadata_table(logger, rawmeta_filepath):
     
     
     # save the metadata table to disk:
+    metadata = remove_duplicated_strain_ids(metadata)
+    metadata = metadata.sort_values(by=['organism_name', 'strain_isolate'], ascending=True)   # sort by species
     metadata.to_csv("working/genomes/genomes.csv")
     logger.info("Metadata table saved in ./working/genomes/genomes.csv.") 
     
