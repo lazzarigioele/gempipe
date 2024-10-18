@@ -201,7 +201,6 @@ def get_accession_to_recovery(logger, cores, pam_modeled):
     
     # format the df_summary
     df_summary = all_df_combined
-    df_summary.to_csv('df_summary.tmp.csv')
 
     return df_summary
 
@@ -221,7 +220,9 @@ def figure_genes_recovered(logger, cores, outdir, pam_modeled):
     genomes_df = genomes_df.set_index('assembly_accession', drop=True, verify_integrity=True)
     # retain only quality-filtered genomes retaining the original order: 
     genomes_df = genomes_df.loc[[i for i in genomes_df.index if i in rec_summary.index.to_list()], ]   
-    df = pnd.concat([rec_summary, genomes_df.loc[rec_summary.index, ]], axis=1)                          
+    genomes_df = genomes_df[genomes_df.index.isin(rec_summary.index.to_list())]   # keep only filtered genomes
+    df = pnd.concat([rec_summary, genomes_df], axis=1)
+    df.to_csv('df.tmp.csv')
     
     # define colors:
     df = df.set_index('strain_isolate', drop=False)
