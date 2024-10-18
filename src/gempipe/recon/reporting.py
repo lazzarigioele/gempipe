@@ -254,7 +254,7 @@ def figure_genes_recovered(logger, cores, outdir, pam_modeled):
 
     
 def get_species_to_core(logger, pam_modeled, report):
-    logger.info("Getting the core gene clusters for each species...")
+    logger.debug("Getting the core gene clusters for each species...")
     
     # get core genes of each species (dict of sets)
     species_to_core = {}
@@ -287,7 +287,7 @@ def get_species_to_core(logger, pam_modeled, report):
     
 
 def get_overall_core(logger, pam_modeled):
-    logger.info("Getting the common core of gene clusters...")
+    logger.debug("Getting the common core of gene clusters...")
     
     # get core genes (considering all quality-filtered genomes in input)
     overall_core = set()
@@ -312,30 +312,77 @@ def get_overall_core(logger, pam_modeled):
 
 
 
-def get_accession_to_genes(logger, pam_modeled):
-    logger.info("Getting the gene clusters for each accession...")
+def task_pam_modeled_parse_column_genes(accession, args): 
+    
+    # retrieve arguments: 
+    pam_modeled = args['pam_modeled']
+    
+    new_row = {
+        'accession': accession,
+        'gene_clusters': set()}
+    
+    for index, row in pam_modeled.iterrows(): 
+        cell = pam_modeled.loc[index, accession]  
 
+        if type(cell) != float:
+            only_stop = True
+            for cds in cell.split(';'):
+                if '_stop' not in cds:
+                    only_stop = False
+            if not only_stop:
+                new_row['gene_clusters'].add(index)
+                    
+    return [new_row]
+
+
+
+def get_accession_to_genes(logger, cores, pam_modeled):
+    logger.debug("Getting the gene clusters for each accession...")
+    
+    
+    # create items for parallelization: 
+    items = []
+    for accession in pam_modeled.columns: 
+        items.append(accession)
+        
+        
+    # randomize and divide in chunks: 
+    chunks = chunkize_items(items, cores)
+    
+    
+    # initialize the globalpool:
+    globalpool = multiprocessing.Pool(processes=cores, maxtasksperchild=1)
+    
+    
+    # start the multiprocessing: 
+    results = globalpool.imap(
+        load_the_worker, 
+        zip(chunks, 
+            range(cores), 
+            itertools.repeat(['accession'] + ['gene_clusters']), 
+            itertools.repeat('accession'), 
+            itertools.repeat(logger), 
+            itertools.repeat(task_pam_modeled_parse_column_genes),
+            itertools.repeat({'pam_modeled': pam_modeled}),
+        ), chunksize = 1)
+    all_df_combined = gather_results(results)  # all_df_combined can be ignored.
+    
+    
+    # empty the globalpool
+    globalpool.close() # prevent the addition of new tasks.
+    globalpool.join()  
+    
+    
     # get all gene clusters of each quality-filtered genome (dict of sets): 
     strain_to_genes = {}
+    for index, row in all_df_combined.iterrows():
+        strain_to_genes[index] = row['gene_clusters']      
     
-    for acc in pam_modeled.columns:
-        strain_to_genes[acc] = set()
-        for index, row in pam_modeled.iterrows(): 
-            cell = pam_modeled.loc[index, acc]  
-            
-            if type(cell) != float:
-                only_stop = True
-                for cds in cell.split(';'):
-                    if '_stop' not in cds:
-                        only_stop = False
-                if not only_stop:
-                    strain_to_genes[acc].add(index)
-                    
     return strain_to_genes
     
     
     
-def figure_modeled_genes(logger, outdir, pam_modeled, report, draft_panmodel):
+def figure_modeled_genes(logger, cores, outdir, pam_modeled, report, draft_panmodel):
     
     logger.info("Gathering metrics for modeled gene clusters...")
     
@@ -343,7 +390,7 @@ def figure_modeled_genes(logger, outdir, pam_modeled, report, draft_panmodel):
     # get main assets:
     overall_core = get_overall_core(logger, pam_modeled)
     species_to_core = get_species_to_core(logger, pam_modeled, report)
-    acc_to_genes = get_accession_to_genes(logger, pam_modeled)
+    acc_to_genes = get_accession_to_genes(logger, cores, pam_modeled)
     
 
     # plotting-dataframe generation: 
@@ -368,43 +415,51 @@ def figure_modeled_genes(logger, outdir, pam_modeled, report, draft_panmodel):
     # retain only quality-filtered genomes retaining the original order: 
     genomes_df = genomes_df.loc[[i for i in genomes_df.index if i in gene_summary.index.to_list()], ]   
     df = pnd.concat([genomes_df, gene_summary], axis=1)
-        
     
+    # display of the pan-content is hided (not a real pangenomics)
+    """
     # handle the draft pan-GSMM in a dedicated dataframe: 
     df_pan = df.copy()
     df_pan.loc['draft pan-GSMM'] = 0  # row
     df_pan['pan'] = 0   # column
     df_pan.loc['draft pan-GSMM', 'pan'] = len(draft_panmodel.genes)   # add information about the draft pan-GSMM in a dedicated column
     df_pan.loc['draft pan-GSMM', 'strain_isolate'] = 'draft pan-GSMM'
-        
+    """    
     
     # define colors:
     df = df.set_index('strain_isolate', drop=False)
     colors = df['organism_name'].map({species: f'C{number}' for number, species in enumerate(df['organism_name'].unique())}).to_dict()
+    """
     colors['draft pan-GSMM'] = 'black'
-    
+    """
+
     # draw bars:
     fig, ax = plt.subplots()
     _ = sb.barplot(df, x='strain_isolate', y='overall_core', color='grey', ax=ax)
-    _ = sb.barplot(df, x='strain_isolate', y='species_core', palette=colors, bottom=df['overall_core'], hue='strain_isolate', legend=False, ax=ax)
+    # much more efficient to split with a for cicle:
+    for number, species in enumerate(df['organism_name'].unique()):
+        df_subsetted = df[df['organism_name']==species]
+        _ = sb.barplot(df_subsetted, x='strain_isolate', y='species_core', color=f'C{number}', bottom=df_subsetted['overall_core'], ax=ax)   
     _ = sb.barplot(df, x='strain_isolate', y='accessory', color='lightgrey', bottom=df['overall_core']+df['species_core'], ax=ax)
+    """
     _ = sb.barplot(df_pan, x='strain_isolate', y='pan', color='black', ax=ax)
+    """
     
     # set tick labels
     ax.tick_params(axis='x', labelrotation=90)
     [label.set_color(colors[label.get_text()]) for label in ax.get_xticklabels()]
-    
     # set legends:
     l1 = plt.legend(handles=[Patch(color=color, label=metric) for color, metric in zip(['grey','lightgrey'], ['Common core','Non-core'])], title='', loc='upper left', bbox_to_anchor=(1.05, 0.5))
     handles = [Patch(color=f'C{number}', label=species) for number, species in enumerate(df['organism_name'].unique())]
+    """
     handles.append(Patch(color=f'black', label='draft pan-GSMM'))
+    """
     l2 = plt.legend(handles=handles, title='', loc='lower left', bbox_to_anchor=(1.05, 0.5))
     ax.add_artist(l1)  # l2 implicitly replaces l1
     
     ax.figure.set_size_inches(0.2*len(df), 4)
     ax.set_ylabel('modeled gene clusters')
     sb.despine()
-
     
     if len(df) <= 100:
         plt.savefig(outdir + 'figures/gene_clusters_modeled.png', dpi=300, bbox_inches='tight')
@@ -565,7 +620,7 @@ def get_accession_to_reactions(rpam):
     
     
     
-def figure_modeled_reactions(logger, outdir, cores, pam_modeled, report, draft_panmodel):
+def figure_modeled_reactions(logger, cores, outdir, pam_modeled, report, draft_panmodel):
     
     
     # get main assets: 
@@ -615,7 +670,10 @@ def figure_modeled_reactions(logger, outdir, cores, pam_modeled, report, draft_p
     # draw bars:
     fig, ax = plt.subplots()
     _ = sb.barplot(df, x='strain_isolate', y='overall_core', color='grey', ax=ax)
-    _ = sb.barplot(df, x='strain_isolate', y='species_core', palette=colors, bottom=df['overall_core'], hue='strain_isolate', legend=False, ax=ax)
+    # much more efficient to split with a for cicle:
+    for number, species in enumerate(df['organism_name'].unique()):
+        df_subsetted = df[df['organism_name']==species]
+        _ = sb.barplot(df_subsetted, x='strain_isolate', y='species_core', color=f'C{number}', bottom=df_subsetted['overall_core'], ax=ax)   
     _ = sb.barplot(df, x='strain_isolate', y='accessory', color='lightgrey', bottom=df['overall_core']+df['species_core'], ax=ax)
     _ = sb.barplot(df_pan, x='strain_isolate', y='pan', color='black', ax=ax)
     
@@ -640,9 +698,8 @@ def figure_modeled_reactions(logger, outdir, cores, pam_modeled, report, draft_p
     else:
         logger.info("Number of genomes is >100: producing the SVG version instead {outdir}/figures/prel_reactions_modeled.svg...")
         plt.savefig(outdir + 'figures/prel_reactions_modeled.svg', bbox_inches='tight')
-
-            
-
+    
+    
     
 def create_recon_plots(logger, outdir, cores, nofig):
     
@@ -663,8 +720,8 @@ def create_recon_plots(logger, outdir, cores, nofig):
     # make 3 plots:
     if not nofig: 
         figure_genes_recovered(logger, cores, outdir, pam_modeled)
-        figure_modeled_genes(logger, outdir, pam_modeled, report, draft_panmodel)
-        figure_modeled_reactions(logger, outdir, cores, pam_modeled, report, draft_panmodel)
+        figure_modeled_genes(logger, cores, outdir, pam_modeled, report, draft_panmodel)
+        figure_modeled_reactions(logger, cores, outdir, pam_modeled, report, draft_panmodel)
     
     
     return 0
