@@ -439,7 +439,7 @@ def figure_modeled_genes(logger, cores, outdir, pam_modeled, report, draft_panmo
     # much more efficient to split with a for cicle:
     for number, species in enumerate(df['organism_name'].unique()):
         df_subsetted = df[df['organism_name']==species]
-        _ = sb.barplot(df_subsetted, x='strain_isolate', y='species_core', color=f'C{number}', bottom=df_subsetted['overall_core'], ax=ax)   
+        _ = sb.barplot(df_subsetted, x='strain_isolate', y='species_core', color=f'C{number}', bottom=df_subsetted['overall_core'], ax=ax) 
     _ = sb.barplot(df, x='strain_isolate', y='accessory', color='lightgrey', bottom=df['overall_core']+df['species_core'], ax=ax)
     """
     _ = sb.barplot(df_pan, x='strain_isolate', y='pan', color='black', ax=ax)
@@ -673,7 +673,7 @@ def figure_modeled_reactions(logger, cores, outdir, pam_modeled, report, draft_p
     # much more efficient to split with a for cicle:
     for number, species in enumerate(df['organism_name'].unique()):
         df_subsetted = df[df['organism_name']==species]
-        _ = sb.barplot(df_subsetted, x='strain_isolate', y='species_core', color=f'C{number}', bottom=df_subsetted['overall_core'], ax=ax)   
+        _ = sb.barplot(df_subsetted, x='strain_isolate', y='species_core', color=f'C{number}', bottom=df_subsetted['overall_core'], ax=ax) 
     _ = sb.barplot(df, x='strain_isolate', y='accessory', color='lightgrey', bottom=df['overall_core']+df['species_core'], ax=ax)
     _ = sb.barplot(df_pan, x='strain_isolate', y='pan', color='black', ax=ax)
     

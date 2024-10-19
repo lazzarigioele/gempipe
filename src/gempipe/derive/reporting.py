@@ -58,7 +58,10 @@ def figure_modeled_reactions(logger, outdir):
     fig, ax = plt.subplots()
     bars_core = sb.barplot(df, x='strain_isolate', y='overall_core', color='lightgray', edgecolor='white', ax=ax, )
     for i in bars_core.patches: i.set_hatch('')  # set hatch before drawing other bars
-    _ = sb.barplot(df, x='strain_isolate', y='species_core', palette=colors, edgecolor='white', bottom=df['overall_core'], hue='strain_isolate', legend=False,  ax=ax)
+    # much more efficient to split with a for cicle:
+    for number, species in enumerate(df['organism_name'].unique()):
+        df_subsetted = df[df['organism_name']==species]
+        _ = sb.barplot(df_subsetted, x='strain_isolate', y='species_core', color=f'C{number}', edgecolor='white', bottom=df_subsetted['overall_core'], ax=ax) 
     _ = sb.barplot(df, x='strain_isolate', y='accessory', color='gray', edgecolor='white', bottom=df['overall_core']+df['species_core'], ax=ax)
     for i, (strain, row) in enumerate(df.iterrows()):
         offset = 0.2
@@ -81,12 +84,12 @@ def figure_modeled_reactions(logger, outdir):
 
     
     os.makedirs(outdir + 'figures/', exist_ok=True)
-    try: 
+    if len(df) <= 100:
         plt.savefig(outdir + 'figures/reactions_modeled.png', dpi=300, bbox_inches='tight')
-    except:  # the png image could be too large, so we produce svg
-        #logger.info(f"PNG was too large: producing the SVG version instead {outdir}/figures/reactions_modeled.svg...")
+    else:
+        logger.info("Number of genomes is >100: producing the SVG version instead {outdir}/figures/reactions_modeled.svg...")
         plt.savefig(outdir + 'figures/reactions_modeled.svg', bbox_inches='tight')
-    
+        
 
     return 0
 
