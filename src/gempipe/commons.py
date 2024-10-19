@@ -67,7 +67,7 @@ def load_the_worker(arguments):
     # join the tabular results of each item:
     if df_combined == []:  # this worker was started empty.
         df_combined = pnd.DataFrame(columns = columns)
-    else: df_combined = pnd.DataFrame.from_records(df_combined)
+    else: df_combined = pnd.DataFrame.from_records(df_combined)    
     df_combined = df_combined.set_index(index, verify_integrity=True)
     return df_combined
 

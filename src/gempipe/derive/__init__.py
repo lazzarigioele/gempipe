@@ -6,7 +6,7 @@ import cobra
 
 
 from .strain import derive_strain_specific
-from .filler import strain_filler
+from .filler import strain_species_filler
 from .biolog import strain_biolog_tests
 from .species import derive_rpam
 from .species import derive_species_specific
@@ -18,7 +18,6 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
     
     
     ### PART 1: derive strain-specific models
-    
     response = derive_strain_specific(logger, outdir, cores, panmodel, pam, report, gannots, sbml)
     if response == 1: return 1
 
@@ -26,7 +25,7 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
     ### PART 2: gap-fill strain-specific models
     if skipgf: logger.info("Skipping the strain-specific gap-filling step (--skipgf)...")
     if not skipgf:
-        response = strain_filler(logger, outdir, cores, panmodel, media_filepath, minflux, sbml)
+        response = strain_species_filler(logger, outdir, cores, panmodel, media_filepath, minflux, sbml, level='strain')
         if response == 1: return 1
     
 
@@ -42,6 +41,11 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
     
     response = derive_species_specific(logger, outdir, cores, panmodel, sbml)
     if response == 1: return 1
+
+    if skipgf: logger.info("Skipping the species-specific gap-filling step (--skipgf)...")
+    if not skipgf:
+        response = strain_species_filler(logger, outdir, cores, panmodel, media_filepath, minflux, sbml, level='species')
+        if response == 1: return 1
     
     
     ### PART 4: make some plots

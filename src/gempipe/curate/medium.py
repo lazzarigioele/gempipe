@@ -9,7 +9,7 @@ def reset_growth_env(model):
     """
     
     for r in model.reactions:
-        if len(r.metabolites)==1 and r.id.startswith('EX_'):
+        if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'):
             r.bounds = (0, 1000)
             
             

@@ -163,10 +163,10 @@ def derive_species_specific(logger, outdir, cores, panmodel, sbml):
     
    
     # create output dir
-    if os.path.exists(outdir + 'species_model/'):
+    if os.path.exists(outdir + 'species_models/'):
         # always overwriting if already existing
-        shutil.rmtree(outdir + 'species_model/')  
-    os.makedirs(outdir + 'species_model/', exist_ok=True)
+        shutil.rmtree(outdir + 'species_models/')  
+    os.makedirs(outdir + 'species_models/', exist_ok=True)
     
 
     # load the reaction presence/absence table:
@@ -195,7 +195,7 @@ def derive_species_specific(logger, outdir, cores, panmodel, sbml):
             itertools.repeat('species'), 
             itertools.repeat(logger), 
             itertools.repeat(task_derivespecies),  # will return a new sequences dataframe (to be concat).
-            itertools.repeat({'strains_table': strains_table, 'panmodel': panmodel, 'outdir': outdir + 'species_model/', 'rpam': rpam, 'sbml': sbml}),
+            itertools.repeat({'strains_table': strains_table, 'panmodel': panmodel, 'outdir': outdir + 'species_models/', 'rpam': rpam, 'sbml': sbml}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
     
