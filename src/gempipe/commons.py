@@ -7,6 +7,8 @@ import subprocess
 import hashlib
 import json
 import collections
+import warnings
+import logging
 
 
 import cobra
@@ -610,3 +612,23 @@ def update_metadata_manual(logger, metadata, source='species_to_genomes'):
     
     
     
+def fba_no_warnings(model): 
+    # Ignore eventual "UserWarning: Solver status is 'infeasible'."
+    
+    with warnings.catch_warnings():  # temporarily suppress warnings for this block
+        warnings.simplefilter("ignore")  # ignore all warnings
+        
+        # disable warnings
+        cobra_logger = logging.getLogger("cobra.util.solver")
+        old_level = cobra_logger.level
+        cobra_logger.setLevel(logging.ERROR)   
+
+        # perform FBA: 
+        res = model.optimize()
+        obj_value = res.objective_value
+        status = res.status
+
+        # restore original behaviour: 
+        cobra_logger.setLevel(old_level)   
+
+        return res, obj_value, status

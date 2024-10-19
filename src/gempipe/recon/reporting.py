@@ -704,21 +704,21 @@ def figure_modeled_reactions(logger, cores, outdir, pam_modeled, report, draft_p
 def create_recon_plots(logger, outdir, cores, nofig):
     
     
-    logger.info("Producing figures for preliminary reconstruction metrics...")
-    
-    # load main assets:
-    draft_panmodel = read_refmodel(outdir + 'draft_panmodel.json')
-    pam = pnd.read_csv(outdir + 'pam.csv', index_col=0)
-    report = pnd.read_csv(outdir + 'report.csv', index_col=0)
-    
-    
-    # filter pam for clusters modeled in draft_panmodel
-    modeled_gids = [g.id for g in draft_panmodel.genes if g.id.startswith('Cluster_')]
-    pam_modeled = pam.loc[modeled_gids, ]
-    
-    
-    # make 3 plots:
     if not nofig: 
+        logger.info("Producing figures for preliminary reconstruction metrics...")
+
+        # load main assets:
+        draft_panmodel = read_refmodel(outdir + 'draft_panmodel.json')
+        pam = pnd.read_csv(outdir + 'pam.csv', index_col=0)
+        report = pnd.read_csv(outdir + 'report.csv', index_col=0)
+
+
+        # filter pam for clusters modeled in draft_panmodel
+        modeled_gids = [g.id for g in draft_panmodel.genes if g.id.startswith('Cluster_')]
+        pam_modeled = pam.loc[modeled_gids, ]
+
+
+        # make 3 plots:
         figure_genes_recovered(logger, cores, outdir, pam_modeled)
         figure_modeled_genes(logger, cores, outdir, pam_modeled, report, draft_panmodel)
         figure_modeled_reactions(logger, cores, outdir, pam_modeled, report, draft_panmodel)

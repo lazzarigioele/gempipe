@@ -10,6 +10,7 @@ import cobra
 from ..commons import chunkize_items
 from ..commons import load_the_worker
 from ..commons import gather_results
+from ..commons import fba_no_warnings
 
 
 
@@ -188,9 +189,8 @@ def task_derivestrain(accession, args):
     
     
     # try the FBA: 
-    res = ss_model.optimize()
-    obj_value = res.objective_value
-    status = res.status
+    res, obj_value, status = fba_no_warnings(ss_model)
+
     
     
     # save strain specific model to disk
