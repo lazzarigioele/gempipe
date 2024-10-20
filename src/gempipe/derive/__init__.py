@@ -8,15 +8,16 @@ import cobra
 from .strain import derive_strain_specific
 from .filler import strain_species_filler
 from .biolog import strain_biolog_tests
+from .screening import strain_auxotrophies_tests
 from .species import derive_rpam
 from .species import derive_species_specific
 from .reporting import create_derive_plots
 
 
 
-def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml, skipgf, nofig):
+def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml, skipgf, nofig, aux):
     
-    
+    """
     ### PART 1: derive strain-specific models
     response = derive_strain_specific(logger, outdir, cores, panmodel, pam, report, gannots, sbml)
     if response == 1: return 1
@@ -33,8 +34,12 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
     if biolog:
         response = strain_biolog_tests(logger, outdir, cores, pam, panmodel, skipgf)
         if response == 1: return 1
+    """
+    if aux:
+        response = strain_auxotrophies_tests(logger, outdir, cores, pam, skipgf)
+        if response == 1: return 1
     
-    
+    """
     ### PART 3: derive species-specific models
     response = derive_rpam(logger, outdir, cores, panmodel, skipgf)
     if response == 1: return 1
@@ -51,7 +56,7 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
     ### PART 4: make some plots
     create_derive_plots(logger, outdir, nofig)
     if response == 1: return 1
-
+    """
 
     return 0
 
@@ -105,7 +110,7 @@ def derive_command(args, logger):
     
     
     logger.info("Deriving strain- and species-specific metabolic models...")
-    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml, args.skipgf, args.nofig)
+    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml, args.skipgf, args.nofig, args.aux)
     if response == 1: return 1
     
     

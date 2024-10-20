@@ -17,11 +17,11 @@ from ..commons import read_refmodel
 
 
 
-def biolog_simulation(ss_model, biolog_mappings, seed=False, starting_C='EX_glc__D_e', starting_N='EX_nh4_e', starting_P='EX_pi_e', starting_S='EX_so4_e' ):
+def biolog_simulation(model, biolog_mappings, seed=False, starting_C='EX_glc__D_e', starting_N='EX_nh4_e', starting_P='EX_pi_e', starting_S='EX_so4_e' ):
     
     
     # get the modeled rids: 
-    modeled_rids = set([r.id for r in ss_model.reactions])
+    modeled_rids = set([r.id for r in model.reactions])
     
     
     # iterate each Biolog substrate
@@ -51,25 +51,25 @@ def biolog_simulation(ss_model, biolog_mappings, seed=False, starting_C='EX_glc_
             
 
             # changes are temporary: 
-            with ss_model:
+            with model:
                 
                 # perform the simulation:
                 if exr_before_present:  # the exchange reaction could not be present
-                    ss_model.reactions.get_by_id(exr_before).bounds = (0, 1000)
+                    model.reactions.get_by_id(exr_before).bounds = (0, 1000)
                     
                     # particularly important in case of rich media
-                    res_before = ss_model.optimize()
+                    res_before = model.optimize()
                     objv_before = res_before.objective_value
                     if res_before.status == 'infeasible': objv_before = 0
                     
                     if exr_after_present: # the exchange reaction could not be present
-                        r = ss_model.reactions.get_by_id(exr_after)
+                        r = model.reactions.get_by_id(exr_after)
                         r.bounds = (-1000, 1000)
                         formula = list(r.metabolites)[0].formula
                         
                         # optimize catching the warnings
                         with warnings.catch_warnings(record=True) as w:
-                            res = ss_model.optimize()
+                            res = model.optimize()
                         for warning in w:
                             pass
                         

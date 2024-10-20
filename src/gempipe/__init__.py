@@ -71,6 +71,7 @@ def main():
     derive_parser.add_argument("--sbml", action='store_true', help="Save the output GSMMs in SBML format (L3V1 FBC2) in addition to JSON.")
     derive_parser.add_argument("--skipgf", action='store_true', help="Skip the gap-filling step applied to the strain-specific models.")
     derive_parser.add_argument("--nofig", action='store_true', help="Skip the generation of figures.")
+    derive_parser.add_argument("--aux", action='store_true', help="Test auxotrophies for aminoacids and vitamins.")
         
     
     
@@ -114,6 +115,7 @@ def main():
     autopilot_parser.add_argument("--minflux", metavar='', type=float, default=0.1, help="Minimum flux through the objective of strain-specific models.")
     autopilot_parser.add_argument("--minpanflux", metavar='', type=float, default=0.3, help="Minimum flux through the objective of the pan model.")
     autopilot_parser.add_argument("--biolog", action='store_true', help="Simulate Biolog's utilization tests on strain-specific models.")
+    autopilot_parser.add_argument("--aux", action='store_true', help="Test auxotrophies for aminoacids and vitamins.")
     
 
     # check the inputted subcommand, automatic sys.exit(1) if a bad subprogram was specied. 
