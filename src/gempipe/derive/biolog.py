@@ -80,7 +80,7 @@ def biolog_simulation(model, biolog_mappings, seed=False, starting_C='EX_glc__D_
             
             
             # even if they could be simulated, substrate out of the Biolog system
-            # are not taken into acocunt in this analysis:
+            # are not taken into account in this analysis:
             if eval(row['PM'])==set(): 
                 growth = value = status = None
             

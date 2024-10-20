@@ -193,3 +193,196 @@ def strain_auxotrophies_tests(logger, outdir, cores, pam, skipgf):
     aux_pam = all_df_combined
     aux_pam = aux_pam.T
     aux_pam.to_csv(outdir + 'aux.csv')
+    
+    return 0
+    
+    
+    
+def get_sources_by_class(model):
+    
+    sources_by_class = {'C': set(), 'N': set(), 'P': set(), 'S': set()}
+    for r in model.reactions: 
+        if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'):
+            m = list(r.metabolites)[0]
+            formula = m.formula
+            # avoid confusion with 'C':
+            formula = formula.replace('Ca', '').replace('Co', '').replace('Cu', '').replace('Cd', '').replace('Cr', '').replace('Cs', '').replace('Cl', '')   
+            # avoid confusion with 'N':
+            formula = formula.replace('Na', '').replace('Nb', '').replace('Ni', '').replace('Ne', '')
+            # avoid confusion with 'P':
+            formula = formula.replace('Pd', '').replace('Pt', '').replace('Pb', '').replace('Po', '')
+            # avoid confusion with 'S':
+            formula = formula.replace('Sc', '').replace('Si', '').replace('Sn', '').replace('Sb', '').replace('Se', '')
+            
+            if 'C' in formula: sources_by_class['C'].add(r.id)
+            if 'N' in formula: sources_by_class['N'].add(r.id)
+            if 'P' in formula: sources_by_class['P'].add(r.id)
+            if 'S' in formula: sources_by_class['S'].add(r.id)
+    
+    return sources_by_class
+
+
+
+def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, model_id=None, starting_C='EX_glc__D_e', starting_N='EX_nh4_e', starting_P='EX_pi_e', starting_S='EX_so4_e'):
+    """
+    Function to test utilization of C-N-P-S substrates in a GSMM. 
+    A growth-enabling medium is assumed to be already set up. 
+    
+    seed: switch to ModelSEED naming system (not yet impemented)
+    mode: 'binary' (1: auxotroph, 0: autotroph) or 'growth': quantitative results from FBA. 
+    sources_by_class:  Dictionary of compounds to test. For example {'C': {'EX_ala__L_e', ...}, 'N': {'EX_ala__L_e', ...}}
+    model_id: name of the putput column (if None, 'output' will be used)
+    """    
+    
+    # get the dictionary of compounds to be tested
+    if sources_by_class == None:
+        sources_by_class = get_sources_by_class(model)
+        
+    # get the modeled rids: 
+    modeled_rids = set([r.id for r in model.reactions])
+    
+    
+    df = [] # list of dict to be converted in pnd dataframe
+    if model_id == None: model_id = 'output'
+    
+    
+    for sub_class in sources_by_class.keys():
+        for exr_after in sources_by_class[sub_class]:
+                    
+                res_before = model.optimize()
+                
+                with model:  # reversible changes. 
+                    if sub_class == 'C': 
+                        if starting_C in modeled_rids:
+                            model.reactions.get_by_id(starting_C).lower_bound = 0
+                            model.reactions.get_by_id(exr_after).lower_bound = -1000
+                            sub_key = f'[C]{exr_after[3:-2]}'
+                        else: continue
+                    if sub_class == 'N': 
+                        if starting_N in modeled_rids:
+                            model.reactions.get_by_id(starting_N).lower_bound = 0
+                            model.reactions.get_by_id(exr_after).lower_bound = -1000
+                            sub_key = f'[N]{exr_after[3:-2]}'
+                        else: continue
+                    if sub_class == 'P':
+                        if starting_P in modeled_rids:
+                            model.reactions.get_by_id(starting_P).lower_bound = 0
+                            model.reactions.get_by_id(exr_after).lower_bound = -1000
+                            sub_key = f'[P]{exr_after[3:-2]}'
+                        else: continue
+                    if sub_class == 'S': 
+                        if starting_S in modeled_rids:
+                            model.reactions.get_by_id(starting_S).lower_bound = 0
+                            model.reactions.get_by_id(exr_after).lower_bound = -1000
+                            sub_key = f'[S]{exr_after[3:-2]}'
+                        else: continue
+                    
+                    res_after = model.optimize()
+                    
+                    if res_before.status=='optimal' and res_after.status=='optimal' and res_after.objective_value >= (res_before.objective_value + 0.001):
+                        can_use = 1
+                    else:
+                        can_use = 0
+                        
+                    # save results in a future pnd DataFrame:
+                    if mode=='binary':
+                        df.append({'exchange': sub_key, model_id: can_use})
+                    elif mode=='growth':
+                        if res_after.status=='optimal': 
+                            df.append({'exchange': sub_key, model_id: res_after.objective_value})
+                        else: 
+                            df.append({'exchange': sub_key, model_id: res_after.status})
+
+    
+    df = pnd.DataFrame.from_records(df)
+    df = df.set_index('exchange', drop=True, verify_integrity=True)
+    return df
+    
+    
+    
+def task_cnps(accession, args):
+    
+    
+    # retrive the arguments:
+    outdir = args['outdir']
+    skipgf = args['skipgf']
+    sources_by_class = args['sources_by_class']
+    
+    
+    # read json/sbml file:
+    if not skipgf:
+        ss_model = cobra.io.load_json_model(outdir + f'strain_models_gf/{accession}.json')
+    else:  # user asked to skip the strain-specific gapfilling step
+        ss_model = cobra.io.load_json_model(outdir + f'strain_models/{accession}.json')
+    
+    # perform the simulations: 
+    df_results = cnps_simulation(ss_model, model_id=accession, sources_by_class=sources_by_class)
+    df_results = df_results.T.reset_index(drop=False).rename(columns={'index': 'accession'})
+        
+    # it has just 1 row:
+    return [df_results.iloc[0].to_dict()]
+
+    
+    
+def strain_cnps_tests(logger, outdir, cores, pam, panmodel, skipgf):
+    
+    
+    # log some messages
+    logger.info("Testing strain-specific consumption of C-N-P-S substrates...")
+    sources_by_class = get_sources_by_class(panmodel)   
+    
+    
+    # ge the header for the results table:
+    header = []
+    for sub_class in sources_by_class.keys():
+        for sub in sources_by_class[sub_class]:
+            if sub_class == 'C': sub_key = f'[C]{sub[3:-2]}'
+            if sub_class == 'N': sub_key = f'[N]{sub[3:-2]}'
+            if sub_class == 'P': sub_key = f'[P]{sub[3:-2]}'
+            if sub_class == 'S': sub_key = f'[S]{sub[3:-2]}'
+            header.append(sub_key)
+
+    
+    # check if it's everything pre-computed:
+    # not needed!
+    
+    
+    # create items for parallelization: 
+    items = []
+    for accession in pam.columns:
+        items.append(accession)
+       
+        
+    # randomize and divide in chunks: 
+    chunks = chunkize_items(items, cores)
+                          
+                          
+    # initialize the globalpool:
+    globalpool = multiprocessing.Pool(processes=cores, maxtasksperchild=1)
+    
+    
+    # start the multiprocessing: 
+    results = globalpool.imap(
+        load_the_worker, 
+        zip(chunks, 
+            range(cores), 
+            itertools.repeat(['accession'] + header), 
+            itertools.repeat('accession'), 
+            itertools.repeat(logger), 
+            itertools.repeat(task_cnps),  # will return a new sequences dataframe (to be concat).
+            itertools.repeat({'outdir': outdir, 'skipgf': skipgf, 'sources_by_class': sources_by_class}),
+        ), chunksize = 1)
+    all_df_combined = gather_results(results)
+    
+    
+    # empty the globalpool
+    globalpool.close() # prevent the addition of new tasks.
+    globalpool.join() 
+    
+    
+    # save the auxotrophyie table in the sae format of 'rpam':
+    cnps_pam = all_df_combined
+    cnps_pam = cnps_pam.T
+    cnps_pam.to_csv(outdir + 'cnps.csv')
+    
+    return 0

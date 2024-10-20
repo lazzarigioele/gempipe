@@ -72,7 +72,8 @@ def main():
     derive_parser.add_argument("--skipgf", action='store_true', help="Skip the gap-filling step applied to the strain-specific models.")
     derive_parser.add_argument("--nofig", action='store_true', help="Skip the generation of figures.")
     derive_parser.add_argument("--aux", action='store_true', help="Test auxotrophies for aminoacids and vitamins.")
-        
+    derive_parser.add_argument("--cnps", action='store_true', help="Sistematically simulate growth on all the available C-N-P-S sources.")
+         
     
     
     # add arguments for the 'recon'/'autopilot' command
@@ -116,7 +117,8 @@ def main():
     autopilot_parser.add_argument("--minpanflux", metavar='', type=float, default=0.3, help="Minimum flux through the objective of the pan model.")
     autopilot_parser.add_argument("--biolog", action='store_true', help="Simulate Biolog's utilization tests on strain-specific models.")
     autopilot_parser.add_argument("--aux", action='store_true', help="Test auxotrophies for aminoacids and vitamins.")
-    
+    autopilot_parser.add_argument("--cnps", action='store_true', help="Sistematically simulate growth on all the available C-N-P-S sources.")
+
 
     # check the inputted subcommand, automatic sys.exit(1) if a bad subprogram was specied. 
     args = parser.parse_args()
