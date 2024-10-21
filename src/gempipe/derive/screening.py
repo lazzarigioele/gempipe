@@ -246,37 +246,21 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
     if model_id == None: model_id = 'output'
     
     
-    for sub_class in sources_by_class.keys():
-        for exr_after in sources_by_class[sub_class]:
-                    
-                res_before = model.optimize()
+    for sub_class, starting in zip(['C','N','P','S'], [starting_C, starting_N, starting_P, starting_S]):
+        if starting in modeled_rids:   # For example, 
+            for exr_after in sources_by_class[sub_class]:
                 
-                with model:  # reversible changes. 
-                    if sub_class == 'C': 
-                        if starting_C in modeled_rids:
-                            model.reactions.get_by_id(starting_C).lower_bound = 0
-                            model.reactions.get_by_id(exr_after).lower_bound = -1000
-                            sub_key = f'[C]{exr_after[3:-2]}'
-                        else: continue
-                    if sub_class == 'N': 
-                        if starting_N in modeled_rids:
-                            model.reactions.get_by_id(starting_N).lower_bound = 0
-                            model.reactions.get_by_id(exr_after).lower_bound = -1000
-                            sub_key = f'[N]{exr_after[3:-2]}'
-                        else: continue
-                    if sub_class == 'P':
-                        if starting_P in modeled_rids:
-                            model.reactions.get_by_id(starting_P).lower_bound = 0
-                            model.reactions.get_by_id(exr_after).lower_bound = -1000
-                            sub_key = f'[P]{exr_after[3:-2]}'
-                        else: continue
-                    if sub_class == 'S': 
-                        if starting_S in modeled_rids:
-                            model.reactions.get_by_id(starting_S).lower_bound = 0
-                            model.reactions.get_by_id(exr_after).lower_bound = -1000
-                            sub_key = f'[S]{exr_after[3:-2]}'
-                        else: continue
+                with model:  # reversible changes 
+                    # close the original substrate
+                    model.reactions.get_by_id(starting).lower_bound = 0
                     
+                    # first FBA to be later compared:
+                    res_before = model.optimize()
+                
+                    # open the alternative substrate:
+                    model.reactions.get_by_id(exr_after).lower_bound = -1000
+                    
+                    # second FBA for camparison:
                     res_after = model.optimize()
                     
                     if res_before.status=='optimal' and res_after.status=='optimal' and res_after.objective_value >= (res_before.objective_value + 0.001):
@@ -285,6 +269,7 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
                         can_use = 0
                         
                     # save results in a future pnd DataFrame:
+                    sub_key = f'[{sub_class}]{exr_after[3:-2]}'
                     if mode=='binary':
                         df.append({'exchange': sub_key, model_id: can_use})
                     elif mode=='growth':
