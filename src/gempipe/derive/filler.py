@@ -9,9 +9,9 @@ import pandas as pnd
 import cobra
 
 
-from gempipe.curate.gaps import perform_gapfilling
-from gempipe.curate.gaps import import_from_universe
-from gempipe.curate.gaps import get_solver
+from gempipe.interface.gaps import perform_gapfilling
+from gempipe.interface.gaps import import_from_universe
+from gempipe.interface.gaps import get_solver
 
 
 from ..commons import chunkize_items

@@ -7,7 +7,7 @@ import os
 from ..commons import get_md5_string
 
 
-from gempipe.curate.sanity import search_biomass
+from gempipe.interface.sanity import search_biomass
 
 
 __PIMPCACHE__ = None

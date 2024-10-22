@@ -25,11 +25,11 @@ from gempipe.recon.refexpansion import add_new_reaction
 from gempipe.recon.refexpansion import mancor_to_dict
 
 
-from gempipe.curate.gaps import perform_gapfilling
-from gempipe.curate.gaps import import_from_universe
-from gempipe.curate.gaps import check_reactants
-from gempipe.curate.gaps import get_objectives
-from gempipe.curate.gaps import add_demand
+from gempipe.interface.gaps import perform_gapfilling
+from gempipe.interface.gaps import import_from_universe
+from gempipe.interface.gaps import check_reactants
+from gempipe.interface.gaps import get_objectives
+from gempipe.interface.gaps import add_demand
 
 
 

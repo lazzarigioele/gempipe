@@ -13,9 +13,10 @@ from .derive import derive_command
 from .autopilot import autopilot_command
 
 
-from .curate.gaps import *
-from .curate.sanity import *
-from .curate.medium import *
+from .interface.gaps import *
+from .interface.sanity import *
+from .interface.medium import *
+from .interface.clusters import *
 # set up the cobra solver
 
 

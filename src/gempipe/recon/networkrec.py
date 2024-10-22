@@ -17,7 +17,7 @@ from ..commons import get_retained_accessions
 from ..commons import read_refmodel
 
 
-from ..curate.gaps import import_from_universe
+from ..interface.gaps import import_from_universe
     
 
     

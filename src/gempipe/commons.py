@@ -16,7 +16,7 @@ import pandas as pnd
 from Bio import SeqIO, SeqRecord, Seq
 
 
-from gempipe.curate.medium import reset_growth_env
+from gempipe.interface.medium import reset_growth_env
 
 
 

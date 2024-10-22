@@ -5,8 +5,8 @@ import importlib.metadata
 import cobra
 
 
-from gempipe.curate.gaps import get_solver
-from gempipe.curate.gaps import get_objectives
+from gempipe.interface.gaps import get_solver
+from gempipe.interface.gaps import get_objectives
 
 
 def close_boundaries(model):
