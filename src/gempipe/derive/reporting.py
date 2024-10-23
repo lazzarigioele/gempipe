@@ -52,7 +52,7 @@ def figure_modeled_reactions(logger, outdir):
     
     # define colors:
     df = df.set_index('strain_isolate', drop=False)
-    colors = df['organism_name'].map({species: f'C{number}' for number, species in enumerate(df['organism_name'].unique())}).to_dict()
+    colors = df['organism_name'].map({species: f'C{number}' for number, species in enumerate(df['organism_name'].unique())}).to_dict()    
     
     # draw bars:
     fig, ax = plt.subplots()

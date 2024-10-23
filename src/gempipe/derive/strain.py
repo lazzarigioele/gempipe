@@ -180,6 +180,8 @@ def task_derivestrain(accession, args):
         logger.error("Duplicated accessions in the provided report. Please report this error to the developer.")
     report = report.reset_index(drop=True)
     species = report.loc[0, 'species']
+    strain = report.loc[0, 'strain']
+    niche = report.loc[0, 'niche']
     
     
     # get some metrics: 
@@ -199,7 +201,7 @@ def task_derivestrain(accession, args):
     
     
     # compose the new row:
-    return [{'accession': accession, 'species': species, 'G': n_G, 'R': n_R, 'M': n_M, 'obj_value': obj_value, 'status': status }]
+    return [{'accession': accession, 'species': species, 'strain': strain, 'niche': niche, 'G': n_G, 'R': n_R, 'M': n_M, 'obj_value': obj_value, 'status': status }]
 
 
 
@@ -236,7 +238,7 @@ def  derive_strain_specific(logger, outdir, cores, panmodel, pam, report, gannot
         load_the_worker, 
         zip(chunks, 
             range(cores), 
-            itertools.repeat(['accession', 'G', 'R', 'M', 'obj_value', 'status']), 
+            itertools.repeat(['accession', 'species', 'strain', 'niche', 'G', 'R', 'M', 'obj_value', 'status']), 
             itertools.repeat('accession'), 
             itertools.repeat(logger), 
             itertools.repeat(task_derivestrain),  # will return a new sequences dataframe (to be concat).
@@ -251,7 +253,9 @@ def  derive_strain_specific(logger, outdir, cores, panmodel, pam, report, gannot
     
     
     # save tabular output:
-    all_df_combined.to_csv(outdir + 'derive_strains.csv')
+    df_derive_strains = all_df_combined
+    df_derive_strains = df_derive_strains.sort_values(by=['species', 'strain', 'niche'], ascending=True)   # sort by species
+    df_derive_strains.to_csv(outdir + 'derive_strains.csv')
     
     
     return 0

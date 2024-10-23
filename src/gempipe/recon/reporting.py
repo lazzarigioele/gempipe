@@ -91,6 +91,9 @@ def create_report(logger, outdir):
     report = []  # list of dicts, future dataframe
     
     
+    genomes_df = pnd.read_csv('working/genomes/genomes.csv', index_col=0)
+    genomes_df = genomes_df.set_index('assembly_accession', drop=True, verify_integrity=True)
+    
     # get the retained genomes/proteomes (post filtering):
     with open('working/proteomes/species_to_proteome.pickle', 'rb') as handler:
         species_to_proteome = pickle.load(handler)
@@ -99,9 +102,14 @@ def create_report(logger, outdir):
                 basename = os.path.basename(proteome)
                 accession, _ = os.path.splitext(basename)
                 
+                strain = genomes_df.loc[accession, 'strain_isolate']
+                niche = genomes_df.loc[accession, 'niche']
                 
                 # populate the table: 
-                report.append({'species': species, 'accession': accession})
+                report.append({
+                    'accession': accession, 'species': species, 
+                    'strain': strain, 'niche': niche
+                })
                 
                 
     # save to file

@@ -262,11 +262,12 @@ def strain_species_filler(logger, outdir, cores, panmodel, media_filepath, minfl
     # join with the previous table, and save:
     if   level=='strain':  summary_file='derive_strains.csv' 
     else:                  summary_file='derive_species.csv'
-    results_df = pnd.read_csv(outdir + summary_file, index_col=0)
+    results_df = pnd.read_csv(outdir + summary_file, index_col=0)   # set accession or species as index
     if level=='species': 
         all_df_combined.index = [i.replace('_', ' ') for i in all_df_combined.index.to_list()]
     results_df = pnd.concat([results_df, all_df_combined], axis=1)
-    results_df = results_df.sort_index()   # sort by accession or species
+    if   level=='species':  results_df = results_df.sort_index()   # sort by species
+    else:                   results_df = results_df.sort_values(by=['species', 'strain', 'niche'], ascending=True)   # sort by species
     results_df.to_csv(outdir + summary_file)   # replace summary_file.csv
     
     
