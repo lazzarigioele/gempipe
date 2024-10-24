@@ -9,20 +9,21 @@ from sklearn.metrics import silhouette_score, silhouette_samples
 import numpy as np    
 
 
-from .clusters_utils import merge_tables, make_dendrogram, make_colorbar_clusters, make_colorbar_metadata, make_legends
+from .clusters_utils import merge_tables, sort_by_leaves, make_dendrogram, make_colorbar_clusters, make_colorbar_metadata, make_legends, subset_k_best
 
     
     
-def silhouette_analysis(tables, figsize = (10,5), ctotest=None, forcen=None, derive_report=None, report_key='species', legend_ratio=0.4, outfile=None, verbose=False):
+def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None, forcen=None, derive_report=None, report_key='species', legend_ratio=0.7, outfile=None, verbose=False):
     """Perform a silhuette analysis to detect the optimal number of clusters. 
     
     Args:
-        tables (pnd.DataFrame): feture tables with genome accessions are in columns and features are in rows. 
+        tables (pnd.DataFrame): feature tables with genome accessions are in columns and features are in rows. 
             Can also be a dictionary of feature tables (example: ``{'auxotrophies': aux_df, 'substrates': sub_df})``. 
             In this case, any number of tables (pandas.DataFrame) can be used. 
             For each table, genome accessions are in columns, features are in rows.
             Directly compatible tables are: `rpam.csv`, `cnps.csv`, and `aux.csv` (all produced by `gempipe derive`).
         figsize (int, int): width and height of the figure.
+        drop_const (bool): if `True`, remove constant features.
         ctotest (list): number of clusters to test (example: ``[5,7,10]`` to test five, seven and ten clusters).
             If `None`, all the combinations from 2 to the number of accessions -1 will be used.
         forcen (int): force the number of cluster, otherwise the optimal number will picked up according to the sihouette value. 
@@ -59,7 +60,7 @@ def silhouette_analysis(tables, figsize = (10,5), ctotest=None, forcen=None, der
 
 
 
-    def make_plot_1_silhouette(ax, num_clusters_vector, silhouette_avg_scores, opt_n_clusters, forcen, verbose):
+    def make_plot_ncluster_comparison(ax, num_clusters_vector, silhouette_avg_scores, opt_n_clusters, forcen, verbose):
 
         # Plot the silhouette scores against the number of clusters (threshold values)
         ax.plot(num_clusters_vector, silhouette_avg_scores, marker='o')
@@ -72,7 +73,7 @@ def silhouette_analysis(tables, figsize = (10,5), ctotest=None, forcen=None, der
 
 
 
-    def make_plot_2_silhouette(ax, opt_n_clusters, silhouette_scores, clusters):
+    def make_plot_silhouette_coeff(ax, opt_n_clusters, silhouette_scores, clusters):
 
         # Given a fixed number of cluster (ie the optimal number of clusters),
         # extract the datapoint belonging to each of the clusters and show its associates silhouette score. 
@@ -114,13 +115,20 @@ def silhouette_analysis(tables, figsize = (10,5), ctotest=None, forcen=None, der
     # START:
     # format input tables:
     data, dict_tables = merge_tables(tables)
-    data = data.astype(bool)   # convert multi-layer (0, 1, 2, 3, ...)into binary:
+    data_bool = data.astype(bool)   # convert multi-layer (0, 1, 2, 3, ...)into binary:
+    
+    
+    # the user may want to drop constant columns: 
+    if drop_const: 
+        constant_columns = [col for col in data.columns if data[col].nunique() == 1]
+        if verbose: print(f"WARNING: removing {len(constant_columns)} constant features.")
+        data_bool = data_bool.drop(columns=constant_columns)
     
     
     # pdist() / linkage() will loose the accession information. So here we save a dict: 
-    index_to_acc = {i: accession for i, accession in enumerate(data.index)}
+    index_to_acc = {i: accession for i, accession in enumerate(data_bool.index)}
     # Calculate the linkage matrix using Ward clustering and Jaccard dissimilarity
-    distances = pdist(data, 'jaccard')
+    distances = pdist(data_bool, 'jaccard')
     linkage_matrix = linkage(distances, method='ward')
     
     
@@ -129,7 +137,7 @@ def silhouette_analysis(tables, figsize = (10,5), ctotest=None, forcen=None, der
     
     
     # get the vector of number of clusters to test:
-    num_clusters_vector = np.arange(2, len(data)-1, 1)
+    num_clusters_vector = np.arange(2, len(data_bool)-1, 1)
     if ctotest != None: num_clusters_vector = ctotest
     #print("Testing the following number of clusters:", num_clusters_vector)
     
@@ -153,7 +161,7 @@ def silhouette_analysis(tables, figsize = (10,5), ctotest=None, forcen=None, der
         # The Silhouette Score can be used for both K-means clustering and hierarchical clustering, 
         # as well as other clustering algorithms. It's a general-purpose metric for evaluating the 
         # quality of clusters, and it does not depend on the specific clustering algorithm being used.
-        silhouette_avg = silhouette_score(data, clusters)
+        silhouette_avg = silhouette_score(data_bool, clusters)
         
         # Store the silhouette score and cluster assignments
         silhouette_avg_scores.append(silhouette_avg)
@@ -166,8 +174,8 @@ def silhouette_analysis(tables, figsize = (10,5), ctotest=None, forcen=None, der
     opt_n_clusters = max_index + 2  # '+2' because num_clsuters starts from 2
     
         
-    # FIRST PLOT. Plot the average sihoutte (average on each datapoint).
-    make_plot_1_silhouette(axs[0], num_clusters_vector, silhouette_avg_scores, opt_n_clusters, forcen, verbose)
+    # Plot the average sihoutte (average on each datapoint).
+    make_plot_ncluster_comparison(axs[0], num_clusters_vector, silhouette_avg_scores, opt_n_clusters, forcen, verbose)
     
         
     # Given the optimal number of clusters, visualizze the silhouette score for each data point. 
@@ -175,25 +183,28 @@ def silhouette_analysis(tables, figsize = (10,5), ctotest=None, forcen=None, der
     clusters = cut_tree(linkage_matrix, n_clusters=opt_n_clusters)
     clusters = clusters.flatten()
     acc_to_cluster = {index_to_acc[index]: clusters[index]+1 for index in index_to_acc.keys()}
-    silhouette_avg = silhouette_score(data, clusters)
+    silhouette_avg = silhouette_score(data_bool, clusters)
     if verbose: print(f'Avg silhouette score when {opt_n_clusters} clusters:', silhouette_avg)
-    silhouette_scores = silhouette_samples(data, clusters)
+    silhouette_scores = silhouette_samples(data_bool, clusters)
     # Now 'silhouette_scores' is just a list of values. But the index correspond to a specific accession, that is
     # associated to a specific cluster. Thus, later we obtain the scores for a specific cluster 
     # simply with a 'silhouette_scores[clusters == i]'.
     
 
-    # SECOND PLOT. Show silhouette scores for each datapoint (given the opimal number of clusters)
-    cluster_to_color = make_plot_2_silhouette(axs[2], opt_n_clusters, silhouette_scores, clusters)
+    # Show silhouette scores for each datapoint (given the opimal number of clusters)
+    cluster_to_color = make_plot_silhouette_coeff(axs[2], opt_n_clusters, silhouette_scores, clusters)
     
-    # THIRD PLOT. Plot the dendrogram
+    # Plot the dendrogram
     make_dendrogram(axs[4], linkage_matrix)
     
-    # FOURTH PLOT: add colorbar for the dendrogram
-    make_colorbar_clusters(axs[5], index_to_acc, acc_to_cluster, cluster_to_color, linkage_matrix)
+    # order the dataframe following the leaves of the tree:
+    ord_data_bool = sort_by_leaves(data_bool, linkage_matrix, index_to_acc)
+
+    # add colorbar for the dendrogram
+    make_colorbar_clusters(axs[5], ord_data_bool, acc_to_cluster, cluster_to_color)
     
-    # FIFTH PLOT: add colorbar for the species/niches
-    make_colorbar_metadata(axs[7], derive_report, report_key, index_to_acc, acc_to_cluster, cluster_to_color, linkage_matrix)
+    # add colorbar for the species/niches
+    make_colorbar_metadata(axs[7], ord_data_bool, derive_report, report_key)
     
     # make legeneds
     make_legends(axs[9], derive_report, report_key, cluster_to_color, dict_tables=None)
@@ -207,11 +218,11 @@ def silhouette_analysis(tables, figsize = (10,5), ctotest=None, forcen=None, der
 
 
 
-def phylomet_dendro(tables, figsize = (10,5), drop_const=True, derive_report=None, report_key='species', acc_to_cluster=None, cluster_to_color=None, legend_ratio=0.4, outfile=None, verbose=False):
+def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=None, report_key='species', acc_to_cluster=None, cluster_to_color=None, legend_ratio=0.7, label_ratio=0.02, k=None, outfile=None, verbose=False):
     """Create a phylo-metabolic dendrogram.
     
     Args:
-        tables (pnd.DataFrame): feture tables with genome accessions are in columns and features are in rows. 
+        tables (pnd.DataFrame): feature tables with genome accessions are in columns and features are in rows. 
             Can also be a dictionary of feature tables (example: ``{'auxotrophies': aux_df, 'substrates': sub_df})``. 
             In this case, any number of tables (pandas.DataFrame) can be used. 
             For each table, genome accessions are in columns, features are in rows.
@@ -224,6 +235,8 @@ def phylomet_dendro(tables, figsize = (10,5), drop_const=True, derive_report=Non
         acc_to_cluster (dict):  genome-to-cluster associations produced by `silhouette_analysis()`.
         cluster_to_color (dict):  cluster-to-RGB color associations produced by `silhouette_analysis()`.
         legend_ratio (float): space reserved for the legend.
+        label_ratio (float): space reserved for the Y-axis labels.
+        k (int): focus on the `k` most discriminative features.
         outfile (str): filepath to be used to save the image. If `None` it will not be saved.
         verbose (bool): if `True`, print more log messages
     
@@ -233,13 +246,13 @@ def phylomet_dendro(tables, figsize = (10,5), drop_const=True, derive_report=Non
     """
     
     
-    def create_dendro_frame(figsize):
+    def create_heatmap_frame(figsize):
     
         # create the subplots: 
         fig, axs = plt.subplots(
             nrows=1, ncols=8, 
             figsize=figsize, # global dimensions.
-            gridspec_kw={'width_ratios': [0.3, 0.04, 0.02, 0.94, 0.02, 0.04,  0.02, legend_ratio ]}) # suplots width proportions. 
+            gridspec_kw={'width_ratios': [0.3, 0.04, 0.02, 0.04,  0.02, 0.94, label_ratio, legend_ratio ]}) # suplots width proportions. 
         # adjust the space between subplots: 
         plt.subplots_adjust(wspace=0, hspace=0)
         axs[2].axis('off')  # remove frame and axis
@@ -250,8 +263,8 @@ def phylomet_dendro(tables, figsize = (10,5), drop_const=True, derive_report=Non
     
     
     
-    def make_plot_1_dendro(ax, ord_data):
-        
+    def make_plot_heatmap_multilayer(ax, ord_data, k):
+                
         ax.matshow(
             ord_data,  
             cmap='viridis',
@@ -260,23 +273,37 @@ def phylomet_dendro(tables, figsize = (10,5), drop_const=True, derive_report=Non
             interpolation='none') # no interp. performed on Agg-ps-pdf-svg backends.
 
         # set x labels
-        ax.get_xaxis().set_visible(False)
+        if k==None: ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
 
         ax.spines['top'].set_visible(False)
         ax.spines['bottom'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
-    
-    
+        
+        
+        if k != None: 
+            
+            # set right-Y-axis labels:
+            for i, label in enumerate(ord_data.index):
+                ax.text(ax.get_xlim()[1], i, '- '+label, va='center', ha='left', color='black')
+
+            # set X-axis labels: 
+            ax.set_xticks(np.arange(ord_data.shape[1]))
+            ax.set_xticklabels(ord_data.columns, rotation=20, ha='right')
+            ax.xaxis.set_ticks_position('bottom')  # move ticks to the bottom
+            ax.tick_params(top=False, bottom=True)  # disable ticks on the top
+        
+ 
     
     # START
     # format input tables: 
     data, dict_tables = merge_tables(tables)
     data_bool = data.astype(bool)   # convert multi-layer (0, 1, 2, 3, ...)into binary:
 
-
+    
     # the user may want to drop constant columns: 
+    if k != None and drop_const==False: drop_const = True
     if drop_const: 
         constant_columns = [col for col in data.columns if data[col].nunique() == 1]
         if verbose: print(f"WARNING: removing {len(constant_columns)} constant features.")
@@ -293,29 +320,29 @@ def phylomet_dendro(tables, figsize = (10,5), drop_const=True, derive_report=Non
     linkage_matrix = linkage(distances, method='ward')
     
     
+    # the user may want to focus on the 'k' most discriminative features:
+    if k != None:
+        data_bool = subset_k_best(data_bool, k, acc_to_cluster, derive_report, report_key)
+        data = data.loc[:, data_bool.columns ]
+    
+    
     # create the empty figure frame:
-    fig, axs = create_dendro_frame(figsize)
-    
+    fig, axs = create_heatmap_frame(figsize)
 
-    # FIRST PLOT: plot the dendrogram
+    # plot the dendrogram
     make_dendrogram(axs[0], linkage_matrix)
+
+    # order the dataframe following the leaves of the tree:
+    ord_data = sort_by_leaves(data, linkage_matrix, index_to_acc)   
     
-    # SECOND PLOT: add the cluster information (coming from the silhouette analysis);
-    make_colorbar_clusters(axs[1], index_to_acc, acc_to_cluster, cluster_to_color, linkage_matrix)
- 
+    # plot the heatmap:
+    make_plot_heatmap_multilayer(axs[5], ord_data, k)
     
-    # How to get the leaves order: 
-    ord_leaves = leaves_list(linkage_matrix)
-    ord_leaves = np.flip(ord_leaves)  # because leaves are returned in the inverse sense.
-    ord_leaves = [index_to_acc[i] for i in ord_leaves]  # convert index as number to index as accession
-    ord_data = data.loc[ord_leaves, :]  # # transposed and reordered dataframe.
-     
+    # add the cluster information (coming from the silhouette analysis);
+    make_colorbar_clusters(axs[1], ord_data, acc_to_cluster, cluster_to_color)
     
-    # THIRD PLOT: plot the heatmap:
-    make_plot_1_dendro(axs[3], ord_data)
-    
-    # FOURTH PLOT: colorbar for the species/niche
-    make_colorbar_metadata(axs[5], derive_report, report_key, index_to_acc, acc_to_cluster, cluster_to_color, linkage_matrix)
+    # colorbar for the species/niche
+    make_colorbar_metadata(axs[3], ord_data, derive_report, report_key)
     
     # make legends
     make_legends(axs[7], derive_report, report_key, cluster_to_color, dict_tables)
@@ -323,6 +350,7 @@ def phylomet_dendro(tables, figsize = (10,5), drop_const=True, derive_report=Non
     # save to disk; bbox_inches='tight' removes white spaces around the figure. 
     if outfile != None:
         plt.savefig(outfile, dpi=200, bbox_inches='tight')
+                
         
-        
+    return pnd.concat([ord_data, derive_report], axis=1)
     return fig
