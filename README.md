@@ -6,7 +6,7 @@
 <br>
 
 <div align="center">
-  <p>This is gempipe, a tool for the reconstruction of strain-specific genome-scale metabolic models.</p>
+  <p>This is gempipe, a tool for drafting, curating and analyzing pan and multi-strain reconstructions of genome-scale metabolic models (GSMMs or GEMs).</p>
 </div>
 
 <h1 align="center">
