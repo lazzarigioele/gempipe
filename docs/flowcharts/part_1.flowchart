@@ -61,9 +61,9 @@ style Input_ref_model fill:lightgreen
 style Input_manual_corrections fill:lightgreen
 
 style initial_Genomes fill:lightblue 
-style Busco fill:lightsalmon
-style N50 fill:lightsalmon
-style n_contigs fill:lightsalmon
+style Busco fill:burlywood
+style N50 fill:burlywood
+style n_contigs fill:burlywood
 style Genomes fill:lightblue
 style initial_Proteomes fill:lightblue
 style Proteomes fill:lightblue

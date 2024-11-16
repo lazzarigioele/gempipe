@@ -2,6 +2,9 @@ subgraph Part_3[Part 3]
 
 strain_derivation --> strain_models{{strain_models}} --> gapfilling --> gf_strain_models{{gf_strain_models}} 
 gf_strain_models --> species_derivation --> species_models{{species_models}}
+gf_strain_models --> aux_prediction --> aux{{aux}}
+gf_strain_models --> cnps_prediction --> cnps{{cnps}}
+gf_strain_models --> rpam{{rpam}}
 
 end
 
@@ -21,8 +24,13 @@ style strain_models fill:lightblue
 style gf_strain_models fill:gold
 style species_models fill:gold
 style gapfilling fill:whitesmoke
+style aux_prediction fill:whitesmoke
+style cnps_prediction fill:whitesmoke
 style panmodel fill:gold
 style PAM fill:gold
+style aux fill:salmon
+style cnps fill:salmon
+style rpam fill:salmon
 
 style strain_derivation fill:whitesmoke
 style species_derivation fill:whitesmoke 
