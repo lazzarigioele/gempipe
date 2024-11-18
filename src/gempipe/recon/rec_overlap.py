@@ -176,6 +176,21 @@ def task_recoverlap(genome, args):
         elongation_df = pnd.concat([hpss_not_masked, hpss_masked], axis=0)
         elongation_df = elongation_df.reset_index(drop=True)
         elongation_df.loc[1, 'sseqid'] = elongation_df.loc[1, 'sseqid'] + ' (masked)'
+        
+        
+        # check that "start" or "end" of the masked fragment falls between "start" and "end" of the non-masked:
+        if elongation_df.loc[1, 'qstart'] < elongation_df.loc[0, 'qstart'] and elongation_df.loc[1, 'qend'] < elongation_df.loc[0, 'qstart']:
+            continue
+        if elongation_df.loc[1, 'qstart'] > elongation_df.loc[0, 'qend'] and elongation_df.loc[1, 'qend'] > elongation_df.loc[0, 'qend']:
+            continue
+
+        # check qlen (length of the representative sequence of the cluster to recover) is at least 100 aa
+        if elongation_df.loc[0, 'qlen'] < 100:
+            continue
+
+        # check that the fragment (masked contig) is significative (at least 20 aa)
+        if elongation_df.loc[1, 'length'] < 20:
+            continue
 
         
         # populate the final improvements dataframe
@@ -227,7 +242,7 @@ def task_recoverlap(genome, args):
 
         # populate the results dataframe:
         df_result.append({
-            'ID': overlap_gid, 'cluster': cluster, 
+            'ID': overlap_gid, 'cluster': row["qseqid"], 
             'accession': accession, 'contig': contig, 'strand': strand, 
             'start': start, 'end': end,
         })
