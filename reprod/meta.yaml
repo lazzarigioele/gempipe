@@ -1,5 +1,5 @@
 {% set name = "gempipe" %}
-{% set version = "1.37.1" %}
+{% set version = "1.37.2" %}
 
 
 package:
@@ -12,7 +12,7 @@ source:
     url: https://github.com/lazzarigioele/{{ name }}/archive/v{{ version }}.tar.gz
     # with https://pypi.org/packages/source/{first-letter}/{package-name}/{package-name}-{version}.tar.gz :
     #url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-    sha256: a3122475c1dfb7f4d0af3d84f3ab26510a9208cf70b1ba6f7e10af20a671570c
+    sha256: 11af00b4106c6ae0f09b595f18228a09af3342913f2ca624b58555d57603059b
 
 
 build:

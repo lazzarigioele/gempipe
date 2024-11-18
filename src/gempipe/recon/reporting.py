@@ -103,7 +103,9 @@ def create_report(logger, outdir):
                 accession, _ = os.path.splitext(basename)
                 
                 strain = genomes_df.loc[accession, 'strain_isolate']
-                niche = genomes_df.loc[accession, 'niche']
+                if 'niche' in genomes_df.columns: 
+                    niche = genomes_df.loc[accession, 'niche']
+                else: niche = None
                 
                 # populate the table: 
                 report.append({
