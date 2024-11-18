@@ -36,6 +36,7 @@ validation/03_pseudomonas/validation/gempipe/working/rec_broken/sequences.csv
 validation/03_pseudomonas/validation/gempipe/working/rec_masking/sequences.csv
 validation/03_pseudomonas/validation/gempipe/working/clustering/sequences.csv
 validation/03_pseudomonas/validation/gempipe/working/clustering/combined.faa
+validation/03_pseudomonas/validation/gempipe/working/rec_overlap/sequences.csv
 validation/dbs/eggnog_proteins.dmnd
 validation/dbs/eggnog.taxa.db
 validation/dbs/eggnog.db
