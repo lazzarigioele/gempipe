@@ -242,7 +242,8 @@ def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=
     
     Returns:
         tuple: A tuple containing:
-            - matplotlib.figure.Figure: figure representing the sinhouette analysis.
+            - matplotlib.figure.Figure: figure representing the phylometabolic tree and associated heatmap.
+            - pnd.DataFrame: table representing the binary features contained in the heatmap.
     """
     
     
@@ -333,7 +334,8 @@ def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=
     make_dendrogram(axs[0], linkage_matrix)
 
     # order the dataframe following the leaves of the tree:
-    ord_data = sort_by_leaves(data, linkage_matrix, index_to_acc)   
+    ord_data = sort_by_leaves(data, linkage_matrix, index_to_acc)  
+    ord_data_bool = sort_by_leaves(data_bool, linkage_matrix, index_to_acc)  # only to return 
     
     # plot the heatmap:
     make_plot_heatmap_multilayer(axs[5], ord_data, k)
@@ -352,5 +354,127 @@ def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=
         plt.savefig(outfile, dpi=200, bbox_inches='tight')
                 
         
-    return pnd.concat([ord_data, derive_report], axis=1)
-    return fig
+    return fig, ord_data_bool
+
+
+
+def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
+    """Extract discriminant features from cluster of strains.
+    
+    Args:
+        tables (pnd.DataFrame): binary features table such as the one produced by `heatmap_multilayer`
+            (genomes in row, binary featuresin column).
+        acc_to_cluster (dict): dictionary such as the one produced by `silhouette_analysis``
+            (accessions as keys, cluster assignment as value).
+        cluster_to_color (dict): dictionary such as the one produced by `silhouette_analysis``
+            (clusters as keys, colors as value).
+        figsize (int, int): width and height of the figure. If ``None``, dimensions will automatically adapted.
+        
+    
+    Returns:
+        tuple: A tuple containing:
+            - matplotlib.figure.Figure: figure representing the discriminative binary features.
+    """
+    
+    def get_contingency(binary_feats, feat_id):
+        contingency_table = pnd.crosstab(
+            binary_feats[feat_id],
+            binary_feats['y'],
+            margins = False)
+        
+        # the resulting pnd.DataFrame will be similar to (e.g. for the binary feat "[aux]his__L"):
+        #         y            Cluster_1  Cluster_2  Cluster_3  Cluster_4  Cluster_5
+        # [aux]his__L                                                       
+        # 0                   12          3          6         12          0
+        # 1                    0          0          0          0          3
+        return contingency_table
+    
+    
+    # convert to int:
+    binary_feats = binary_feats.copy().astype(int)  # .copy() will defragment the dataframe.
+    
+    
+    # add the classification column (usually caled 'y'):
+    binary_feats['y'] = "Cluster_" + str(0)
+    for accession, row in binary_feats.iterrows(): 
+        binary_feats.loc[accession, 'y'] = "Cluster_" + str(acc_to_cluster[accession]) # str to avoid ambiguity
+        
+    
+    # get dataframe of relative frequencies:
+    df_relfreq = pnd.DataFrame(index=list(set(list(binary_feats.columns))-set(['y'])), columns=binary_feats['y'].unique())
+    
+    for feat_id in df_relfreq.index:
+        
+        cont = get_contingency(binary_feats, feat_id)
+        for cluster in df_relfreq.columns:
+            df_relfreq.loc[feat_id, cluster] = cont.loc[1, cluster] / (cont.loc[1, cluster] + cont.loc[0, cluster])
+    
+    df_relfreq = df_relfreq[(df_relfreq >= 0.90).any(axis=1)]
+    df_relfreq = df_relfreq[(df_relfreq <= 0.10).any(axis=1)]
+        
+        
+    # invert column order to match that of the heatmap
+    df_relfreq = df_relfreq[reversed(df_relfreq.columns)]
+    df_relfreq  = df_relfreq.astype(float)
+    
+    
+    # sort features aalphabetically
+    df_relfreq = df_relfreq.sort_index(ascending=False)
+    
+    # resort index in order to have similar rows (similar features) close together.
+    index_to_featid = {i: feat_id for i, feat_id in enumerate(df_relfreq.index)}
+    distances = pdist(df_relfreq, 'jaccard')
+    linkage_matrix = linkage(distances, method='ward')
+    df_relfreq = sort_by_leaves(df_relfreq, linkage_matrix, index_to_featid)  # only to return 
+    
+    
+    # create the subplots: 
+    fig, axs = plt.subplots(
+        nrows=2, ncols=1, 
+        figsize=(3, 0.3 * len(df_relfreq)), # global dimensions.
+        gridspec_kw={'width_ratios': [1], 'height_ratios': [1, 1*len(df_relfreq)]}) # suplots width proportions. 
+    # adjust the space between subplots: 
+    plt.subplots_adjust(wspace=0, hspace=0)
+    
+    
+    # create matshow (clusters)
+    cmap = LinearSegmentedColormap.from_list('', [cluster_to_color[eval(cluster.replace('Cluster_', ''))] for cluster in df_relfreq.columns])
+    df_clusters = pnd.DataFrame({cluster: [i] for i, cluster in enumerate(df_relfreq.columns)})
+    axs[0].matshow(
+        df_clusters,  
+        cmap=cmap,
+        vmin=df_clusters.min().min(), vmax=df_clusters.max().max(), # define ranges for the colormap.
+        aspect='auto', # fixed axes and aspect adjusted to fit data.
+        interpolation='none') # no interp. performed on Agg-ps-pdf-svg backends.
+    
+    
+    # create matshow (heatmap)
+    cmap = LinearSegmentedColormap.from_list('', ["#DDDDDD", "#8888DD"])
+    axs[1].matshow(
+        df_relfreq,  
+        cmap=cmap,
+        vmin=df_relfreq.min().min(), vmax=df_relfreq.max().max(), # define ranges for the colormap.
+        aspect='auto', # fixed axes and aspect adjusted to fit data.
+        interpolation='none') # no interp. performed on Agg-ps-pdf-svg backends.
+    
+    
+    # add x/y axis labels (clusters):
+    axs[0].set_xticks(range(len(df_relfreq.columns)))  # Position of x-ticks
+    axs[0].set_xticklabels(df_relfreq.columns, ha='left', rotation=30)  # Replace with your desired labels
+    axs[0].set_yticks([])   # remove x ticks
+    
+    
+    # add x/y axis labels (heatmap):
+    axs[1].set_xticks([])   # remove x ticks
+    axs[1].set_yticks(range(len(df_relfreq.index)))  # Position of y-ticks
+    axs[1].set_yticklabels(df_relfreq.index)
+    
+    
+    
+    # add annotations (rel frequencies):
+    for i in range(len(df_relfreq.index)):
+        for j in range(len(df_relfreq.columns)):
+            axs[1].text(j, i, f'{round(df_relfreq.iloc[i,j], 2)}', ha='center', va='center', color='black')
+    
+        
+    return fig, df_relfreq

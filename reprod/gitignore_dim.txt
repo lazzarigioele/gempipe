@@ -40,6 +40,17 @@
 8.7G	./testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
 266M	./testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
 39G	./testing/09_aphidicola_auto2/working/dbs/eggnog.db
+68M	./applications/tesi_tmp/old_stuff/pa_matrix_refound_frag.csv
+136M	./applications/tesi_tmp/gempipe/working/coordinates/seq_to_coords.pickle
+62M	./applications/tesi_tmp/gempipe/working/rec_broken/pam.csv
+106M	./applications/tesi_tmp/gempipe/working/clustering/representatives.faa.clstr
+66M	./applications/tesi_tmp/gempipe/working/clustering/pam.csv
+45M	./applications/tesi_tmp/gempipe/working/clustering/acc_to_seqs.pickle
+59M	./applications/tesi_tmp/gempipe/working/clustering/seq_to_cluster.pickle
+46M	./applications/tesi_tmp/gempipe/working/clustering/cluster_to_seqs.pickle
+856M	./applications/tesi_tmp/gempipe/working/clustering/sequences.csv
+870M	./applications/tesi_tmp/gempipe/working/clustering/combined.faa
+58M	./applications/tesi_tmp/gempipe/working/clustering/seq_to_acc.pickle
 170M	./applications/lacticaseibacillus/gempipe/working/coordinates/seq_to_coords.pickle
 69M	./applications/lacticaseibacillus/gempipe/working/rec_broken/pam.csv
 135M	./applications/lacticaseibacillus/gempipe/working/rec_broken/seq_to_coords.pickle
@@ -493,6 +504,8 @@
 99M	./applications/dacicola/raxml_ng/core_gene_alignment.aln.raxml.reduced.phy
 103M	./applications/dacicola/roary/_1725897391/.ipynb_checkpoints/core_gene_alignment-checkpoint.aln
 103M	./applications/dacicola/roary/_1725897391/core_gene_alignment.aln
+88M	./applications/dacicola/gempipe_norec/working/clustering/sequences.csv
+90M	./applications/dacicola/gempipe_norec/working/clustering/combined.faa
 88M	./applications/dacicola/gempipe/working/rec_broken/sequences.csv
 89M	./applications/dacicola/gempipe/working/rec_masking/sequences.csv
 88M	./applications/dacicola/gempipe/working/clustering/sequences.csv

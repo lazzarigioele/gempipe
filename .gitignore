@@ -43,6 +43,17 @@ validation/dbs/eggnog.db
 testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
 testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
 testing/09_aphidicola_auto2/working/dbs/eggnog.db
+applications/tesi_tmp/old_stuff/pa_matrix_refound_frag.csv
+applications/tesi_tmp/gempipe/working/coordinates/seq_to_coords.pickle
+applications/tesi_tmp/gempipe/working/rec_broken/pam.csv
+applications/tesi_tmp/gempipe/working/clustering/representatives.faa.clstr
+applications/tesi_tmp/gempipe/working/clustering/pam.csv
+applications/tesi_tmp/gempipe/working/clustering/acc_to_seqs.pickle
+applications/tesi_tmp/gempipe/working/clustering/seq_to_cluster.pickle
+applications/tesi_tmp/gempipe/working/clustering/cluster_to_seqs.pickle
+applications/tesi_tmp/gempipe/working/clustering/sequences.csv
+applications/tesi_tmp/gempipe/working/clustering/combined.faa
+applications/tesi_tmp/gempipe/working/clustering/seq_to_acc.pickle
 applications/lacticaseibacillus/gempipe/working/coordinates/seq_to_coords.pickle
 applications/lacticaseibacillus/gempipe/working/rec_broken/pam.csv
 applications/lacticaseibacillus/gempipe/working/rec_broken/seq_to_coords.pickle
@@ -496,6 +507,8 @@ applications/lacticaseibacillus/gempipe/output_recon/pam.csv
 applications/dacicola/raxml_ng/core_gene_alignment.aln.raxml.reduced.phy
 applications/dacicola/roary/_1725897391/.ipynb_checkpoints/core_gene_alignment-checkpoint.aln
 applications/dacicola/roary/_1725897391/core_gene_alignment.aln
+applications/dacicola/gempipe_norec/working/clustering/sequences.csv
+applications/dacicola/gempipe_norec/working/clustering/combined.faa
 applications/dacicola/gempipe/working/rec_broken/sequences.csv
 applications/dacicola/gempipe/working/rec_masking/sequences.csv
 applications/dacicola/gempipe/working/clustering/sequences.csv
