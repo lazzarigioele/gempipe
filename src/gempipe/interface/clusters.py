@@ -484,7 +484,9 @@ def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
     # add annotations (rel frequencies):
     for i in range(len(df_relfreq.index)):
         for j in range(len(df_relfreq.columns)):
-            axs[1].text(j, i, f'{round(df_relfreq.iloc[i,j], 2)}', ha='center', va='center', color='black')
+            freq_to_show = round(df_relfreq.iloc[i,j], 2)
+            annot_color = 'white' if freq_to_show >= 0.60 else 'black'
+            axs[1].text(j, i, f'{freq_to_show}', ha='center', va='center', color=annot_color)
     
-        
+
     return fig, df_relfreq

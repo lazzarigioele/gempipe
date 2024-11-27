@@ -2,6 +2,7 @@ import pandas as pnd
 import seaborn as sb
 import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
+from matplotlib.lines import Line2D
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 from scipy.spatial.distance import pdist
 from scipy.cluster.hierarchy import linkage, cut_tree, dendrogram, leaves_list
@@ -167,9 +168,11 @@ def make_legends(ax, derive_report, report_key, cluster_to_color, dict_tables, a
     if isinstance(derive_report, pnd.DataFrame):
         if key_to_color == None:
             patches = [Patch(facecolor=f'C{number}', label=species, ) for number, species in enumerate(derive_report[report_key].unique())]
-        else: 
-            patches = [Patch(facecolor=color, label=species, ) for species, color in key_to_color.items()]
-        l1 = plt.legend(handles=patches, title=report_key, loc='upper left', bbox_to_anchor=anchor[0], facecolor='#f8f8f8')
+            l1 = plt.legend(handles=patches, title=report_key, loc='upper left', bbox_to_anchor=anchor[0])
+        else:   # lines instead of pathches 
+            custom_lines = [Line2D([0], [0], color=color, lw=4) for color in key_to_color.values()]
+            custom_labels = [key for key in key_to_color.keys()]
+            l1 = plt.legend(custom_lines, custom_labels, title=report_key, loc='upper left', bbox_to_anchor=anchor[0], facecolor='#f8f8f8')
         ax.add_artist(l1)  # l2 implicitly replaces l1
         
     
