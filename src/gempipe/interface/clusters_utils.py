@@ -120,7 +120,7 @@ def make_colorbar_clusters(ax, ord_data, acc_to_cluster, cluster_to_color):
     
     
     
-def make_colorbar_metadata(ax, ord_data, derive_report, report_key):
+def make_colorbar_metadata(ax, ord_data, derive_report, report_key, key_to_color):
 
     
     if isinstance(derive_report, pnd.DataFrame):
@@ -131,18 +131,27 @@ def make_colorbar_metadata(ax, ord_data, derive_report, report_key):
             return
         
         # define accession-to-colors:
-        key_to_color = {key: f'C{number}' for number, key in enumerate(derive_report[report_key].unique())}   # 'key' is eg 'species'.
-        acc_to_color = derive_report[report_key].map(key_to_color).to_dict()    
-        # create the colors: 
-        colors_list = list(key_to_color.values())
+        if key_to_color == None:
+            key2color = {key: f'C{number}' for number, key in enumerate(derive_report[report_key].unique())}   # 'key' is eg 'species'.
+        else:   # key_to_color = {'milk': (0, 0.5, 0.5), 'blood': (1, 1, 0)}
+            key2color = key_to_color 
+        acc_to_color = derive_report[report_key].map(key2color).to_dict() 
+        
+        
+        # create the custom cmap: 
+        colors_list = list(key2color.values())
         custom_cmap = LinearSegmentedColormap.from_list('CustomColormap', colors_list, N=256)
 
       
         # create a dataframe (matshow_df) with a single column ('group'):
         matshow_acc = [acc for acc in ord_data.index]
-        matshow_group = [int(acc_to_color[acc][1:]) for acc in ord_data.index]   # int(cell[1:]) convert color for example rom 'C1' to 1.
+        if key_to_color == None:
+            matshow_group = [int(acc_to_color[acc][1:]) for acc in ord_data.index]   # int(cell[1:]) convert color for example rom 'C1' to 1.
+        else:   # key_to_color = {'milk': (0, 0.5, 0.5), 'blood': (1, 1, 0)}
+            matshow_group = [list(key_to_color.values()).index(acc_to_color[acc]) for acc in ord_data.index]
         matshow_df = pnd.DataFrame({'accession': matshow_acc, 'group': matshow_group}).set_index('accession')
-                
+               
+            
         clusters_matshow = ax.matshow(
             matshow_df[['group']],
             cmap= custom_cmap, 
@@ -152,19 +161,22 @@ def make_colorbar_metadata(ax, ord_data, derive_report, report_key):
     
 
 
-def make_legends(ax, derive_report, report_key, cluster_to_color, dict_tables):
+def make_legends(ax, derive_report, report_key, cluster_to_color, dict_tables, anchor, key_to_color):
     
     # l1: species / niche
     if isinstance(derive_report, pnd.DataFrame):
-        patches = [Patch(facecolor=f'C{number}', label=species, ) for number, species in enumerate(derive_report[report_key].unique())]
-        l1 = plt.legend(handles=patches, title=report_key, loc='upper left')  
+        if key_to_color == None:
+            patches = [Patch(facecolor=f'C{number}', label=species, ) for number, species in enumerate(derive_report[report_key].unique())]
+        else: 
+            patches = [Patch(facecolor=color, label=species, ) for species, color in key_to_color.items()]
+        l1 = plt.legend(handles=patches, title=report_key, loc='upper left', bbox_to_anchor=anchor[0], facecolor='#f8f8f8')
         ax.add_artist(l1)  # l2 implicitly replaces l1
         
     
     # l2: clusters
     if cluster_to_color != None: 
         patches = [Patch(facecolor=color, label=f"Cluster_{cluster}", ) for cluster, color in cluster_to_color.items()]
-        l2 = plt.legend(handles=patches, title='clusters', loc='center left')
+        l2 = plt.legend(handles=patches, title='clusters', loc='center left', bbox_to_anchor=anchor[1])
         ax.add_artist(l2)  # l2 implicitly replaces l1
     
     
@@ -175,7 +187,7 @@ def make_legends(ax, derive_report, report_key, cluster_to_color, dict_tables):
         viridis_discrete_rgb = viridis_discrete([i for i in range(n_colors)])
         patches = [Patch(facecolor=viridis_discrete_rgb[i+1], label=key) for i, key in enumerate(dict_tables.keys())]
         patches = [Patch(facecolor=viridis_discrete_rgb[0], label='absence')] + patches
-        l3 = plt.legend(handles=patches, title='features', loc='lower left')  
+        l3 = plt.legend(handles=patches, title='features', loc='lower left', bbox_to_anchor=anchor[2])
         ax.add_artist(l3)  # l2 implicitly replaces l1
     
     ax.axis('off')  # remove frame and axis

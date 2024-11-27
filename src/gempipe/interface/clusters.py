@@ -13,7 +13,7 @@ from .clusters_utils import merge_tables, sort_by_leaves, make_dendrogram, make_
 
     
     
-def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None, forcen=None, derive_report=None, report_key='species', legend_ratio=0.7, outfile=None, verbose=False):
+def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None, forcen=None, derive_report=None, report_key='species', legend_ratio=0.7, outfile=None, verbose=False, anchor=[None, None, None], key_to_color=None):
     """Perform a silhuette analysis to detect the optimal number of clusters. 
     
     Args:
@@ -33,6 +33,10 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
         legend_ratio (float): space reserved for the legend.
         outfile (str): filepath to be used to save the image. If `None` it will not be saved.
         verbose (bool): if `True`, print more log messages
+        anchor (list): list of tuples (X,Y) for customixing the position of legends. 
+            ``None`` will leave default positioning.
+        key_to_color (dict): dict mapping each category in `report_key` to a color in the format ([0:1],[0:1],[0:1]).
+            ``None`` will leave default color and order in the legend. 
     
     Returns:
         tuple: A tuple containing:
@@ -95,7 +99,7 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
             ax.fill_betweenx(np.arange(y_lower, y_upper),
                               0, cluster_i_scores,
                               facecolor=color, edgecolor=color, alpha=1.0)
-            ax.text(0, (y_lower + y_upper -1)/2, f'Cluster_{i+1}')
+            ax.text(0, (y_lower + y_upper -1)/2, f'Cluster_{i+1}', va='center', ha='left')
             y_lower = y_upper + -1  # no space between clusters
 
         ax.set_xlabel('Silhouette Coefficient')
@@ -105,7 +109,7 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
-        ax.set_title('Silhouette Plot for {} Clusters'.format(opt_n_clusters))
+        #ax.set_title('Silhouette Plot for {} Clusters'.format(opt_n_clusters))
         ax.set_facecolor('#f8f8f8')  # Light gray background
 
         return cluster_to_color
@@ -199,15 +203,15 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
     
     # order the dataframe following the leaves of the tree:
     ord_data_bool = sort_by_leaves(data_bool, linkage_matrix, index_to_acc)
-
+    
     # add colorbar for the dendrogram
     make_colorbar_clusters(axs[5], ord_data_bool, acc_to_cluster, cluster_to_color)
     
     # add colorbar for the species/niches
-    make_colorbar_metadata(axs[7], ord_data_bool, derive_report, report_key)
+    make_colorbar_metadata(axs[7], ord_data_bool, derive_report, report_key, key_to_color)
     
     # make legeneds
-    make_legends(axs[9], derive_report, report_key, cluster_to_color, dict_tables=None)
+    make_legends(axs[9], derive_report, report_key, cluster_to_color, None, anchor, key_to_color)
         
     # save to disk; bbox_inches='tight' removes white spaces around the figure. 
     if outfile != None:
@@ -218,7 +222,7 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
 
 
 
-def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=None, report_key='species', acc_to_cluster=None, cluster_to_color=None, legend_ratio=0.7, label_ratio=0.02, k=None, outfile=None, verbose=False):
+def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=None, report_key='species', acc_to_cluster=None, cluster_to_color=None, legend_ratio=0.7, label_ratio=0.02, k=None, outfile=None, verbose=False, anchor=[None, None, None], key_to_color=None):
     """Create a phylo-metabolic dendrogram.
     
     Args:
@@ -239,6 +243,10 @@ def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=
         k (int): focus on the `k` most discriminative features.
         outfile (str): filepath to be used to save the image. If `None` it will not be saved.
         verbose (bool): if `True`, print more log messages
+        anchor (list): list of tuples (X,Y) for customixing the position of legends. 
+            ``None`` will leave default positioning.
+        key_to_color (dict): dict mapping each category in `report_key` to a color in the format ([0:1],[0:1],[0:1]).
+            ``None`` will leave default color and order in the legend. 
     
     Returns:
         tuple: A tuple containing:
@@ -291,7 +299,7 @@ def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=
 
             # set X-axis labels: 
             ax.set_xticks(np.arange(ord_data.shape[1]))
-            ax.set_xticklabels(ord_data.columns, rotation=20, ha='right')
+            ax.set_xticklabels(ord_data.columns, rotation=30, ha='right')
             ax.xaxis.set_ticks_position('bottom')  # move ticks to the bottom
             ax.tick_params(top=False, bottom=True)  # disable ticks on the top
         
@@ -344,10 +352,10 @@ def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=
     make_colorbar_clusters(axs[1], ord_data, acc_to_cluster, cluster_to_color)
     
     # colorbar for the species/niche
-    make_colorbar_metadata(axs[3], ord_data, derive_report, report_key)
+    make_colorbar_metadata(axs[3], ord_data, derive_report, report_key, key_to_color)
     
     # make legends
-    make_legends(axs[7], derive_report, report_key, cluster_to_color, dict_tables)
+    make_legends(axs[7], derive_report, report_key, cluster_to_color, dict_tables, anchor, key_to_color)
     
     # save to disk; bbox_inches='tight' removes white spaces around the figure. 
     if outfile != None:
@@ -390,6 +398,7 @@ def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
         return contingency_table
     
     
+    # START
     # convert to int:
     binary_feats = binary_feats.copy().astype(int)  # .copy() will defragment the dataframe.
     
@@ -402,20 +411,20 @@ def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
     
     # get dataframe of relative frequencies:
     df_relfreq = pnd.DataFrame(index=list(set(list(binary_feats.columns))-set(['y'])), columns=binary_feats['y'].unique())
-    
     for feat_id in df_relfreq.index:
-        
         cont = get_contingency(binary_feats, feat_id)
         for cluster in df_relfreq.columns:
             df_relfreq.loc[feat_id, cluster] = cont.loc[1, cluster] / (cont.loc[1, cluster] + cont.loc[0, cluster])
+    df_relfreq  = df_relfreq.astype(float)
     
+    
+    # filter the dataframe:
     df_relfreq = df_relfreq[(df_relfreq >= 0.90).any(axis=1)]
     df_relfreq = df_relfreq[(df_relfreq <= 0.10).any(axis=1)]
         
         
     # invert column order to match that of the heatmap
     df_relfreq = df_relfreq[reversed(df_relfreq.columns)]
-    df_relfreq  = df_relfreq.astype(float)
     
     
     # sort features aalphabetically
@@ -431,10 +440,12 @@ def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
     # create the subplots: 
     fig, axs = plt.subplots(
         nrows=2, ncols=1, 
-        figsize=(3, 0.3 * len(df_relfreq)), # global dimensions.
+        figsize=(0.5 * len(df_relfreq.columns), 0.3 * len(df_relfreq)), # global dimensions.
         gridspec_kw={'width_ratios': [1], 'height_ratios': [1, 1*len(df_relfreq)]}) # suplots width proportions. 
     # adjust the space between subplots: 
     plt.subplots_adjust(wspace=0, hspace=0)
+    axs[0].set_frame_on(False)  # remove squared border but not ticks
+    axs[1].set_frame_on(False)  # remove squared border but not ticks
     
     
     # create matshow (clusters)
@@ -468,7 +479,6 @@ def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
     axs[1].set_xticks([])   # remove x ticks
     axs[1].set_yticks(range(len(df_relfreq.index)))  # Position of y-ticks
     axs[1].set_yticklabels(df_relfreq.index)
-    
     
     
     # add annotations (rel frequencies):
