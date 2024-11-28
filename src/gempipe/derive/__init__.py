@@ -16,7 +16,7 @@ from .reporting import create_derive_plots
 
 
 
-def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml, skipgf, nofig, aux, cnps):
+def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml, skipgf, nofig, aux, cnps, cnps_minmed):
     
     
     ### PART 1: derive strain-specific models
@@ -41,7 +41,7 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
         if response == 1: return 1
     
     if cnps:
-        response = strain_cnps_tests(logger, outdir, cores, pam, panmodel, skipgf)
+        response = strain_cnps_tests(logger, outdir, cores, pam, panmodel, skipgf, cnps_minmed)
         if response == 1: return 1
     
      
@@ -115,7 +115,7 @@ def derive_command(args, logger):
     
     
     logger.info("Deriving strain- and species-specific metabolic models...")
-    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml, args.skipgf, args.nofig, args.aux, args.cnps)
+    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml, args.skipgf, args.nofig, args.aux, args.cnps, args.cnps_minmed)
     if response == 1: return 1
     
     

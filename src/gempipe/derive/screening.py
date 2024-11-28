@@ -227,7 +227,7 @@ def get_sources_by_class(model):
 
 
 
-def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, model_id=None, starting_C='EX_glc__D_e', starting_N='EX_nh4_e', starting_P='EX_pi_e', starting_S='EX_so4_e', minimal=0.5):
+def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, model_id=None, starting_C='EX_glc__D_e', starting_N='EX_nh4_e', starting_P='EX_pi_e', starting_S='EX_so4_e', cnps_minmed=0):
     """
     Function to test utilization of C-N-P-S substrates in a GSMM. 
     A growth-enabling medium is assumed to be already set up. 
@@ -236,6 +236,8 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
     mode: 'binary' (1: auxotroph, 0: autotroph) or 'growth': quantitative results from FBA. 
     sources_by_class:  Dictionary of compounds to test. For example {'C': {'EX_ala__L_e', ...}, 'N': {'EX_ala__L_e', ...}}
     model_id: name of the putput column (if None, 'output' will be used)
+    cnps_minmed: base the analysis on a minimal medium yielding at least the specified objective value.
+        If ``False`` user-defined medium will be applied. 
     """    
 
     
@@ -245,7 +247,7 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
         
         
     # if autostarting, a minimal medium is applied and starting C, N, P and,S sources are automatically defined:
-    if minimal != False: 
+    if cnps_minmed != 0.0: 
         
         
         # create a beckup for the medium:
@@ -256,7 +258,7 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
                 
         
         # define and apply the mminumum medium: 
-        min_medium = cobra.medium.minimal_medium(model, minimal, minimize_components=True)
+        min_medium = cobra.medium.minimal_medium(model, cnps_minmed, minimize_components=True)
         min_medium = min_medium.sort_values(ascending=False)
         reset_growth_env(model)
         for exr_id, lb in min_medium.items():
@@ -335,7 +337,7 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
     
     
     # restore medium from backup 
-    if minimal != False:
+    if cnps_minmed != 0.0:
         for r in model.reactions:
             if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'):
                 r.bounds = medium_backup[r.id]
@@ -355,6 +357,7 @@ def task_cnps(accession, args):
     outdir = args['outdir']
     skipgf = args['skipgf']
     sources_by_class = args['sources_by_class']
+    cnps_minmed = args['cnps_minmed']
     
     
     # read json/sbml file:
@@ -364,7 +367,7 @@ def task_cnps(accession, args):
         ss_model = cobra.io.load_json_model(outdir + f'strain_models/{accession}.json')
     
     # perform the simulations: 
-    df_results = cnps_simulation(ss_model, model_id=accession, sources_by_class=sources_by_class)
+    df_results = cnps_simulation(ss_model, model_id=accession, sources_by_class=sources_by_class, cnps_minmed=cnps_minmed)
     df_results = df_results.T.reset_index(drop=False).rename(columns={'index': 'accession'})
         
     # it has just 1 row:
@@ -372,11 +375,14 @@ def task_cnps(accession, args):
 
     
     
-def strain_cnps_tests(logger, outdir, cores, pam, panmodel, skipgf):
+def strain_cnps_tests(logger, outdir, cores, pam, panmodel, skipgf, cnps_minmed):
     
     
     # log some messages
     logger.info("Testing strain-specific consumption of C-N-P-S substrates...")
+    if cnps_minmed != 0.0: 
+        logger.info(f"A minimal medium leading to objective value >= {cnps_minmed} will be used for each strain.")
+    
     sources_by_class = get_sources_by_class(panmodel)   
     
     
@@ -418,7 +424,7 @@ def strain_cnps_tests(logger, outdir, cores, pam, panmodel, skipgf):
             itertools.repeat('accession'), 
             itertools.repeat(logger), 
             itertools.repeat(task_cnps),  # will return a new sequences dataframe (to be concat).
-            itertools.repeat({'outdir': outdir, 'skipgf': skipgf, 'sources_by_class': sources_by_class}),
+            itertools.repeat({'outdir': outdir, 'skipgf': skipgf, 'sources_by_class': sources_by_class, 'cnps_minmed': cnps_minmed}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
     
