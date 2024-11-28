@@ -246,32 +246,44 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
         
     # if autostarting, a minimal medium is applied and starting C, N, P and,S sources are automatically defined:
     if minimal != False: 
+        
+        
+        # create a beckup for the medium:
+        medium_backup = {}
+        for r in model.reactions:
+            if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'):
+                medium_backup[r.id] = r.bounds
+                
+        
+        # define and apply the mminumum medium: 
         min_medium = cobra.medium.minimal_medium(model, minimal, minimize_components=True)
         min_medium = min_medium.sort_values(ascending=False)
         reset_growth_env(model)
         for exr_id, lb in min_medium.items():
-            model.reactions.get_by_id(exr_id).lower_bound = lb
+            model.reactions.get_by_id(exr_id).lower_bound = -lb
+            
+            
         # define the starting sources:
         for exr_recommended, sub_class in zip(['EX_glc__D_e', 'EX_nh4_e', 'EX_pi_e', 'EX_so4_e'], ['C', 'N', 'P', 'S']):
-            if exr_recommended in sources_by_class[sub_class]:
+            if exr_recommended in list(model.medium.keys()):
                 if sub_class == 'C': starting_C = exr_recommended
                 if sub_class == 'N': starting_N = exr_recommended
                 if sub_class == 'P': starting_P = exr_recommended
                 if sub_class == 'S': starting_S = exr_recommended
             else:
-                for exr_id, lb in min_medium.items():
+                for exr_id in list(model.medium.keys()):
                     if exr_id in sources_by_class[sub_class]:
                         if sub_class == 'C': 
-                            starting_C = exr_recommended
+                            starting_C = exr_id
                             break
                         if sub_class == 'N': 
-                            starting_N = exr_recommended
+                            starting_N = exr_id
                             break
                         if sub_class == 'P': 
-                            starting_P = exr_recommended
+                            starting_P = exr_id
                             break
                         if sub_class == 'S': 
-                            starting_S = exr_recommended
+                            starting_S = exr_id
                             break
     
             
@@ -320,6 +332,15 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
                         else: 
                             df.append({'exchange': sub_key, model_id: res_after.status})
 
+    
+    
+    # restore medium from backup 
+    if minimal != False:
+        for r in model.reactions:
+            if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'):
+                r.bounds = medium_backup[r.id]
+    
+    
     
     df = pnd.DataFrame.from_records(df)
     df = df.set_index('exchange', drop=True, verify_integrity=True)
