@@ -13,6 +13,10 @@ from ..commons import chunkize_items
 from ..commons import load_the_worker
 from ..commons import gather_results
 from ..commons import read_refmodel
+from ..commons import fba_no_warnings
+
+
+from ..interface.medium import reset_growth_env
 
 
 
@@ -223,7 +227,7 @@ def get_sources_by_class(model):
 
 
 
-def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, model_id=None, starting_C='EX_glc__D_e', starting_N='EX_nh4_e', starting_P='EX_pi_e', starting_S='EX_so4_e'):
+def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, model_id=None, starting_C='EX_glc__D_e', starting_N='EX_nh4_e', starting_P='EX_pi_e', starting_S='EX_so4_e', minimal=0.5):
     """
     Function to test utilization of C-N-P-S substrates in a GSMM. 
     A growth-enabling medium is assumed to be already set up. 
@@ -233,10 +237,44 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
     sources_by_class:  Dictionary of compounds to test. For example {'C': {'EX_ala__L_e', ...}, 'N': {'EX_ala__L_e', ...}}
     model_id: name of the putput column (if None, 'output' will be used)
     """    
+
     
     # get the dictionary of compounds to be tested
     if sources_by_class == None:
         sources_by_class = get_sources_by_class(model)
+        
+        
+    # if autostarting, a minimal medium is applied and starting C, N, P and,S sources are automatically defined:
+    if minimal != False: 
+        min_medium = cobra.medium.minimal_medium(model, minimal, minimize_components=True)
+        min_medium = min_medium.sort_values(ascending=False)
+        reset_growth_env(model)
+        for exr_id, lb in min_medium.items():
+            model.reactions.get_by_id(exr_id).lower_bound = lb
+        # define the starting sources:
+        for exr_recommended, sub_class in zip(['EX_glc__D_e', 'EX_nh4_e', 'EX_pi_e', 'EX_so4_e'], ['C', 'N', 'P', 'S']):
+            if exr_recommended in sources_by_class[sub_class]:
+                if sub_class == 'C': starting_C = exr_recommended
+                if sub_class == 'N': starting_N = exr_recommended
+                if sub_class == 'P': starting_P = exr_recommended
+                if sub_class == 'S': starting_S = exr_recommended
+            else:
+                for exr_id, lb in min_medium.items():
+                    if exr_id in sources_by_class[sub_class]:
+                        if sub_class == 'C': 
+                            starting_C = exr_recommended
+                            break
+                        if sub_class == 'N': 
+                            starting_N = exr_recommended
+                            break
+                        if sub_class == 'P': 
+                            starting_P = exr_recommended
+                            break
+                        if sub_class == 'S': 
+                            starting_S = exr_recommended
+                            break
+    
+            
         
     # get the modeled rids: 
     modeled_rids = set([r.id for r in model.reactions])
@@ -255,15 +293,19 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
                     model.reactions.get_by_id(starting).lower_bound = 0
                     
                     # first FBA to be later compared:
-                    res_before = model.optimize()
+                    res_before, obj_value_before, status_before = fba_no_warnings(model)
                 
                     # open the alternative substrate:
                     model.reactions.get_by_id(exr_after).lower_bound = -1000
                     
                     # second FBA for camparison:
-                    res_after = model.optimize()
+                    res_after, obj_value_after, status_after = fba_no_warnings(model)
                     
-                    if res_before.status=='optimal' and res_after.status=='optimal' and res_after.objective_value >= (res_before.objective_value + 0.001):
+                    if status_before=='infeasible' and status_after=='optimal' and obj_value_after >= 0.001: 
+                        can_use = 1
+                    elif status_after=='infeasible':
+                        can_use = 0
+                    elif status_before=='optimal' and status_after=='optimal' and obj_value_after >= (obj_value_before + 0.001):
                         can_use = 1
                     else:
                         can_use = 0
