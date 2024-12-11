@@ -259,7 +259,7 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
         
         # define the minumum medium: 
         min_medium = cobra.medium.minimal_medium(model, cnps_minmed, minimize_components=True)
-        if min_medium == None:  # usually associated with "Minimization of medium was infeasible."
+        if min_medium is None:  # usually associated with "Minimization of medium was infeasible."
             min_medium = {}  # future 'pandas.core.series.Series'
             for r in model.reactions:   # convert the current medium to a pnd.Series
                 if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'):
