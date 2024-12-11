@@ -257,8 +257,18 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
                 medium_backup[r.id] = r.bounds
                 
         
-        # define and apply the mminumum medium: 
+        # define the minumum medium: 
         min_medium = cobra.medium.minimal_medium(model, cnps_minmed, minimize_components=True)
+        if min_medium == None:  # usually associated with "Minimization of medium was infeasible."
+            min_medium = {}  # future 'pandas.core.series.Series'
+            for r in model.reactions:   # convert the current medium to a pnd.Series
+                if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'):
+                    if r.lower_bound < 0:
+                        min_medium[r.id] = r.lower_bound * -1.0  # positive sign
+            min_medium = pnd.Series(min_medium)
+        
+        
+        # apply the min medium: 
         min_medium = min_medium.sort_values(ascending=False)
         reset_growth_env(model)
         for exr_id, lb in min_medium.items():
