@@ -1,0 +1,46 @@
+accession,species,strain,niche,G,R,M,obj_value,status,R,inserted_rids,solver_error,obj_value_gf,status_gf
+GCA_008868595.1,Lacticaseibacillus casei,BIO5773,-,1039,1312,1212,0.0,optimal,1313,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.6898873415546019},{'cdm25_gempipe': 'optimal'}
+GCA_005864085.1,Lacticaseibacillus casei,FAM 20446,-,948,1255,1212,0.0,optimal,1256,{'cdm25_gempipe': ['ALATA_D']},-,{'cdm25_gempipe': 1.6898873415543527},{'cdm25_gempipe': 'optimal'}
+GCA_018363095.1,Lacticaseibacillus casei,FBL6,-,1018,1289,1212,0.0,optimal,1290,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.6898873415546252},{'cdm25_gempipe': 'optimal'}
+GCA_002091995.1,Lacticaseibacillus casei,GCRL 163,-,1039,1265,1212,0.0,optimal,1266,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7027403931953289},{'cdm25_gempipe': 'optimal'}
+GCA_037901485.1,Lacticaseibacillus casei,LC130,-,877,1229,1212,0.0,optimal,1230,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.1298198948419083},{'cdm25_gempipe': 'optimal'}
+GCA_002192215.1,Lacticaseibacillus casei,LC5,-,1047,1311,1212,0.0,optimal,1312,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.6898873415546167},{'cdm25_gempipe': 'optimal'}
+GCA_032466055.1,Lacticaseibacillus casei,LMG 24099,-,1039,1312,1212,0.0,optimal,1313,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.6898873415546019},{'cdm25_gempipe': 'optimal'}
+GCA_032466035.1,Lacticaseibacillus casei,LMG 24102,-,1039,1312,1212,0.0,optimal,1313,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.6898873415546019},{'cdm25_gempipe': 'optimal'}
+GCA_034477985.1,Lacticaseibacillus casei,M233-24W,-,1000,1254,1212,0.0,optimal,1255,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7027403931952854},{'cdm25_gempipe': 'optimal'}
+GCA_015476095.1,Lacticaseibacillus casei,MGB0470,-,875,1228,1212,0.0,optimal,1229,{'cdm25_gempipe': ['ALATA_D']},-,{'cdm25_gempipe': 1.1292082773822831},{'cdm25_gempipe': 'optimal'}
+GCA_002091975.1,Lacticaseibacillus casei,MJA 12,-,1100,1268,1212,0.0,optimal,1269,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7155271994644095},{'cdm25_gempipe': 'optimal'}
+GCA_019107585.1,Lacticaseibacillus casei,N,-,1000,1288,1212,0.0,optimal,1289,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.6898873415545796},{'cdm25_gempipe': 'optimal'}
+GCA_001013375.1,Lacticaseibacillus casei,N87,-,980,1282,1212,0.0,optimal,1283,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7155271994643915},{'cdm25_gempipe': 'optimal'}
+GCA_007989685.1,Lacticaseibacillus casei,NBRC 101979,-,1036,1257,1212,0.0,optimal,1258,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7027403931953127},{'cdm25_gempipe': 'optimal'}
+GCA_028878205.1,Lacticaseibacillus casei,UD1001,-,1016,1295,1212,0.0,optimal,1296,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.702740393195677},{'cdm25_gempipe': 'optimal'}
+GCA_025190605.1,Lacticaseibacillus paracasei,CIRM-BIA 279,-,999,1261,1212,0.0,optimal,1262,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7155271994644017},{'cdm25_gempipe': 'optimal'}
+GCA_025190495.1,Lacticaseibacillus paracasei,CIRM-BIA 288,-,1042,1271,1212,0.0,optimal,1272,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7155271994644035},{'cdm25_gempipe': 'optimal'}
+GCA_025190575.1,Lacticaseibacillus paracasei,CIRM-BIA 770,-,1057,1265,1212,0.0,optimal,1266,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7155271994644299},{'cdm25_gempipe': 'optimal'}
+GCA_024329385.1,Lacticaseibacillus paracasei,Kef-w17,-,1003,1261,1212,0.0,optimal,1262,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.715527199464457},{'cdm25_gempipe': 'optimal'}
+GCA_024329345.1,Lacticaseibacillus paracasei,Kef-w19,-,1018,1265,1212,0.0,optimal,1266,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7155271994643881},{'cdm25_gempipe': 'optimal'}
+GCA_024329605.1,Lacticaseibacillus paracasei,Kef-w7,-,1006,1265,1212,0.0,optimal,1266,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7155271994643881},{'cdm25_gempipe': 'optimal'}
+GCA_030480425.1,Lacticaseibacillus paracasei,L14,-,1031,1257,1212,0.0,optimal,1258,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7143183524013688},{'cdm25_gempipe': 'optimal'}
+GCA_030361125.1,Lacticaseibacillus paracasei,TOM.15.25,-,919,1237,1212,0.0,optimal,1238,{'cdm25_gempipe': ['ALATA_D']},-,{'cdm25_gempipe': 1.121102580887943},{'cdm25_gempipe': 'optimal'}
+GCA_030361365.1,Lacticaseibacillus paracasei,TOM.9,-,1071,1266,1212,0.0,optimal,1267,{'cdm25_gempipe': ['ALATA_D']},-,{'cdm25_gempipe': 1.7027403931953005},{'cdm25_gempipe': 'optimal'}
+GCA_030215365.1,Lacticaseibacillus paracasei,UMB7433A,-,1067,1266,1212,0.0,optimal,1267,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7027403931953276},{'cdm25_gempipe': 'optimal'}
+GCA_030224505.1,Lacticaseibacillus paracasei,UMB7433B,-,1068,1266,1212,0.0,optimal,1267,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.702740393195298},{'cdm25_gempipe': 'optimal'}
+GCA_036453305.1,Lacticaseibacillus paracasei,UW_AWMP_LACCAS1_1,-,984,1250,1212,0.0,optimal,1251,{'cdm25_gempipe': ['ALATA_D']},-,{'cdm25_gempipe': 1.7155271994644046},{'cdm25_gempipe': 'optimal'}
+GCA_022483205.1,Lacticaseibacillus paracasei,UW_TS_LACCAS1_2,-,982,1260,1212,0.0,optimal,1261,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7027403931953489},{'cdm25_gempipe': 'optimal'}
+GCA_022643295.1,Lacticaseibacillus paracasei,UW_TS_LACCAS1_4,-,922,1253,1212,0.0,optimal,1254,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.7027403931952996},{'cdm25_gempipe': 'optimal'}
+GCA_022643065.1,Lacticaseibacillus paracasei,UW_TS_LACCAS1_5,-,920,1248,1212,0.0,optimal,1249,{'cdm25_gempipe': ['GLUR']},-,{'cdm25_gempipe': 1.700626234135994},{'cdm25_gempipe': 'optimal'}
+GCA_000735255.1,Lacticaseibacillus rhamnosus,K32,-,1027,1253,1212,1.689887341554598,optimal,1253,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6898873415545859},{'cdm25_gempipe': 'optimal'}
+GCA_000784405.1,Lacticaseibacillus rhamnosus,L31,-,961,1252,1212,0.0,optimal,1253,{'cdm25_gempipe': ['PHETRS_1']},-,{'cdm25_gempipe': 1.677132893729805},{'cdm25_gempipe': 'optimal'}
+GCA_000784375.1,Lacticaseibacillus rhamnosus,L34,-,1008,1257,1212,1.6771328937298138,optimal,1257,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6771328937298713},{'cdm25_gempipe': 'optimal'}
+GCA_000311945.1,Lacticaseibacillus rhamnosus,LRHMDP2,-,963,1249,1212,1.6898873415546267,optimal,1249,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6898873415546023},{'cdm25_gempipe': 'optimal'}
+GCA_000311965.1,Lacticaseibacillus rhamnosus,LRHMDP3,-,963,1249,1212,1.6898873415546267,optimal,1249,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6898873415546023},{'cdm25_gempipe': 'optimal'}
+GCA_000026525.1,Lacticaseibacillus rhamnosus,Lc 705,-,1045,1269,1212,1.6898873415546036,optimal,1269,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6898873415546483},{'cdm25_gempipe': 'optimal'}
+GCA_028578945.1,Lacticaseibacillus rhamnosus,SR9-2,-,1026,1267,1212,1.689887341554598,optimal,1267,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6898873415546412},{'cdm25_gempipe': 'optimal'}
+GCA_028578865.1,Lacticaseibacillus rhamnosus,SR9-5,-,1041,1267,1212,1.689887341554598,optimal,1267,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6898873415546412},{'cdm25_gempipe': 'optimal'}
+GCA_959021285.1,Lacticaseibacillus rhamnosus,SRR13494523_bin.4_MetaWRAP_v1.3_MAG,-,946,1248,1212,1.677132893729795,optimal,1248,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6771328937298011},{'cdm25_gempipe': 'optimal'}
+GCA_030217405.1,Lacticaseibacillus rhamnosus,UMB1344,-,1000,1256,1212,1.6771328937297925,optimal,1256,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6771328937298216},{'cdm25_gempipe': 'optimal'}
+GCA_030217425.1,Lacticaseibacillus rhamnosus,UMB1351A,-,955,1262,1212,1.6898873415545903,optimal,1262,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6898873415546782},{'cdm25_gempipe': 'optimal'}
+GCA_030224725.1,Lacticaseibacillus rhamnosus,UMB1351B,-,952,1262,1212,1.6898873415545903,optimal,1262,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6898873415546782},{'cdm25_gempipe': 'optimal'}
+GCA_030233995.1,Lacticaseibacillus rhamnosus,UMB8035A,-,975,1249,1212,1.6771328937298136,optimal,1249,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6771328937300312},{'cdm25_gempipe': 'optimal'}
+GCA_030227945.1,Lacticaseibacillus rhamnosus,UMB8035B,-,955,1249,1212,1.6771328937298136,optimal,1249,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6771328937300312},{'cdm25_gempipe': 'optimal'}
+GCA_026427555.1,Lacticaseibacillus rhamnosus,VHProbi F20,-,995,1258,1212,1.6898873415546063,optimal,1258,{'cdm25_gempipe': []},-,{'cdm25_gempipe': 1.6898873415545008},{'cdm25_gempipe': 'optimal'}
