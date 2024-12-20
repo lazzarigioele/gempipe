@@ -9,7 +9,7 @@ from sklearn.metrics import silhouette_score, silhouette_samples
 import numpy as np    
 
 
-from .clusters_utils import merge_tables, sort_by_leaves, make_dendrogram, make_colorbar_clusters, make_colorbar_metadata, make_legends, subset_k_best
+from gempipe.interface.clusters_utils import merge_tables, sort_by_leaves, make_dendrogram, make_colorbar_clusters, make_colorbar_metadata, make_legends, subset_k_best
 
     
     
