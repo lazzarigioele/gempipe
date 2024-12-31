@@ -32,7 +32,7 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
             Usually it is 'species' or 'niche'.
         legend_ratio (float): space reserved for the legend.
         outfile (str): filepath to be used to save the image. If `None` it will not be saved.
-        verbose (bool): if `True`, print more log messages
+        verbose (bool): if `True`, print more log messages.
         anchor (list): list of tuples (X,Y) for customixing the position of legends. 
             ``None`` will leave default positioning.
         key_to_color (dict): dict mapping each category in `report_key` to a color in the format ([0:1],[0:1],[0:1]).

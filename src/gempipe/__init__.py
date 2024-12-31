@@ -17,6 +17,7 @@ from .interface.gaps import *
 from .interface.sanity import *
 from .interface.medium import *
 from .interface.clusters import *
+from .interface.compgen import *
 # set up the cobra solver
 
 

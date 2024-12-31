@@ -32,7 +32,7 @@ nb_execution_timeout = 60*15  # minutes max execution seconds before timeout exc
 # autoapi settings
 autoapi_add_toctree_entry = False
 autoapi_dirs = ["../src/gempipe/interface"]
-autoapi_ignore = ['*-checkpoint.py', '*gempipe/assets/*', '*gempipe/interface/*_utils.py']
+autoapi_ignore = ['*-checkpoint.py', '*gempipe/assets/*', '*gempipe/interface/*_utils.py', '*gempipe/interface/compgen.py']
 
 
 
