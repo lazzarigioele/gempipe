@@ -515,6 +515,15 @@
 153M	./applications/lacticaseibacillus/gempipe/working/rec_overlap/seq_to_coords.pickle
 899M	./applications/lacticaseibacillus/gempipe/working/rec_overlap/sequences.csv
 74M	./applications/lacticaseibacillus/gempipe/output_recon/pam.csv
+105M	./applications/blattabacterium/orthogroups/output_proteinortho/myproject.blast-graph
+105M	./applications/blattabacterium/orthogroups/output_proteinortho/myproject.proteinortho-graph
+105M	./applications/blattabacterium/orthogroups/output_proteinortho_poff/myproject.blast-graph
+122M	./applications/blattabacterium/orthogroups/output_proteinortho_poff/myproject.ffadj-graph
+122M	./applications/blattabacterium/orthogroups/output_proteinortho_poff/myproject.poff-graph
+105M	./applications/blattabacterium/orthogroups/output_proteinortho_poff/myproject.proteinortho-graph
+45M	./applications/blattabacterium/orthogroups/output_orthofinder/Results_Jan02/WorkingDirectory/OrthoFinder_graph.txt
+68M	./applications/blattabacterium/roary/output_panaroo/gene_data.csv
+50M	./applications/blattabacterium/roary/output_panaroo/combined_DNA_CDS.fasta
 99M	./applications/dacicola/raxml_ng/core_gene_alignment.aln.raxml.reduced.phy
 103M	./applications/dacicola/roary/_1725897391/.ipynb_checkpoints/core_gene_alignment-checkpoint.aln
 103M	./applications/dacicola/roary/_1725897391/core_gene_alignment.aln

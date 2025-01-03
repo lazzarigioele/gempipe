@@ -147,7 +147,7 @@ def aniclustermap_enhanced(
 def phyogenomics_enhanced(
     thirdparty_pam='roary/_1735552997/gene_presence_absence.csv', mode='roary', 
     newick='raxml_ng/core_gene_alignment.aln.raxml.bestTree', 
-    legend_ratio=0.25, genomes=None, showtiles=True, 
+    legend_ratio=0.25, genomes=None, showtiles=True, support_values=True, 
     outfile=None, verbose=False ):
     """Create a phylogenomics tree starting from a pangenome analysis (e.g. the Roary outputs).
     
@@ -159,7 +159,8 @@ def phyogenomics_enhanced(
         legend_ratio (float): space reserved for the legend.
         genomes (pandas.DataFrame): having at last the following columns `assembly_accession`, `strain_isolate`, `organism_name`, `niche`. 
             The teble produced in `working/genomes/genomes.csv` is fully compatible.
-        showtiles (bool): if `True`, include a grphi representation of the `thirdparty_pam`.
+        showtiles (bool): if `True`, include a graphical representation of the `thirdparty_pam`.
+        support_values (bool): if `True`, indicate the support values.
         outfile (str): filepath to be used to save the image. If `None` it will not be saved.
         verbose (bool): if `True`, print more log messages.
 
@@ -183,7 +184,14 @@ def phyogenomics_enhanced(
         # order by sum of cols
         pam_binary = pam_binary.iloc[pam_binary.sum(axis=1).sort_values(ascending=False).index, :].reset_index(drop=True)
         # 'genomes' contains all the genomes, while the 'pam_binary' and 'newick' are made with quality-filtered genomes.
-        
+    elif mode=='proteinortho': 
+        pam = pnd.read_csv(thirdparty_pam, sep='\t', na_filter=False, low_memory=False)
+        pam.columns = [i[:-len('.faa')] if i.endswith('.faa') else i for i in pam.columns  ]
+        # binarize the matrix
+        pam_binary = pam.iloc[:, 3:len(pam.columns)].apply(lambda x: x.map(lambda y: 0 if y=='*' else 1))
+        # order by sum of cols
+        pam_binary = pam_binary.iloc[pam_binary.sum(axis=1).sort_values(ascending=False).index, :].reset_index(drop=True)
+        # 'genomes' contains all the genomes, while the 'pam_binary' and 'newick' are made with quality-filtered genomes.
         
     # (3) create the frame
     if genomes is not None:
@@ -219,7 +227,7 @@ def phyogenomics_enhanced(
         
     # (5) plot the tree
     # define labels and label colors:
-    def get_label(leaf):
+    def get_leaf_label(leaf):
         if leaf.name != None:
             if genomes is not None:
                 row = genomes[genomes['assembly_accession']==leaf.name].iloc[0]
@@ -237,11 +245,21 @@ def phyogenomics_enhanced(
                 return 'black'
         else: 
             return 'black'
+    def get_node_label(node):
+        if node.confidence != None:
+            if node.confidence != 1:
+                return node.confidence
+            else:
+                return None   # remove 1 to improve readibility
+        else:
+            return None
     Phylo.draw(
         tree=newick, 
         axes=axs[0],
-        label_func=get_label,
+        label_func=get_leaf_label,
         label_colors=get_color,
+        branch_labels=get_node_label if support_values else None,
+        show_confidence=support_values, 
         do_show=False)
     axs[0].axis('off')  # remove frame and axis:
     # make the tree closer to the heatmap:
@@ -254,8 +272,9 @@ def phyogenomics_enhanced(
     
     # (6) plot the tiles
     if showtiles:
+        matshow_df = pam_binary.T.loc[ord_leaves]
         axs[1].matshow(
-            pam_binary.T.loc[ord_leaves] +0.2, # transposed and reordered matrix. 
+            matshow_df +0.2, # transposed and reordered matrix. 
             cmap=plt.cm.Greys, 
             vmin=0, vmax=1, 
             aspect='auto', 
