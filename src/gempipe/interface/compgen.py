@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 
 
-def aniclustermap_enhanced(
+def animatrix(
     tree_original='fastani/ANIclustermap_dendrogram.nwk', 
     triangular='fastani/ANIclustermap_matrix.tsv', 
     legend_ratio=0.25, genomes=None, cellannot=True, 
@@ -144,7 +144,7 @@ def aniclustermap_enhanced(
 
 
 
-def phyogenomics_enhanced(
+def phylogenomics(
     thirdparty_pam='roary/_1735552997/gene_presence_absence.csv', mode='roary', 
     newick='raxml_ng/core_gene_alignment.aln.raxml.bestTree', 
     legend_ratio=0.25, genomes=None, showtiles=True, support_values=True, 
@@ -192,7 +192,15 @@ def phyogenomics_enhanced(
         # order by sum of cols
         pam_binary = pam_binary.iloc[pam_binary.sum(axis=1).sort_values(ascending=False).index, :].reset_index(drop=True)
         # 'genomes' contains all the genomes, while the 'pam_binary' and 'newick' are made with quality-filtered genomes.
-        
+    elif mode=='orthofinder': 
+        pam = pnd.read_csv(thirdparty_pam, sep='\t', na_filter=False, low_memory=False)
+        # binarize the matrix
+        pam_binary = pam.iloc[:, 1:len(pam.columns)].apply(lambda x: x.map(lambda y: 0 if y=='' else 1))
+        # order by sum of cols
+        pam_binary = pam_binary.iloc[pam_binary.sum(axis=1).sort_values(ascending=False).index, :].reset_index(drop=True)
+        # 'genomes' contains all the genomes, while the 'pam_binary' and 'newick' are made with quality-filtered genomes.
+    
+    
     # (3) create the frame
     if genomes is not None:
         tree_ratio = 0.60
