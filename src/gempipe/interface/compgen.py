@@ -147,7 +147,7 @@ def animatrix(
 def phylogenomics(
     thirdparty_pam='roary/_1735552997/gene_presence_absence.csv', mode='roary', 
     newick='raxml_ng/core_gene_alignment.aln.raxml.bestTree', 
-    legend_ratio=0.25, genomes=None, showtiles=True, support_values=True, 
+    legend_ratio=0.25, genomes=None, showtiles=True, support_values=True, outgroup=None, 
     outfile=None, verbose=False ):
     """Create a phylogenomics tree starting from a pangenome analysis (e.g. the Roary outputs).
     
@@ -161,6 +161,7 @@ def phylogenomics(
             The teble produced in `working/genomes/genomes.csv` is fully compatible.
         showtiles (bool): if `True`, include a graphical representation of the `thirdparty_pam`.
         support_values (bool): if `True`, indicate the support values.
+        outgroup (str): improve representation of the outgroup (if present) in the tiles.
         outfile (str): filepath to be used to save the image. If `None` it will not be saved.
         verbose (bool): if `True`, print more log messages.
 
@@ -181,26 +182,28 @@ def phylogenomics(
         pam = pnd.read_csv(thirdparty_pam, na_filter=False, low_memory=False)   # 'low_memory=False' as columns have mixed types.
         # binarize the matrix
         pam_binary = pam.iloc[:, 14:len(pam.columns)].apply(lambda x: x.map(lambda y: 0 if y=='' else 1))
-        # order by sum of cols
-        pam_binary = pam_binary.iloc[pam_binary.sum(axis=1).sort_values(ascending=False).index, :].reset_index(drop=True)
-        # 'genomes' contains all the genomes, while the 'pam_binary' and 'newick' are made with quality-filtered genomes.
     elif mode=='proteinortho': 
         pam = pnd.read_csv(thirdparty_pam, sep='\t', na_filter=False, low_memory=False)
         pam.columns = [i[:-len('.faa')] if i.endswith('.faa') else i for i in pam.columns  ]
         # binarize the matrix
         pam_binary = pam.iloc[:, 3:len(pam.columns)].apply(lambda x: x.map(lambda y: 0 if y=='*' else 1))
-        # order by sum of cols
-        pam_binary = pam_binary.iloc[pam_binary.sum(axis=1).sort_values(ascending=False).index, :].reset_index(drop=True)
-        # 'genomes' contains all the genomes, while the 'pam_binary' and 'newick' are made with quality-filtered genomes.
     elif mode=='orthofinder': 
         pam = pnd.read_csv(thirdparty_pam, sep='\t', na_filter=False, low_memory=False)
         # binarize the matrix
         pam_binary = pam.iloc[:, 1:len(pam.columns)].apply(lambda x: x.map(lambda y: 0 if y=='' else 1))
-        # order by sum of cols
-        pam_binary = pam_binary.iloc[pam_binary.sum(axis=1).sort_values(ascending=False).index, :].reset_index(drop=True)
-        # 'genomes' contains all the genomes, while the 'pam_binary' and 'newick' are made with quality-filtered genomes.
+
     
-    
+    #  order by sum of cols
+    pam_binary = pam_binary.iloc[pam_binary.sum(axis=1).sort_values(ascending=False).index, :].reset_index(drop=True)
+    # 'genomes' contains all the genomes, while the 'pam_binary' and 'newick' are made with quality-filtered genomes.
+    if outgroup != None: # bring outgroup singleton to the tail: 
+        # (df.drop('col_1', axis=1) == 0) creates a boolean DataFrame where each column (other than 'outgroup') is checked to be 0.
+        # .all(axis=1) ensures that all the columns (other than 'outgroup') are 0 in each row.
+        outgroup_singletons = pam_binary[(pam_binary[outgroup] == 1) & (pam_binary.drop(columns=[outgroup]) == 0).all(axis=1)]
+        pam_binary = pam_binary.drop(index=outgroup_singletons.index)
+        pam_binary = pnd.concat([pam_binary, outgroup_singletons])
+        
+        
     # (3) create the frame
     if genomes is not None:
         tree_ratio = 0.60
