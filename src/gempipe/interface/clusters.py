@@ -127,7 +127,7 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
         constant_columns = [col for col in data.columns if data[col].nunique() == 1]
         if verbose: print(f"WARNING: removing {len(constant_columns)} constant features.")
         data_bool = data_bool.drop(columns=constant_columns)
-    
+
     
     # pdist() / linkage() will loose the accession information. So here we save a dict: 
     index_to_acc = {i: accession for i, accession in enumerate(data_bool.index)}
@@ -194,7 +194,7 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
     # associated to a specific cluster. Thus, later we obtain the scores for a specific cluster 
     # simply with a 'silhouette_scores[clusters == i]'.
     
-
+    
     # Show silhouette scores for each datapoint (given the opimal number of clusters)
     cluster_to_color = make_plot_silhouette_coeff(axs[2], opt_n_clusters, silhouette_scores, clusters)
     

@@ -65,10 +65,13 @@ applications/plantarum/gempipe/working/rec_overlap/sequences.csv
 applications/plantarum/gempipe/output_recon/pam.csv
 applications/limosilactobacillus_reuteri/fastani/ANIclustermap.svg
 applications/limosilactobacillus_reuteri/gempipe/working/coordinates/seq_to_coords.pickle
+applications/limosilactobacillus_reuteri/gempipe/working/rec_broken/seq_to_coords.pickle
 applications/limosilactobacillus_reuteri/gempipe/working/rec_broken/sequences.csv
+applications/limosilactobacillus_reuteri/gempipe/working/rec_masking/seq_to_coords.pickle
 applications/limosilactobacillus_reuteri/gempipe/working/rec_masking/sequences.csv
 applications/limosilactobacillus_reuteri/gempipe/working/clustering/sequences.csv
 applications/limosilactobacillus_reuteri/gempipe/working/clustering/combined.faa
+applications/limosilactobacillus_reuteri/gempipe/working/rec_overlap/seq_to_coords.pickle
 applications/limosilactobacillus_reuteri/gempipe/working/rec_overlap/sequences.csv
 applications/lacticaseibacillus/gempipe/working/coordinates/seq_to_coords.pickle
 applications/lacticaseibacillus/gempipe/working/rec_broken/pam.csv

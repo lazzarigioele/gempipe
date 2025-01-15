@@ -102,7 +102,10 @@ def animatrix(
     # (4) get the colors and labels
     if genomes is not None:
         genomes = genomes.copy().set_index('assembly_accession', drop=False)
-        genomes = genomes.loc[ord_leaves, ]  # drop low-qiality genomes
+        ord_leaves_present = [i for i in ord_leaves if i in genomes.index]  # drop low-quality genomes
+        if verbose: 
+            print("Leaves accessions not found in 'genomes':", [i for i in ord_leaves if i not in genomes.index])
+        genomes = genomes.loc[ord_leaves_present, ]  # drop low-quality genomes
         genomes['label'] = ''
         for accession, row in genomes.iterrows(): 
             genomes.loc[accession, 'label'] = f"{row['organism_name']} {row['strain_isolate']} ({row['niche']})"

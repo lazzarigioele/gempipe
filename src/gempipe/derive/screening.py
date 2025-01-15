@@ -209,6 +209,8 @@ def get_sources_by_class(model):
         if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'):
             m = list(r.metabolites)[0]
             formula = m.formula
+            if formula == None: 
+                continue
             # avoid confusion with 'C':
             formula = formula.replace('Ca', '').replace('Co', '').replace('Cu', '').replace('Cd', '').replace('Cr', '').replace('Cs', '').replace('Cl', '')   
             # avoid confusion with 'N':
