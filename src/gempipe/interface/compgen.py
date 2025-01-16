@@ -8,6 +8,7 @@ from matplotlib.colors import LinearSegmentedColormap
 
 
 
+
 def animatrix(
     tree_original='fastani/ANIclustermap_dendrogram.nwk', 
     triangular='fastani/ANIclustermap_matrix.tsv',
@@ -114,7 +115,7 @@ def animatrix(
         else: 
             print("WARNING: wrong 'colorannot' parameter.")
             color_key = 'organism_name'
-        key_to_color = {key: f'C{number}' for number, key in enumerate(genomes.sort_index()[color_key].unique())} 
+        key_to_color = {key: f'C{number}' for number, key in enumerate(sorted(genomes.sort_index()[color_key].unique()))} 
         if  niche:
             for n in excludeniche: 
                 key_to_color[n] = 'white'
@@ -196,11 +197,11 @@ def animatrix(
 
     # (6) legend
     if genomes is not None and not niche and not fastmode:
-        patches = [Patch(facecolor=f'C{number}', label=species, ) for number, species in enumerate(genomes.sort_index()['organism_name'].unique())]
+        patches = [Patch(facecolor=f'C{number}', label=species, ) for number, species in enumerate(sorted(genomes.sort_index()['organism_name'].unique()))]
         l1 = plt.legend(handles=patches, title=legend_title, loc='center right')
         axs[6].add_artist(l1)  # l2 implicitly replaces l1
     if niche: 
-        patches = [Patch(facecolor=key_to_color[n], label=n, ) for n in genomes['niche'].unique() if n not in excludeniche]
+        patches = [Patch(facecolor=key_to_color[n], label=n, ) for n in sorted(genomes['niche'].unique()) if n not in excludeniche]
         l2 = plt.legend(handles=patches, title='niche', loc='center right')
         axs[6].add_artist(l2)  # l2 implicitly replaces l1
     axs[6].axis('off')  # remove frame and axis
@@ -317,7 +318,7 @@ def phylogenomics(
         genomes['label'] = ''
         for accession, row in genomes.iterrows(): 
             genomes.loc[accession, 'label'] = f"{row['strain_isolate']} ({row['niche']})"
-        key_to_color = {key: f'C{number}' for number, key in enumerate(genomes.sort_index()['organism_name'].unique())}  
+        key_to_color = {key: f'C{number}' for number, key in enumerate(sorted(genomes.sort_index()['organism_name'].unique()))}  
         acc_to_color = genomes['organism_name'].map(key_to_color).to_dict()
     else:
         acc_to_color = None

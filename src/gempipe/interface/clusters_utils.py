@@ -121,7 +121,7 @@ def make_colorbar_clusters(ax, ord_data, acc_to_cluster, cluster_to_color):
     
     
     
-def make_colorbar_metadata(ax, ord_data, derive_report, report_key, key_to_color):
+def make_colorbar_metadata(ax, ord_data, derive_report, report_key,  excludekeys, key_to_color):
 
     
     if isinstance(derive_report, pnd.DataFrame):
@@ -133,7 +133,9 @@ def make_colorbar_metadata(ax, ord_data, derive_report, report_key, key_to_color
         
         # define accession-to-colors:
         if key_to_color == None:
-            key2color = {key: f'C{number}' for number, key in enumerate(derive_report[report_key].unique())}   # 'key' is eg 'species'.
+            key2color = {key: f'C{number}' for number, key in enumerate(sorted(derive_report[report_key].unique()))}   # 'key' is eg 'species'.
+            for k in excludekeys:   # handle 'excludekeys': 
+                key2color[k] = 'white'
         else:   # key_to_color = {'milk': (0, 0.5, 0.5), 'blood': (1, 1, 0)}
             key2color = key_to_color 
         acc_to_color = derive_report[report_key].map(key2color).to_dict() 
@@ -146,12 +148,9 @@ def make_colorbar_metadata(ax, ord_data, derive_report, report_key, key_to_color
       
         # create a dataframe (matshow_df) with a single column ('group'):
         matshow_acc = [acc for acc in ord_data.index]
-        if key_to_color == None:
-            matshow_group = [int(acc_to_color[acc][1:]) for acc in ord_data.index]   # int(cell[1:]) convert color for example rom 'C1' to 1.
-        else:   # key_to_color = {'milk': (0, 0.5, 0.5), 'blood': (1, 1, 0)}
-            matshow_group = [list(key_to_color.values()).index(acc_to_color[acc]) for acc in ord_data.index]
+        matshow_group = [list(key2color.values()).index(acc_to_color[acc]) for acc in ord_data.index]   
         matshow_df = pnd.DataFrame({'accession': matshow_acc, 'group': matshow_group}).set_index('accession')
-               
+                       
             
         clusters_matshow = ax.matshow(
             matshow_df[['group']],
@@ -162,12 +161,13 @@ def make_colorbar_metadata(ax, ord_data, derive_report, report_key, key_to_color
     
 
 
-def make_legends(ax, derive_report, report_key, cluster_to_color, dict_tables, anchor, key_to_color):
+def make_legends(ax, derive_report, report_key, excludekeys, cluster_to_color, dict_tables, anchor, key_to_color):
     
     # l1: species / niche
     if isinstance(derive_report, pnd.DataFrame):
         if key_to_color == None:
-            patches = [Patch(facecolor=f'C{number}', label=species, ) for number, species in enumerate(derive_report[report_key].unique())]
+            key2color = {key: f'C{number}' for number, key in enumerate(sorted(derive_report[report_key].unique())) if key not in excludekeys}
+            patches = [Patch(facecolor=color, label=key, ) for key, color in key2color.items()]
             l1 = plt.legend(handles=patches, title=report_key, loc='upper left', bbox_to_anchor=anchor[0])
         else:   # lines instead of pathches 
             custom_lines = [Line2D([0], [0], color=color, lw=4) for color in key_to_color.values()]

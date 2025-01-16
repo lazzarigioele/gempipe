@@ -13,7 +13,10 @@ from gempipe.interface.clusters_utils import merge_tables, sort_by_leaves, make_
 
     
     
-def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None, forcen=None, derive_report=None, report_key='species', legend_ratio=0.7, outfile=None, verbose=False, anchor=[None, None, None], key_to_color=None):
+def silhouette_analysis(
+    tables, figsize = (10,5), drop_const=True, ctotest=None, forcen=None, 
+    derive_report=None, report_key='species', excludekeys=[],
+    legend_ratio=0.7, outfile=None, verbose=False, anchor=[None, None, None], key_to_color=None):
     """Perform a silhuette analysis to detect the optimal number of clusters. 
     
     Args:
@@ -28,6 +31,7 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
             If `None`, all the combinations from 2 to the number of accessions -1 will be used.
         forcen (int): force the number of cluster, otherwise the optimal number will picked up according to the sihouette value. 
         derive_report (pandas.DataFrame): report table for the generation of strain-specific GSMMs, made by `gempipe derive` in the output directory (`derive_strains.csv`). 
+        excludekeys (list): keys (iches/species) not to show in legend. 
         report_key (str): name of the attribute (column) appearing in `derive_report`, to be compared to the metabolilc clusters.
             Usually it is 'species' or 'niche'.
         legend_ratio (float): space reserved for the legend.
@@ -208,10 +212,10 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
     make_colorbar_clusters(axs[5], ord_data_bool, acc_to_cluster, cluster_to_color)
     
     # add colorbar for the species/niches
-    make_colorbar_metadata(axs[7], ord_data_bool, derive_report, report_key, key_to_color)
+    make_colorbar_metadata(axs[7], ord_data_bool, derive_report, report_key,  excludekeys, key_to_color)
     
     # make legeneds
-    make_legends(axs[9], derive_report, report_key, cluster_to_color, None, anchor, key_to_color)
+    make_legends(axs[9], derive_report, report_key,  excludekeys, cluster_to_color, None, anchor, key_to_color)
         
     # save to disk; bbox_inches='tight' removes white spaces around the figure. 
     if outfile != None:
@@ -222,7 +226,10 @@ def silhouette_analysis(tables, figsize = (10,5), drop_const=True, ctotest=None,
 
 
 
-def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=None, report_key='species', acc_to_cluster=None, cluster_to_color=None, legend_ratio=0.7, label_ratio=0.02, k=None, outfile=None, verbose=False, anchor=[None, None, None], key_to_color=None):
+def heatmap_multilayer(
+    tables, figsize = (10,5), drop_const=True, 
+    derive_report=None, report_key='species', excludekeys=[], acc_to_cluster=None, cluster_to_color=None, 
+    legend_ratio=0.7, label_ratio=0.02, k=None, outfile=None, verbose=False, anchor=[None, None, None], key_to_color=None):
     """Create a phylo-metabolic dendrogram.
     
     Args:
@@ -236,6 +243,7 @@ def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=
         derive_report (pandas.DataFrame): report table for the generation of strain-specific GSMMs, made by `gempipe derive` in the output directory (`derive_strains.csv`). 
         report_key (str): name of the attribute (column) appearing in `derive_report`, to be compared to the metabolilc clusters.
             Usually it is 'species' or 'niche'.
+        excludekeys (list): keys (iches/species) not to show in legend. 
         acc_to_cluster (dict):  genome-to-cluster associations produced by `silhouette_analysis()`.
         cluster_to_color (dict):  cluster-to-RGB color associations produced by `silhouette_analysis()`.
         legend_ratio (float): space reserved for the legend.
@@ -352,10 +360,10 @@ def heatmap_multilayer(tables, figsize = (10,5), drop_const=True, derive_report=
     make_colorbar_clusters(axs[1], ord_data, acc_to_cluster, cluster_to_color)
     
     # colorbar for the species/niche
-    make_colorbar_metadata(axs[3], ord_data, derive_report, report_key, key_to_color)
+    make_colorbar_metadata(axs[3], ord_data, derive_report, report_key,  excludekeys, key_to_color)
     
     # make legends
-    make_legends(axs[7], derive_report, report_key, cluster_to_color, dict_tables, anchor, key_to_color)
+    make_legends(axs[7], derive_report, report_key,  excludekeys, cluster_to_color, dict_tables, anchor, key_to_color)
     
     # save to disk; bbox_inches='tight' removes white spaces around the figure. 
     if outfile != None:
