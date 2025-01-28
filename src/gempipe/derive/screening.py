@@ -17,45 +17,47 @@ from ..commons import fba_no_warnings
 
 
 from ..interface.medium import reset_growth_env
+from ..interface.gaps import can_synth
 
 
 
 DEFAULT_TEST_DICT = {
     # amino acids
-    'EX_ala__L_e': 'alanine',  # 1
-    'EX_arg__L_e': 'arginine',  # 2
-    'EX_asp__L_e': 'aspartate',  # 3
-    'EX_cys__L_e': 'cysteine' ,  # 4
-    'EX_glu__L_e': 'glutamate' ,  # 5
-    'EX_gly_e': 'glycine' ,  # 6
-    'EX_his__L_e': 'histidine' ,  # 7
-    'EX_ile__L_e': 'isoleucine',  # 8
-    'EX_leu__L_e': 'leucine',  # 9
-    'EX_lys__L_e': 'lysine',  # 10
-    'EX_met__L_e': 'methionine',  # 11
-    'EX_phe__L_e': 'phenylalanyne',  # 12
-    'EX_pro__L_e': 'proline',  # 13
-    'EX_ser__L_e': 'serine',  # 14
-    'EX_thr__L_e': 'threonine',  # 15
-    'EX_trp__L_e': 'tryptophane',  # 16
-    'EX_tyr__L_e': 'tyrosine',  # 17
-    'EX_val__L_e': 'valine',  # 18
-    'EX_asn__L_e': 'asparagine',  # 19
-    'EX_gln__L_e': 'glutamine',  # 20
+    'ala__L': 'alanine',  # 1
+    'arg__L': 'arginine',  # 2
+    'asp__L': 'aspartate',  # 3
+    'cys__L': 'cysteine' ,  # 4
+    'glu__L': 'glutamate' ,  # 5
+    'gly': 'glycine' ,  # 6
+    'his__L': 'histidine' ,  # 7
+    'ile__L': 'isoleucine',  # 8
+    'leu__L': 'leucine',  # 9
+    'lys__L': 'lysine',  # 10
+    'met__L': 'methionine',  # 11
+    'phe__L': 'phenylalanyne',  # 12
+    'pro__L': 'proline',  # 13
+    'ser__L': 'serine',  # 14
+    'thr__L': 'threonine',  # 15
+    'trp__L': 'tryptophane',  # 16
+    'tyr__L': 'tyrosine',  # 17
+    'val__L': 'valine',  # 18
+    'asn__L': 'asparagine',  # 19
+    'gln__L': 'glutamine',  # 20
     # vitamins
-    'EX_btn_e': 'biotine',  # 1, vitamin B7
-    'EX_fol_e': 'folate', # 2, vitamin B9
-    'EX_lipoate_e': 'lipoate', # 3, 6,8-Thioctic acid / alpha-Lipoic acid
-    'EX_pnto__R_e': 'panthotenate', # 4, vitamin B5
-    'EX_pydxn_e': 'pyridoxine',  # 5, form of vitamin B6
-    'EX_pydam_e': 'pyridoxamine',  # 6, form of vitamin B6
-    'EX_pydx_e': 'pyridoxal',   # form of vitamin B6
-    'EX_ribflv_e': 'riboflavin', # 7, vitamin B2
-    'EX_thm_e': 'thiamine',  # 8, vitamin B1
-    'EX_nac_e': 'nicotinate',  # 9, vitamin PP, vitamin B3, niacin
-    'EX_4abz_e': '4_Aminobenzoate', # 10, pABA, vitamin B10
-    'EX_cbl1_e': 'cob(I)alamin',   # cobolamine, vitamin B12
-    'EX_ascb__L_e': 'ascorbate', # ascorbic acid / vitamin C
+    'btn': 'biotine',  # 1, vitamin B7
+    #'fol': 'folate', # 2, vitamin B9
+    'thf': 'tetrahydrofolate', # active form of B9
+    'lipoate': 'lipoate', # 3, 6,8-Thioctic acid / alpha-Lipoic acid
+    'pnto__R': 'panthotenate', # 4, vitamin B5
+    'pydxn': 'pyridoxine',  # 5, form of vitamin B6
+    'pydam': 'pyridoxamine',  # 6, form of vitamin B6
+    'pydx': 'pyridoxal',   # form of vitamin B6
+    'ribflv': 'riboflavin', # 7, vitamin B2
+    'thm': 'thiamine',  # 8, vitamin B1
+    'nac': 'nicotinate',  # 9, vitamin PP, vitamin B3, niacin
+    '4abz': '4_Aminobenzoate', # 10, pABA, vitamin B10
+    'cbl1': 'cob(I)alamin',   # cobolamine, vitamin B12
+    'ascb__L': 'ascorbate', # ascorbic acid / vitamin C
 }
 
 
@@ -71,14 +73,19 @@ def auxotropy_simulation(model, seed=False, mode='binary', test_dict=None, model
     test_dict:  Dictionary of compounds to test. For example {'EX_ala__L_e': 'alanine', 'EX_arg__L_e': 'arginine', ...}
     model_id: name of the putput column (if None, 'output' will be used)
     """
+    
+    # implementation in versions <= v1.37.5 was based on the assumption that all the 
+    # aminoacids/vitamins had their exchange reaction. From v1.37.6 it is sufficient that 
+    # a metabolite appears in the cytosol to test for its production. 
 
     
     # get the dictionary of compounds to be tested
     if test_dict == None:
         test_dict = DEFAULT_TEST_DICT
         
-    # get the modeled rids: 
+    # get the modeled rids / mids: 
     modeled_rids = set([r.id for r in model.reactions])
+    modeled_mids = set([m.id for m in model.metabolites])
     
     
     df = [] # list of dict to be converted in pnd dataframe
@@ -88,41 +95,48 @@ def auxotropy_simulation(model, seed=False, mode='binary', test_dict=None, model
         # iterate the compound dictionaries 2 times: 
         # (aa and aa2 are EX_change reactions)
         for aa in test_dict.keys():
-            aux_key = f'[aux]{aa[3:-2]}'  # format the dataframe index. For example, from 'EX_glu__L_e' to [aux]glu__L.
-            if aa not in modeled_rids:
-                df.append({'exchange': aux_key, model_id: None})
-                continue 
-                
-            for aa2 in test_dict.keys():
-                if aa2 not in modeled_rids:
-                    continue
-                    
-                if aa2 == aa: 
-                    model.reactions.get_by_id(aa2).lower_bound = 0
-                else:  # set all other compounds to an arbitrarly high concentration
-                    model.reactions.get_by_id(aa2).lower_bound = -1000  # mmol / L
-
-            # perform flux balance analysis. Growth is assumed to be already set as objective. 
-            res = model.optimize()
-
-            if res.status == 'optimal' and res.objective_value > 0.001:  # FIVE decimals
-                auxotroph = 0 
-            else:
+            aux_key = f'[aux]{aa}'  # format the dataframe index. For example, from 'EX_glu__L_e' to '[aux]glu__L'
+            aa_c = f'{aa}_c'   # For example, from 'EX_glu__L_e' to 'glu__L_c'.
+            
+            if aa_c not in modeled_mids:
                 auxotroph = 1
+                obj_value = 0.0
+                status = 'missing'
+            
+            else:    
+                for aa2 in test_dict.keys():
+                    aa2_c = f'{aa2}_c'   # For example, from 'EX_glu__L_e' to 'glu__L_c'.
+                    if aa2_c not in modeled_mids:
+                        continue
+
+                    EX_aa2 = f'EX_{aa2}_e'
+                    if aa2_c == aa_c: 
+                        if EX_aa2 in modeled_rids: 
+                            model.reactions.get_by_id(EX_aa2).lower_bound = 0
+                    else:  # set all other compounds to an arbitrarly high concentration
+                        if EX_aa2 in modeled_rids: 
+                            model.reactions.get_by_id(EX_aa2).lower_bound = -1000  # mmol / L
+
+                # perform flux balance analysis
+                binary, obj_value, status = can_synth(model, aa_c)
+
+                if status == 'optimal' and obj_value > 0.00001:  # FIVE decimals
+                    auxotroph = 0 
+                else:
+                    auxotroph = 1
 
             # save results in a future pnd DataFrame:
             if mode=='binary':
                 df.append({'exchange': aux_key, model_id: auxotroph})
             elif mode=='growth':
                 if res.status=='optimal': 
-                    df.append({'exchange': aux_key, model_id: res.objective_value})
+                    df.append({'exchange': aux_key, model_id: obj_value})
                 else: 
-                    df.append({'exchange': aux_key, model_id: res.status})
+                    df.append({'exchange': aux_key, model_id: status})
     
     df = pnd.DataFrame.from_records(df)
     df = df.set_index('exchange', drop=True, verify_integrity=True)
     return df
-
 
 
 
@@ -179,7 +193,7 @@ def strain_auxotrophies_tests(logger, outdir, cores, pam, skipgf):
         load_the_worker, 
         zip(chunks, 
             range(cores), 
-            itertools.repeat(['accession'] + [i[3:-2] for i in DEFAULT_TEST_DICT.keys()]), 
+            itertools.repeat(['accession'] + [i for i in DEFAULT_TEST_DICT.keys()]), 
             itertools.repeat('accession'), 
             itertools.repeat(logger), 
             itertools.repeat(task_auxotrophy),  # will return a new sequences dataframe (to be concat).
@@ -252,7 +266,7 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
     if cnps_minmed != 0.0: 
         
         
-        # create a beckup for the medium:
+        # create a backup for the medium:
         medium_backup = {}
         for r in model.reactions:
             if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'):

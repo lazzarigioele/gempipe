@@ -32,6 +32,7 @@ def silhouette_analysis(
         forcen (int): force the number of cluster, otherwise the optimal number will picked up according to the sihouette value. 
         derive_report (pandas.DataFrame): report table for the generation of strain-specific GSMMs, made by `gempipe derive` in the output directory (`derive_strains.csv`). 
         excludekeys (list): keys (iches/species) not to show in legend. 
+            Bug: no more than 1 key is allowed.
         report_key (str): name of the attribute (column) appearing in `derive_report`, to be compared to the metabolilc clusters.
             Usually it is 'species' or 'niche'.
         legend_ratio (float): space reserved for the legend.
@@ -244,6 +245,7 @@ def heatmap_multilayer(
         report_key (str): name of the attribute (column) appearing in `derive_report`, to be compared to the metabolilc clusters.
             Usually it is 'species' or 'niche'.
         excludekeys (list): keys (iches/species) not to show in legend. 
+            Bug: no more than 1 key is allowed.
         acc_to_cluster (dict):  genome-to-cluster associations produced by `silhouette_analysis()`.
         cluster_to_color (dict):  cluster-to-RGB color associations produced by `silhouette_analysis()`.
         legend_ratio (float): space reserved for the legend.
@@ -374,7 +376,7 @@ def heatmap_multilayer(
 
 
 
-def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
+def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color, threshold=0.90):
     """Extract discriminant features from cluster of strains.
     
     Args:
@@ -384,7 +386,9 @@ def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
             (accessions as keys, cluster assignment as value).
         cluster_to_color (dict): dictionary such as the one produced by `silhouette_analysis``
             (clusters as keys, colors as value).
-        figsize (int, int): width and height of the figure. If ``None``, dimensions will automatically adapted.
+        threshold (float): features are shown if at least one cluster has relative frequency
+            >= `threshold` and, at the same time, at least another cluster has relative frequency
+            <= 1-`threshold`.
         
     
     Returns:
@@ -397,6 +401,14 @@ def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
             binary_feats[feat_id],
             binary_feats['y'],
             margins = False)
+        
+        # limit case: '0' or '1' is mising: 
+        if 0 not in contingency_table.index:
+            new_row = pnd.DataFrame([[0] * contingency_table.shape[1]], columns=contingency_table.columns, index=[0])
+            contingency_table = pnd.concat([new_row, contingency_table])
+        if 1 not in contingency_table.index:
+            new_row = pnd.DataFrame([[0] * contingency_table.shape[1]], columns=contingency_table.columns, index=[1])
+            contingency_table = pnd.concat([new_row, contingency_table])
         
         # the resulting pnd.DataFrame will be similar to (e.g. for the binary feat "[aux]his__L"):
         #         y            Cluster_1  Cluster_2  Cluster_3  Cluster_4  Cluster_5
@@ -427,8 +439,8 @@ def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
     
     
     # filter the dataframe:
-    df_relfreq = df_relfreq[(df_relfreq >= 0.90).any(axis=1)]
-    df_relfreq = df_relfreq[(df_relfreq <= 0.10).any(axis=1)]
+    df_relfreq = df_relfreq[(df_relfreq >= threshold).any(axis=1)]
+    df_relfreq = df_relfreq[(df_relfreq <= 1-threshold).any(axis=1)]
         
         
     # invert column order to match that of the heatmap
@@ -457,7 +469,10 @@ def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color):
     
     
     # create matshow (clusters)
-    cmap = LinearSegmentedColormap.from_list('', [cluster_to_color[eval(cluster.replace('Cluster_', ''))] for cluster in df_relfreq.columns])
+    if type(list(cluster_to_color.keys())[0]) == str: 
+        cmap = LinearSegmentedColormap.from_list('', [cluster_to_color[cluster.replace('Cluster_', '')] for cluster in df_relfreq.columns])
+    if type(list(cluster_to_color.keys())[0]) == int:   # add the 'eval'
+        cmap = LinearSegmentedColormap.from_list('', [cluster_to_color[eval(cluster.replace('Cluster_', ''))] for cluster in df_relfreq.columns])
     df_clusters = pnd.DataFrame({cluster: [i] for i, cluster in enumerate(df_relfreq.columns)})
     axs[0].matshow(
         df_clusters,  

@@ -11,6 +11,9 @@ from cobra.flux_analysis.gapfilling import GapFiller
 from cobra.util.solver import linear_reaction_coefficients
 
 
+from ..commons import fba_no_warnings
+
+
 
 __GAPSCACHE__ = None
 
@@ -360,10 +363,8 @@ def can_synth(model, mid):
         model.objective = rid
 
         # perform FBA: 
-        res = model.optimize()
-        value = res.objective_value
-        status = res.status
-        response = True if (value > 0 and status == 'optimal') else False
+        res, value, status = fba_no_warnings(model)
+        response = True if (value > 0.00001 and status == 'optimal') else False
         
         return response, round(value, 2), status
     

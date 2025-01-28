@@ -22,32 +22,54 @@ def merge_tables(dict_tables):
     
     # concat tables:
     tables_list = []
-    for key, value in dict_tables.items(): 
-        tables_list.append(value)
+    for key, table in dict_tables.items(): 
+           
         
-    # verify shape:
-    for table in tables_list: 
-        if set(list(tables_list[0].columns)) != set(list(table.columns)):
+        # verify shape:
+        if set(list(dict_tables[list(dict_tables.keys())[0]].columns)) != set(list(table.columns)):
             print("ERROR: provided tables have different accessions.")
             return
       
+    
+        # convert to int:
+        table = table.replace(False, 0)
+        table = table.replace(True, 1)
+
+
+        # replace NAs: 
+        replacing = set()
+        table_nas = table[table.isna().any(axis=1)]
+        for index in table_nas.index:
+            for col in table_nas.columns:
+                if pnd.isna(table_nas.loc[index, col]):
+                    replacing.add(index)
+                    if index.startswith('[aux]'):
+                        table.loc[index, col] = 1
+                    else: table.loc[index, col] = 0    
+        if replacing != set(): 
+            print(f"WARNING: {key}: replacing NA values for the following rows: {replacing}.")
+
+
+        # verify binary format:
+        binary = table.isin([0, 1]).all().all() 
+        if not binary:
+            print(f"ERROR: {key}: provided data are not binary (must be all {{0,1}} or all {{False,True}}.")
+            return
+
+
+        # order by sum of cols
+        table = table.loc[table.sum(axis=1).sort_values(ascending=False).index, :]
+
+
+        # start with all cells 0/1
+        table.astype(int)
+        
+        
+        tables_list.append(table)
+    
+    
     # concat the tables:
     data = pnd.concat(tables_list)
-    
-    # remove any ro conntaining NA in at least 1 column :
-    rows_with_missing = list(data[data.isna().any(axis=1)].index)
-    if rows_with_missing != []:
-        print(f"WARNING: removing rows with missing values: {rows_with_missing}.")
-    data = data.dropna()
-    
-    # verify binary format:
-    binary = data.isin([0, 1]).all().all() or data.isin([False, True]).all().all()
-    if not binary:
-        print("ERROR: provided data are not binary (must be all {0,1} or all {False,True}.")
-        return
-    
-    # start with all cells 0/1
-    data.astype(int)
     
     # accessions as rows, features as columns: 
     data = data.T
@@ -134,15 +156,17 @@ def make_colorbar_metadata(ax, ord_data, derive_report, report_key,  excludekeys
         # define accession-to-colors:
         if key_to_color == None:
             key2color = {key: f'C{number}' for number, key in enumerate(sorted(derive_report[report_key].unique()))}   # 'key' is eg 'species'.
-            for k in excludekeys:   # handle 'excludekeys': 
-                key2color[k] = 'white'
         else:   # key_to_color = {'milk': (0, 0.5, 0.5), 'blood': (1, 1, 0)}
             key2color = key_to_color 
+        # handle 'excludekeys':
+        for k in excludekeys:   
+            key2color[k] = 'white'
         acc_to_color = derive_report[report_key].map(key2color).to_dict() 
-        
+                
         
         # create the custom cmap: 
-        colors_list = list(key2color.values())
+        # 'white' may be repeatd more times.
+        colors_list = list(key2color.values()) 
         custom_cmap = LinearSegmentedColormap.from_list('CustomColormap', colors_list, N=256)
 
       

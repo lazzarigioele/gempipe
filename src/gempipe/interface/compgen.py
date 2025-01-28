@@ -34,7 +34,8 @@ def animatrix(
             This may improve the coloring. 
         fastmode (bool): if `True`, don't draw the dendrogram and make the picture smaller. 
         niche (bool): if `True`, draw squares according to the 'niche' attribute contained in 'genomes'.
-        excludeniche (list): list of niches to exclude from the representation (when using 'niche'). 
+        excludeniche (list): list of niches to exclude from the representation (when using 'niche').
+            Bug: no more than 1 key is allowed.
         nichewidth (int): width of the border of squares (when using 'niche').
         outfile (str): filepath to be used to save the image. If `None` it will not be saved.
         verbose (bool): if `True`, print more log messages.
