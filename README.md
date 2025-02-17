@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/static/icon_proposal.svg" alt="icon_proposal.csv" height="150px">
+  <img src="docs/static/icon_proposal.svg" alt="icon_proposal.svg" height="150px">
 </div>
 
 <br>
