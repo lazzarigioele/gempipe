@@ -153,7 +153,7 @@ def perform_gapfilling(model, universe, mid=None, slim=None, minflux=1.0, exr=Fa
     Returns:
         list: IDs of reactions proposed during the 1st solution.
     """
-    
+
     
     def temporized_task(model, universe, minflux, exr, nsol, penalties):
 
@@ -188,10 +188,11 @@ def perform_gapfilling(model, universe, mid=None, slim=None, minflux=1.0, exr=Fa
             
             
         # if requested, boost the actual sources:
-        for r in model.reactions: 
-            if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'): # if exchange reaction
-                if r.lower_bound < 0: 
-                    r.lower_bound = -1000
+        if boost:
+            for r in model.reactions: 
+                if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'): # if exchange reaction
+                    if r.lower_bound < 0: 
+                        r.lower_bound = -1000
 
 
         # if requested, try to reduce the universe complexity:
