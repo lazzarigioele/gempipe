@@ -29,9 +29,6 @@ validation/validation_new/01_klebsiella/tools_runs/gempipe/working/rec_masking/s
 validation/validation_new/01_klebsiella/tools_runs/gempipe/working/clustering/sequences.csv
 validation/validation_new/01_klebsiella/tools_runs/gempipe/working/clustering/combined.faa
 validation/validation_new/01_klebsiella/tools_runs/gempipe/working/rec_overlap/sequences.csv
-validation/validation_new/gapseq_v1.3.1/dat/seq/Bacteria/unrev/sequences.tar.gz
-validation/validation_new/gapseq_v1.3.1/dat/seq/Bacteria/unrev/7ccc5cd23660f087629258dec00384ef.fasta
-validation/validation_new/gapseq_v1.3.1/dat/seq/Bacteria/unrev/d8f4388392492f58e09fd15edab321af.fasta
 validation/validation_new/03_pseudomonas/tools_runs/gempipe_rf/working/rec_broken/sequences.csv
 validation/validation_new/03_pseudomonas/tools_runs/gempipe_rf/working/rec_masking/sequences.csv
 validation/validation_new/03_pseudomonas/tools_runs/gempipe_rf/working/clustering/sequences.csv
@@ -42,9 +39,6 @@ validation/validation_new/03_pseudomonas/tools_runs/gempipe/working/rec_masking/
 validation/validation_new/03_pseudomonas/tools_runs/gempipe/working/clustering/sequences.csv
 validation/validation_new/03_pseudomonas/tools_runs/gempipe/working/clustering/combined.faa
 validation/validation_new/03_pseudomonas/tools_runs/gempipe/working/rec_overlap/sequences.csv
-validation/validation_new/slurm/02_ralstonia_gapseq.stdout
-validation/validation_new/slurm/03_pseudomonas_gapseq.stdout
-validation/validation_new/slurm/01_klebsiella_gapseq.stdout
 validation/validation_new/dbs/eggnog_proteins.dmnd
 validation/validation_new/dbs/eggnog.taxa.db
 validation/validation_new/dbs/eggnog.db
