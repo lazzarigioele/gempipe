@@ -69,7 +69,7 @@ def auxotropy_simulation(model, seed=False, mode='binary', test_dict=None, model
     All compounds -1 in 'test_dict' (aminoacids) will be supplemented.
     
     seed: switch to ModelSEED naming system (not yet impemented)
-    mode: 'binary' (1: auxotroph, 0: autotroph) or 'growth': quantitative results from FBA. 
+    mode: 'binary' (1: auxotroph, 0: prototroph) or 'growth': quantitative results from FBA. 
     test_dict:  Dictionary of compounds to test. For example {'EX_ala__L_e': 'alanine', 'EX_arg__L_e': 'arginine', ...}
     model_id: name of the putput column (if None, 'output' will be used)
     """
@@ -249,7 +249,7 @@ def cnps_simulation(model, seed=False, mode='binary', sources_by_class=None, mod
     A growth-enabling medium is assumed to be already set up. 
     
     seed: switch to ModelSEED naming system (not yet impemented)
-    mode: 'binary' (1: auxotroph, 0: autotroph) or 'growth': quantitative results from FBA. 
+    mode: 'binary' (1: can grow, 0: cannot grow) or 'growth': quantitative results from FBA. 
     sources_by_class:  Dictionary of compounds to test. For example {'C': {'EX_ala__L_e', ...}, 'N': {'EX_ala__L_e', ...}}
     model_id: name of the putput column (if None, 'output' will be used)
     cnps_minmed: base the analysis on a minimal medium yielding at least the specified objective value.

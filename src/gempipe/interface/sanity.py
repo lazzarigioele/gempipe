@@ -147,14 +147,64 @@ def verify_egc_all(model):
         print("No energy-generating cycles (EGCs) found.")
         
         
-                
+
+def check_sinks(model, verbose=True):
+    """Check presence of sink reactions.
+        
+    Args:
+        model (cobra.Model): target model.
+        verbose (bool): if ``False``, don't print.
+        
+    Returns:
+        list: IDs of sink reactions found.
+    """
+    
+    found_rids = []
+    cnt = 0
+    for r in model.reactions:
+        if len(list(r.metabolites))==1 and list(r.metabolites)[0].compartment!='e':
+            if 0 in r.bounds == False:
+                cnt += 1
+                if verbose: print(cnt, ':', r.id, ':', r.reaction, ':', r.bounds)
+                found_rids.append(r.id)
+    
+    
+    if found_rids == []:
+        if verbose: print("No sink reactions found.")
+    return found_rids
+
+
+
+def check_demands(model, verbose=True):
+    """Check presence of demand reactions.
+        
+    Args:
+        model (cobra.Model): target model.
+        verbose (bool): if ``False``, don't print.
+        
+    Returns:
+        list: IDs of demand reactions found.
+    """
+    
+    found_rids = []
+    cnt = 0
+    for r in model.reactions:
+        if len(list(r.metabolites))==1 and list(r.metabolites)[0].compartment!='e':
+            if 0 in r.bounds:
+                cnt += 1
+                if verbose: print(cnt, ':', r.id, ':', r.reaction, ':', r.bounds)
+                found_rids.append(r.id)
+    
+    
+    if found_rids == []:
+        if verbose: print("No demand reactions found.")
+    return found_rids
+        
 
     
-def check_sink_demand(model, verbose=True):
+def check_sinks_demands(model, verbose=True):
     """Check presence of sink and demand reactions.
-    
-    Here they are simply defined as reactions involving just 1 metabolite, with an ID not starting with ``EX_``.
-    
+        
     Args:
         model (cobra.Model): target model.
         verbose (bool): if ``False``, don't print.
@@ -166,11 +216,10 @@ def check_sink_demand(model, verbose=True):
     found_rids = []
     cnt = 0
     for r in model.reactions:
-        if len(r.metabolites) == 1: 
-            if r.id.startswith("EX_") == False: 
-                cnt += 1
-                if verbose: print(cnt, ':', r.id, ':', r.reaction, ':', r.bounds)
-                found_rids.append(r.id)
+        if len(list(r.metabolites))==1 and list(r.metabolites)[0].compartment!='e':
+            cnt += 1
+            if verbose: print(cnt, ':', r.id, ':', r.reaction, ':', r.bounds)
+            found_rids.append(r.id)
     
     
     if found_rids == []:
@@ -594,7 +643,7 @@ def sanity_report(model):
     
     print("Bad EX_change notation:", len(check_exr_notation(model, verbose=False)))
     
-    print("Sink/demand:", len(check_sink_demand(model, verbose=False)))
+    print("Sinks/demands:", len(check_sinks_demands(model, verbose=False)))
     
     print("Constrained metabolic:", len(check_constrained_metabolic(model, verbose=False)))
     
