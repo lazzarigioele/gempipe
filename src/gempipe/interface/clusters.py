@@ -230,7 +230,7 @@ def silhouette_analysis(
 def heatmap_multilayer(
     tables, figsize = (10,5), drop_const=True, 
     derive_report=None, report_key='species', excludekeys=[], acc_to_cluster=None, cluster_to_color=None, 
-    legend_ratio=0.7, label_ratio=0.02, k=None, outfile=None, verbose=False, anchor=[None, None, None], key_to_color=None):
+    legend_ratio=0.7, label_ratio=0.02, outfile=None, verbose=False, anchor=[None, None, None], key_to_color=None):
     """Create a phylo-metabolic dendrogram.
     
     Args:
@@ -250,7 +250,6 @@ def heatmap_multilayer(
         cluster_to_color (dict):  cluster-to-RGB color associations produced by `silhouette_analysis()`.
         legend_ratio (float): space reserved for the legend.
         label_ratio (float): space reserved for the Y-axis labels.
-        k (int): focus on the `k` most discriminative features.
         outfile (str): filepath to be used to save the image. If `None` it will not be saved.
         verbose (bool): if `True`, print more log messages
         anchor (list): list of tuples (X,Y) for customixing the position of legends. 
@@ -282,7 +281,7 @@ def heatmap_multilayer(
     
     
     
-    def make_plot_heatmap_multilayer(ax, ord_data, k):
+    def make_plot_heatmap_multilayer(ax, ord_data):
                 
         ax.matshow(
             ord_data,  
@@ -292,26 +291,13 @@ def heatmap_multilayer(
             interpolation='none') # no interp. performed on Agg-ps-pdf-svg backends.
 
         # set x labels
-        if k==None: ax.get_xaxis().set_visible(False)
+        ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
 
         ax.spines['top'].set_visible(False)
         ax.spines['bottom'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
-        
-        
-        if k != None: 
-            
-            # set right-Y-axis labels:
-            for i, label in enumerate(ord_data.index):
-                ax.text(ax.get_xlim()[1], i, '- '+label, va='center', ha='left', color='black')
-
-            # set X-axis labels: 
-            ax.set_xticks(np.arange(ord_data.shape[1]))
-            ax.set_xticklabels(ord_data.columns, rotation=30, ha='right')
-            ax.xaxis.set_ticks_position('bottom')  # move ticks to the bottom
-            ax.tick_params(top=False, bottom=True)  # disable ticks on the top
         
  
     
@@ -322,7 +308,6 @@ def heatmap_multilayer(
 
     
     # the user may want to drop constant columns: 
-    if k != None and drop_const==False: drop_const = True
     if drop_const: 
         constant_columns = [col for col in data.columns if data[col].nunique() == 1]
         if verbose: print(f"WARNING: removing {len(constant_columns)} constant features.")
@@ -339,12 +324,6 @@ def heatmap_multilayer(
     linkage_matrix = linkage(distances, method='ward')
     
     
-    # the user may want to focus on the 'k' most discriminative features:
-    if k != None:
-        data_bool = subset_k_best(data_bool, k, acc_to_cluster, derive_report, report_key)
-        data = data.loc[:, data_bool.columns ]
-    
-    
     # create the empty figure frame:
     fig, axs = create_heatmap_frame(figsize)
 
@@ -356,7 +335,7 @@ def heatmap_multilayer(
     ord_data_bool = sort_by_leaves(data_bool, linkage_matrix, index_to_acc)  # only to return 
     
     # plot the heatmap:
-    make_plot_heatmap_multilayer(axs[5], ord_data, k)
+    make_plot_heatmap_multilayer(axs[5], ord_data)
     
     # add the cluster information (coming from the silhouette analysis);
     make_colorbar_clusters(axs[1], ord_data, acc_to_cluster, cluster_to_color)
