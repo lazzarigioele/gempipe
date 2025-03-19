@@ -26,8 +26,8 @@ def animatrix(
         type_strain (str): accession of the genome from type strain to be used for a taxonoy-based filtering.
             All genomes having ANI < 95 respect to the type strain are discarded. 
         legend_ratio (float): space reserved for the legend.
-        genomes (pandas.DataFrame): having at last the following columns `assembly_accession`, `strain_isolate`, `organism_name`, `niche`. 
-            The teble produced in `working/genomes/genomes.csv` is fully compatible.
+        genomes (pandas.DataFrame): having at last the following columns `accession`, `strain`, `species`, `niche`. 
+            The report produced by `gempipe recon` is fully compatible.
         cellannot (bool): if `True`, annotate each cell.
         colorannot (str): choose between 'species' and 'niche'.
         replace0 (float): replace 0s in the `ANIclustermap_matrix.tsv` with the provided value.
@@ -115,19 +115,19 @@ def animatrix(
     
     # (4) get the colors and labels
     if genomes is not None:
-        genomes = genomes.copy().set_index('assembly_accession', drop=False)
+        genomes = genomes.copy().set_index('accession', drop=False)
         ord_leaves_present = [i for i in ord_leaves if i in genomes.index]  # drop low-quality genomes
         if verbose: 
             print("Leaves accessions not found in 'genomes':", [i for i in ord_leaves if i not in genomes.index])
         genomes = genomes.loc[ord_leaves_present, ]  # drop low-quality genomes
         genomes['label'] = ''
         for accession, row in genomes.iterrows(): 
-            genomes.loc[accession, 'label'] = f"{row['organism_name']} {row['strain_isolate']} ({row['niche']})"
-        if   colorannot=='species': color_key = 'organism_name'
+            genomes.loc[accession, 'label'] = f"{row['species']} {row['strain']} ({row['niche']})"
+        if   colorannot=='species': color_key = 'species'
         elif colorannot=='niche': color_key = 'niche'
         else: 
             print("WARNING: wrong 'colorannot' parameter.")
-            color_key = 'organism_name'
+            color_key = 'species'
         key_to_color = {key: f'C{number}' for number, key in enumerate(sorted(genomes.sort_index()[color_key].unique()))} 
         if  niche:
             for n in excludeniche: 
@@ -143,7 +143,7 @@ def animatrix(
             return ''
         if leaf.name != None:
             if genomes is not None:
-                row = genomes[genomes['assembly_accession']==leaf.name].iloc[0]
+                row = genomes[genomes['accession']==leaf.name].iloc[0]
                 return row['label']
             else:
                 return leaf.name
@@ -153,7 +153,7 @@ def animatrix(
         if leaf_name != '':
             if acc_to_color is not None:
                 row = genomes[genomes['label']==leaf_name].iloc[0]
-                return acc_to_color[row['assembly_accession']]
+                return acc_to_color[row['accession']]
             else:
                 return 'black'
         else: 
@@ -197,8 +197,8 @@ def animatrix(
             if n in excludeniche: 
                 continue
             subset = genomes[genomes['niche']==n]
-            first_acc = subset.iloc[0]['assembly_accession']
-            last_acc = subset.iloc[-1]['assembly_accession']
+            first_acc = subset.iloc[0]['accession']
+            last_acc = subset.iloc[-1]['accession']
             first_index = genomes.index.get_loc(first_acc) 
             last_index = genomes.index.get_loc(last_acc) 
             min_value = min([first_index, last_index])
@@ -210,7 +210,7 @@ def animatrix(
 
     # (6) legend
     if genomes is not None and not niche and not fastmode:
-        patches = [Patch(facecolor=f'C{number}', label=species, ) for number, species in enumerate(sorted(genomes.sort_index()['organism_name'].unique()))]
+        patches = [Patch(facecolor=f'C{number}', label=species, ) for number, species in enumerate(sorted(genomes.sort_index()['species'].unique()))]
         l1 = plt.legend(handles=patches, title=legend_title, loc='center right')
         axs[6].add_artist(l1)  # l2 implicitly replaces l1
     if niche: 
@@ -256,8 +256,8 @@ def phylogenomics(
         mode (str): pangenomics pipeline used (Only "roary" is supported for the moment).
         legend_ratio (float): space reserved for the legend.
         legend_title (str): title for the species legend.
-        genomes (pandas.DataFrame): having at last the following columns `assembly_accession`, `strain_isolate`, `organism_name`, `niche`. 
-            The teble produced in `working/genomes/genomes.csv` is fully compatible.
+        genomes (pandas.DataFrame): having at last the following columns `accession`, `strain`, `species`, `niche`. 
+            The report produced by `gempipe recon` is fully compatible.
         showtiles (bool): if `True`, include a graphical representation of the `thirdparty_pam`.
         support_values (bool): if `True`, indicate the support values.
         outgroup (str): improve representation of the outgroup (if present) in the tiles.
@@ -326,13 +326,13 @@ def phylogenomics(
     
     # (4) get the colors
     if genomes is not None:
-        genomes = genomes.copy().set_index('assembly_accession', drop=False)
+        genomes = genomes.copy().set_index('accession', drop=False)
         genomes = genomes.loc[ord_leaves, ]  # drop low-quality genomes
         genomes['label'] = ''
         for accession, row in genomes.iterrows(): 
-            genomes.loc[accession, 'label'] = f"{row['strain_isolate']} ({row['niche']})"
-        key_to_color = {key: f'C{number}' for number, key in enumerate(sorted(genomes.sort_index()['organism_name'].unique()))}  
-        acc_to_color = genomes['organism_name'].map(key_to_color).to_dict()
+            genomes.loc[accession, 'label'] = f"{row['strain']} ({row['niche']})"
+        key_to_color = {key: f'C{number}' for number, key in enumerate(sorted(genomes.sort_index()['species'].unique()))}  
+        acc_to_color = genomes['species'].map(key_to_color).to_dict()
     else:
         acc_to_color = None
         
@@ -342,7 +342,7 @@ def phylogenomics(
     def get_leaf_label(leaf):
         if leaf.name != None:
             if genomes is not None:
-                row = genomes[genomes['assembly_accession']==leaf.name].iloc[0]
+                row = genomes[genomes['accession']==leaf.name].iloc[0]
                 return row['label']
             else:
                 return leaf.name
@@ -352,7 +352,7 @@ def phylogenomics(
         if leaf_name != '':
             if acc_to_color is not None:
                 row = genomes[genomes['label']==leaf_name].iloc[0]
-                return acc_to_color[row['assembly_accession']]
+                return acc_to_color[row['accession']]
             else:
                 return 'black'
         else: 
@@ -397,7 +397,7 @@ def phylogenomics(
     # (7) legend
     ax_legend = axs[2] if showtiles else axs[1]
     if genomes is not None:
-        patches = [Patch(facecolor=f'C{number}', label=species, ) for number, species in enumerate(genomes.sort_index()['organism_name'].unique())]
+        patches = [Patch(facecolor=f'C{number}', label=species, ) for number, species in enumerate(genomes.sort_index()['species'].unique())]
         l1 = plt.legend(handles=patches, title=legend_title, loc='center right')
         ax_legend.add_artist(l1)  # l2 implicitly replaces l1
     ax_legend.axis('off')  # remove frame and axis
