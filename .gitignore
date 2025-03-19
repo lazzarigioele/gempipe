@@ -52,6 +52,16 @@ paper_gempipe/validation_new/03_pseudomonas/tools_runs/gempipe/working/rec_maski
 paper_gempipe/validation_new/03_pseudomonas/tools_runs/gempipe/working/clustering/sequences.csv
 paper_gempipe/validation_new/03_pseudomonas/tools_runs/gempipe/working/clustering/combined.faa
 paper_gempipe/validation_new/03_pseudomonas/tools_runs/gempipe/working/rec_overlap/sequences.csv
+paper_gempipe/case_study_new/fastani/ANIclustermap.svg
+paper_gempipe/case_study_new/gempipe/working/coordinates/seq_to_coords.pickle
+paper_gempipe/case_study_new/gempipe/working/rec_broken/seq_to_coords.pickle
+paper_gempipe/case_study_new/gempipe/working/rec_broken/sequences.csv
+paper_gempipe/case_study_new/gempipe/working/rec_masking/seq_to_coords.pickle
+paper_gempipe/case_study_new/gempipe/working/rec_masking/sequences.csv
+paper_gempipe/case_study_new/gempipe/working/clustering/sequences.csv
+paper_gempipe/case_study_new/gempipe/working/clustering/combined.faa
+paper_gempipe/case_study_new/gempipe/working/rec_overlap/seq_to_coords.pickle
+paper_gempipe/case_study_new/gempipe/working/rec_overlap/sequences.csv
 paper_gempipe/validation_old/01_klebsiella/validation/gempipe/working/rec_broken/sequences.csv
 paper_gempipe/validation_old/01_klebsiella/validation/gempipe/working/rec_masking/sequences.csv
 paper_gempipe/validation_old/01_klebsiella/validation/gempipe/working/clustering/sequences.csv

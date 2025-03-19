@@ -48,6 +48,18 @@ def animatrix(
 
     # (1) load the tree produced by aniclustermap
     tree_original = Phylo.read(tree_original, "newick")
+    # Sometimes, when used after 'ncbi_genome_download', leaves coud be formatted
+    # like 'GCA_000010005.1_ASM1000v1_genomic', while the matrix like 'GCA_000010005.1'.
+    # Here the formatting is corrected if needed:
+    for leaf in tree_original.get_terminals():
+        splitted = leaf.name.split('_')
+        if len(splitted) > 2:  # (like in GCA_000010005.1)
+            gca_gcf_index = None
+            for i, split in enumerate(splitted): 
+                if split in ['GCA', 'GCF']:
+                    gca_gcf_index = i
+            if gca_gcf_index != None:
+                leaf.name = f'{splitted[gca_gcf_index]}_{splitted[gca_gcf_index +1]}'
     # get the leaves from top to bottom. It will be used to sort DataFrames later. 
     ord_leaves = [leaf.name for leaf in tree_original.get_terminals()]
 
@@ -458,18 +470,41 @@ def unwrap_ncbidataset(filepath='./assembly_data_report.jsonl'):
 
 
 def get_filtering_summary(working_dir='gempipe/working/', thr_N50=50000, thr_nc=200, thr_bm=2, thr_bf=100, verbose=True):
+    """
+    Get a summary of the metrics used to filter genomes.
     
+    Args:
+        working_dir (str): path to the gempipe's working directory.
+        thr_N50 (int): N50 threshold.
+        thr_nc (int): number of contigs threshold.
+        thr_bm (int): BUSCO M% (missing) threshold.
+        thr_bf (int): BUSCO F% (fragmented) threshold.
+
+    Returns:
+        tuple: A tuple containing:
+            - pandas.DataFrame: metrics for all input genomes.
+            - pandas.DataFrame: metrics only for retained genomes.
+            - matplotlib.figure.Figure: histograms of metrics.
+    """
     
+    # load tables by reading the working directory: 
     genomes = pnd.read_csv(f'{working_dir}/genomes/genomes.csv', index_col=0)
     genomes = genomes.sort_values(by='assembly_accession')
+    t_metrics = pnd.read_csv(f'{working_dir}/filtering/tmetrics.csv', index_col=0)
+    t_metrics = t_metrics.set_index('accession', drop=True)
+    b_metrics = pnd.read_csv(f'{working_dir}/filtering/bmetrics.csv', index_col=0)
+    b_metrics = b_metrics.set_index('accession', drop=True)
     
-    summary_table = pnd.concat([genomes.set_index('assembly_accession', drop=True), pnd.read_csv(f'{working_dir}/filtering/tmetrics.csv', index_col=0).set_index('accession', drop=True)], axis=1)
-    summary_table = pnd.concat([summary_table, pnd.read_csv(f'{working_dir}/filtering/bmetrics.csv', index_col=0).set_index('accession', drop=True)], axis=1)
+    
+    # create a table whowing all metrics ('summary_table')
+    summary_table = pnd.concat([genomes.set_index('assembly_accession', drop=True), t_metrics], axis=1)
+    summary_table = pnd.concat([summary_table, b_metrics], axis=1)
     summary_table['sum_len'] = round(summary_table['sum_len'] /  1000 / 1000, 3)
-    summary_table = summary_table[['strain_isolate', 'organism_name', 'niche', 'ncontigs', 'sum_len', 'N50', 'GC(%)', 'F', 'M']]
+    summary_table = summary_table[['strain_isolate', 'organism_name', 'ncontigs', 'sum_len', 'N50', 'GC(%)', 'F', 'M']]
     summary_table = summary_table.rename(columns={'F': 'BUSCO_F%', 'M': 'BUSCO_M%'})
     
 
+    # apply thresholds:
     summary_table_filt = summary_table[
         (summary_table['N50'] >= thr_N50) & \
         (summary_table['ncontigs'] <= thr_nc) & \
@@ -485,6 +520,8 @@ def get_filtering_summary(working_dir='gempipe/working/', thr_N50=50000, thr_nc=
         
         print(f"Remaining: {len(summary_table_filt)} / {len(summary_table)} strains")
     
+    
+    # define the canvas:
     nrows = 4
     props = [1 for i in range(nrows)]
     fig, axs = plt.subplots(
@@ -502,6 +539,8 @@ def get_filtering_summary(working_dir='gempipe/working/', thr_N50=50000, thr_nc=
             axs[i].axvline(x=thr, color='red', linestyle='-', linewidth=0.5)
         axs[i].set_xlabel(metric)
         axs[i].set_facecolor('ghostwhite')
+        if metric == 'N50':   # the only case where higher values are better
+            axs[i].invert_xaxis()
     
     
-    return genomes, summary_table, summary_table_filt, fig
+    return summary_table, summary_table_filt, fig
