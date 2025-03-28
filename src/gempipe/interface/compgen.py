@@ -215,7 +215,7 @@ def animatrix(
         axs[6].add_artist(l1)  # l2 implicitly replaces l1
     if niche: 
         patches = [Patch(facecolor=key_to_color[n], label=n, ) for n in sorted(genomes['niche'].unique()) if n not in excludeniche]
-        l2 = plt.legend(handles=patches, title='niche', loc='center right')
+        l2 = plt.legend(handles=patches, title=legend_title, loc='center right')
         axs[6].add_artist(l2)  # l2 implicitly replaces l1
     axs[6].axis('off')  # remove frame and axis
     

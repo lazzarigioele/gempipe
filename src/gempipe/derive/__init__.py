@@ -10,13 +10,14 @@ from .filler import strain_species_filler
 from .biolog import strain_biolog_tests
 from .screening import strain_auxotrophies_tests
 from .screening import strain_cnps_tests
+from .screening import strain_biosynth_tests
 from .species import derive_rpam
 from .species import derive_species_specific
 from .reporting import create_derive_plots
 
 
 
-def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml, skipgf, nofig, aux, cnps, cnps_minmed):
+def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_filepath, minflux, biolog, sbml, skipgf, nofig, aux, cnps, cnps_minmed, biosynth):
     
     
     ### PART 1: derive strain-specific models
@@ -30,7 +31,7 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
         response = strain_species_filler(logger, outdir, cores, panmodel, media_filepath, minflux, sbml, level='strain')
         if response == 1: return 1
     
-
+    
     ### PART 2bis: simulations
     if biolog:
         response = strain_biolog_tests(logger, outdir, cores, pam, panmodel, skipgf)
@@ -42,6 +43,10 @@ def derive_all(logger, outdir, cores, panmodel, pam, report, gannots, media_file
     
     if cnps:
         response = strain_cnps_tests(logger, outdir, cores, pam, panmodel, skipgf, cnps_minmed)
+        if response == 1: return 1
+    
+    if biosynth != 0:
+        response = strain_biosynth_tests(logger, outdir, cores, panmodel, pam, skipgf, biosynth)
         if response == 1: return 1
     
      
@@ -115,7 +120,9 @@ def derive_command(args, logger):
     
     
     logger.info("Deriving strain- and species-specific metabolic models...")
-    response = derive_all(logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, args.biolog, args.sbml, args.skipgf, args.nofig, args.aux, args.cnps, args.cnps_minmed)
+    response = derive_all(
+        logger, outdir, args.cores, panmodel, pam, report, gannots, args.media, args.minflux, 
+        args.biolog, args.sbml, args.skipgf, args.nofig, args.aux, args.cnps, args.cnps_minmed, args.biosynth)
     if response == 1: return 1
     
     

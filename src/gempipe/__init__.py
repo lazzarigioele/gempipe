@@ -75,8 +75,9 @@ def main():
     derive_parser.add_argument("--nofig", action='store_true', help="Skip the generation of figures.")
     derive_parser.add_argument("--aux", action='store_true', help="Test auxotrophies for aminoacids and vitamins.")
     derive_parser.add_argument("--cnps", action='store_true', help="Sistematically simulate growth on all the available C-N-P-S sources.")
-    derive_parser.add_argument("--cnps_minmed", metavar='', type=float, default=0.0, help="Base C-N-P-S simulation on a minimal medium leading to the specified minimum objective value. If 0, user-defined medium will be used.")
-         
+    derive_parser.add_argument("--cnps_minmed", metavar='', type=float, default=0.0, help="Base the C-N-P-S simulations on a minimal medium leading to the specified minimum objective value. If 0, user-defined medium will be used.")
+    derive_parser.add_argument("--biosynth", metavar='', type=float, default=0.0, help="Check biosynthesis of each metabolite while granting the specified minimum fraction of objective. If 0, this step will be skipped.")
+           
     
     
     # add arguments for the 'recon'/'autopilot' command
@@ -121,7 +122,8 @@ def main():
     autopilot_parser.add_argument("--biolog", action='store_true', help="Simulate Biolog's utilization tests on strain-specific models.")
     autopilot_parser.add_argument("--aux", action='store_true', help="Test auxotrophies for aminoacids and vitamins.")
     autopilot_parser.add_argument("--cnps", action='store_true', help="Sistematically simulate growth on all the available C-N-P-S sources.")
-    autopilot_parser.add_argument("--cnps_minmed", metavar='', type=float, default=0.0, help="Base C-N-P-S simulation on a minimal medium leading to the specified minimum objective value. If 0, user-defined medium will be used.")
+    autopilot_parser.add_argument("--cnps_minmed", metavar='', type=float, default=0.0, help="Base the C-N-P-S simulations on a minimal medium leading to the specified minimum objective value. If 0, user-defined medium will be used.")
+    autopilot_parser.add_argument("--biosynth", metavar='', type=float, default=0.0, help="Check biosynthesis of each metabolite while granting the specified minimum fraction of objective. If 0, this step will be skipped.")
      
 
 

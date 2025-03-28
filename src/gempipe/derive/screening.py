@@ -18,6 +18,7 @@ from ..commons import fba_no_warnings
 
 from ..interface.medium import reset_growth_env
 from ..interface.gaps import can_synth
+from ..interface.gaps import get_objectives
 
 
 
@@ -464,5 +465,137 @@ def strain_cnps_tests(logger, outdir, cores, pam, panmodel, skipgf, cnps_minmed)
     cnps_pam = all_df_combined
     cnps_pam = cnps_pam.T
     cnps_pam.to_csv(outdir + 'cnps.csv')
+    
+    return 0
+
+
+
+def biosynth_simulation(model, model_id=None, biosynth=0.5):
+    """
+    Function to test biosynthesis of metabolites in a model. 
+    A growth-enabling medium is assumed to be already set up. 
+    Biomass formation is assumed to be already the objective. 
+    
+    model_id: name of the putput column (if None, 'output' will be used)
+    biosynth: minimum fraction of the maximal biomass to guarantee.
+    """    
+
+    
+    
+    df = [] # list of dict to be converted in pnd dataframe
+    if model_id == None: model_id = 'output'
+    
+    
+    # get the max biomass
+    res_before, obj_value_before, status_before = fba_no_warnings(model)
+    
+    
+    for m in model.metabolites:
+        if m.id.endswith('_c') == False:
+            continue   # only interested in cytosolic metabolites
+
+        with model:  # reversible changes 
+            
+            model.reactions.get_by_id(get_objectives(model)[0]).lower_bound = biosynth * obj_value_before
+            
+            binary, obj_value, status = can_synth(model, m.id)
+
+            if status == 'optimal' and obj_value > 0.0001:  # FIVE decimals
+                able = 0 
+            else:
+                able = 1
+
+            # save results in a future pnd DataFrame:
+            df.append({'mid': m.id, model_id: able})
+    
+    
+    df = pnd.DataFrame.from_records(df)
+    df = df.set_index('mid', drop=True, verify_integrity=True)
+    return df
+    
+
+
+def task_biosynth(accession, args):
+    
+    
+    # retrive the arguments:
+    outdir = args['outdir']
+    skipgf = args['skipgf']
+    biosynth = args['biosynth']
+    
+    
+    # read json/sbml file:
+    if not skipgf:
+        ss_model = cobra.io.load_json_model(outdir + f'strain_models_gf/{accession}.json')
+    else:  # user asked to skip the strain-specific gapfilling step
+        ss_model = cobra.io.load_json_model(outdir + f'strain_models/{accession}.json')
+    
+    # perform the simulations: 
+    df_results = biosynth_simulation(ss_model, model_id=accession, biosynth=biosynth)
+    df_results = df_results.T.reset_index(drop=False).rename(columns={'index': 'accession'})
+        
+    # it has just 1 row:
+    return [df_results.iloc[0].to_dict()]
+
+
+
+def strain_biosynth_tests(logger, outdir, cores, panmodel, pam, skipgf, biosynth):
+    
+    
+    # log some messages
+    logger.info("Testing strain-specific biosynthesis of metabolites...")
+    if biosynth != 0: 
+        logger.info(f"Biomass will be fixed at {biosynth} fraction of its maximum.")
+        
+        
+    # get the header for the rusults table:
+    header = []
+    for m in panmodel.metabolites: 
+        if m.id.endswith('_c')==False:
+            continue   # interested only in cytosolyc metabolites
+        header.append(m.id)
+
+    
+    # check if it's everything pre-computed:
+    # not needed!
+    
+    
+    # create items for parallelization: 
+    items = []
+    for accession in pam.columns:
+        items.append(accession)
+       
+        
+    # randomize and divide in chunks: 
+    chunks = chunkize_items(items, cores)
+                          
+                          
+    # initialize the globalpool:
+    globalpool = multiprocessing.Pool(processes=cores, maxtasksperchild=1)
+    
+    
+    # start the multiprocessing: 
+    results = globalpool.imap(
+        load_the_worker, 
+        zip(chunks, 
+            range(cores), 
+            itertools.repeat(['accession'] + header), 
+            itertools.repeat('accession'), 
+            itertools.repeat(logger), 
+            itertools.repeat(task_biosynth), 
+            itertools.repeat({'outdir': outdir, 'skipgf': skipgf, 'biosynth': biosynth}),
+        ), chunksize = 1)
+    all_df_combined = gather_results(results)
+    
+    
+    # empty the globalpool
+    globalpool.close() # prevent the addition of new tasks.
+    globalpool.join() 
+    
+    
+    # save the table in the sae format of 'rpam':
+    biosynth_pam = all_df_combined
+    biosynth_pam = biosynth_pam.T
+    biosynth_pam.to_csv(outdir + 'biosynth.csv')
     
     return 0
