@@ -230,7 +230,8 @@ def silhouette_analysis(
 def heatmap_multilayer(
     tables, figsize = (10,5), drop_const=True, 
     derive_report=None, report_key='species', excludekeys=[], acc_to_cluster=None, cluster_to_color=None, 
-    legend_ratio=0.7, label_ratio=0.02, outfile=None, verbose=False, anchor=[None, None, None], key_to_color=None):
+    legend_ratio=0.7, label_ratio=0.02, outfile=None, verbose=False, anchor=[None, None, None], key_to_color=None,
+    xlabels=False):
     """Create a phylo-metabolic dendrogram.
     
     Args:
@@ -256,6 +257,7 @@ def heatmap_multilayer(
             ``None`` will leave default positioning.
         key_to_color (dict): dict mapping each category in `report_key` to a color in the format ([0:1],[0:1],[0:1]).
             ``None`` will leave default color and order in the legend. 
+        xlabels (bool): if `True`, show x-axis labels (feature IDs).
     
     Returns:
         tuple: A tuple containing:
@@ -281,7 +283,7 @@ def heatmap_multilayer(
     
     
     
-    def make_plot_heatmap_multilayer(ax, ord_data):
+    def make_plot_heatmap_multilayer(ax, ord_data, xlabels ):
                 
         ax.matshow(
             ord_data,  
@@ -298,6 +300,12 @@ def heatmap_multilayer(
         ax.spines['bottom'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
+        
+        if xlabels:   # show x-axis labels (feats IDs)
+            ax.get_xaxis().set_visible(True)
+            ax.set_xticks(range(len(ord_data.columns)))
+            ax.set_xticklabels(list(ord_data.columns))
+            ax.xaxis.set_ticks_position('bottom')
         
  
     
@@ -335,7 +343,7 @@ def heatmap_multilayer(
     ord_data_bool = sort_by_leaves(data_bool, linkage_matrix, index_to_acc)  # only to return 
     
     # plot the heatmap:
-    make_plot_heatmap_multilayer(axs[5], ord_data)
+    make_plot_heatmap_multilayer(axs[5], ord_data, xlabels)
     
     # add the cluster information (coming from the silhouette analysis);
     make_colorbar_clusters(axs[1], ord_data, acc_to_cluster, cluster_to_color)

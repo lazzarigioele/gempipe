@@ -500,10 +500,10 @@ def biosynth_simulation(model, model_id=None, biosynth=0.5):
             
             binary, obj_value, status = can_synth(model, m.id)
 
-            if status == 'optimal' and obj_value > 0.0001:  # FIVE decimals
-                able = 0 
+            if status == 'optimal' and obj_value > 0.001:  
+                able = 1 
             else:
-                able = 1
+                able = 0
 
             # save results in a future pnd DataFrame:
             df.append({'mid': m.id, model_id: able})
