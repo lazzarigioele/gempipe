@@ -8,6 +8,7 @@ gf_strain_models{{gf_strain_models}} --> Multi_strain_analysis
 aux{{aux}} --> Multi_strain_analysis
 cnps{{cnps}} --> Multi_strain_analysis
 rpam{{rpam}} --> Multi_strain_analysis
+biosynth{{biosynth}} --> Multi_strain_analysis
 
 
 click Multi_strain_analysis href "https://gempipe.readthedocs.io/en/latest/part_4_multi_strain_analysis.html" "Link"
@@ -21,4 +22,5 @@ style gf_strain_models fill:gold
 style aux fill:salmon
 style cnps fill:salmon
 style rpam fill:salmon
+style biosynth fill:salmon
 style Multi_strain_analysis fill:whitesmoke

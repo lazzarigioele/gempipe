@@ -4,6 +4,7 @@ strain_derivation --> strain_models{{strain_models}} --> gapfilling --> gf_strai
 gf_strain_models --> species_derivation --> species_models{{species_models}}
 gf_strain_models --> aux_prediction --> aux{{aux}}
 gf_strain_models --> cnps_prediction --> cnps{{cnps}}
+gf_strain_models --> biosynth_prediction --> biosynth{{biosynth}}
 gf_strain_models --> rpam{{rpam}}
 
 end
@@ -17,6 +18,7 @@ click gapfilling href "https://gempipe.readthedocs.io/en/latest/part_3_gempipe_d
 click species_derivation href "https://gempipe.readthedocs.io/en/latest/part_3_gempipe_derive.html#deriving-species-specific-models" "Link"
 click aux_prediction href "https://gempipe.readthedocs.io/en/latest/part_3_gempipe_derive.html#strain-specific-screenings" "Link"
 click cnps_prediction href "https://gempipe.readthedocs.io/en/latest/part_3_gempipe_derive.html#strain-specific-screenings" "Link"
+click biosynth_prediction href "https://gempipe.readthedocs.io/en/latest/part_3_gempipe_derive.html#strain-specific-screenings" "Link"
 
 
 
@@ -28,10 +30,12 @@ style species_models fill:gold
 style gapfilling fill:whitesmoke
 style aux_prediction fill:whitesmoke
 style cnps_prediction fill:whitesmoke
+style biosynth_prediction fill:whitesmoke
 style panmodel fill:gold
 style PAM fill:gold
 style aux fill:salmon
 style cnps fill:salmon
+style biosynth fill:salmon
 style rpam fill:salmon
 
 style strain_derivation fill:whitesmoke
