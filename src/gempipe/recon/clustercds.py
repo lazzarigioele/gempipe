@@ -42,6 +42,10 @@ def create_combined(logger):
             for seqrecord in SeqIO.parse(cds_handler, "fasta"):
                 seqid = seqrecord.id
                 seq = seqrecord.seq
+                if seq.endswith("*"):   # remove trailing stop codon
+                    seq = seq.rstrip("*")  
+                if "*" in seq:  # remove internale stop codon (replace with X)
+                    seq = seq.replace("*", "X")   
                 sr = SeqRecord.SeqRecord(seq, id=seqid, description=accession)
                 sr_list.append(sr)
                 sequences_df.append({'accession': accession, 'cds': seqid, 'aaseq': str(seq)})

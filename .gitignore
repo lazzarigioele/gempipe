@@ -42,6 +42,17 @@ paper_gempipe/validation/03_pseudomonas/tools_runs/gempipe/working/rec_masking/s
 paper_gempipe/validation/03_pseudomonas/tools_runs/gempipe/working/clustering/sequences.csv
 paper_gempipe/validation/03_pseudomonas/tools_runs/gempipe/working/clustering/combined.faa
 paper_gempipe/validation/03_pseudomonas/tools_runs/gempipe/working/rec_overlap/sequences.csv
+paper_gempipe/validation/compare_with_manual_pan/tools_runs/gempipe_pan/working/rec_broken/sequences.csv
+paper_gempipe/validation/compare_with_manual_pan/tools_runs/gempipe_pan/working/rec_masking/sequences.csv
+paper_gempipe/validation/compare_with_manual_pan/tools_runs/gempipe_pan/working/clustering/sequences.csv
+paper_gempipe/validation/compare_with_manual_pan/tools_runs/gempipe_pan/working/clustering/combined.faa
+paper_gempipe/validation/compare_with_manual_pan/tools_runs/gempipe_pan/working/rec_overlap/sequences.csv
+paper_gempipe/validation/installation_check/tools_runs/working/rec_masking/sequences.csv
+paper_gempipe/validation/installation_check/tools_runs/working/clustering/combined.faa
+paper_gempipe/validation/installation_check/tools_runs/working/rec_overlap/sequences.csv
+paper_gempipe/validation/installation_check/tools_runs/working/dbs/eggnog_proteins.dmnd
+paper_gempipe/validation/installation_check/tools_runs/working/dbs/eggnog.taxa.db
+paper_gempipe/validation/installation_check/tools_runs/working/dbs/eggnog.db
 paper_gempipe/case_study/fastani/ANIclustermap.svg
 paper_gempipe/case_study/gempipe/working/coordinates/seq_to_coords.pickle
 paper_gempipe/case_study/gempipe/working/rec_broken/seq_to_coords.pickle

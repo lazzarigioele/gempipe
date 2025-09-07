@@ -716,6 +716,8 @@ def create_recon_plots(logger, outdir, cores, nofig):
     
     if not nofig: 
         logger.info("Producing figures for preliminary reconstruction metrics...")
+        os.makedirs(f"{outdir}/figures/", exist_ok=True)
+        
 
         # load main assets:
         draft_panmodel = read_refmodel(outdir + 'draft_panmodel.json')
