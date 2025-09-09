@@ -19,6 +19,11 @@
 8.7G	./testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
 266M	./testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
 39G	./testing/09_aphidicola_auto2/working/dbs/eggnog.db
+63M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/rec_broken/sequences.csv
+63M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/rec_masking/sequences.csv
+63M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/clustering/sequences.csv
+64M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/clustering/combined.faa
+63M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/rec_overlap/sequences.csv
 63M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_rf/working/rec_broken/sequences.csv
 63M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_rf/working/rec_masking/sequences.csv
 63M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_rf/working/clustering/sequences.csv
@@ -39,11 +44,6 @@
 75M	./paper_gempipe/validation/03_pseudomonas/tools_runs/gempipe/working/clustering/sequences.csv
 76M	./paper_gempipe/validation/03_pseudomonas/tools_runs/gempipe/working/clustering/combined.faa
 75M	./paper_gempipe/validation/03_pseudomonas/tools_runs/gempipe/working/rec_overlap/sequences.csv
-63M	./paper_gempipe/validation/compare_with_manual_pan/tools_runs/gempipe_pan/working/rec_broken/sequences.csv
-63M	./paper_gempipe/validation/compare_with_manual_pan/tools_runs/gempipe_pan/working/rec_masking/sequences.csv
-63M	./paper_gempipe/validation/compare_with_manual_pan/tools_runs/gempipe_pan/working/clustering/sequences.csv
-64M	./paper_gempipe/validation/compare_with_manual_pan/tools_runs/gempipe_pan/working/clustering/combined.faa
-63M	./paper_gempipe/validation/compare_with_manual_pan/tools_runs/gempipe_pan/working/rec_overlap/sequences.csv
 45M	./paper_gempipe/validation/installation_check/tools_runs/working/rec_masking/sequences.csv
 45M	./paper_gempipe/validation/installation_check/tools_runs/working/clustering/combined.faa
 45M	./paper_gempipe/validation/installation_check/tools_runs/working/rec_overlap/sequences.csv

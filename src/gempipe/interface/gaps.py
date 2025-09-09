@@ -171,115 +171,121 @@ def perform_gapfilling(model, universe, mid=None, slim=None, minflux=1.0, exr=Fa
         
         return solutions
             
-            
+       
     # temporary changes (objective, solver, demands edits are temporary)
-    with model, universe: 
+    # remove genes to avoid errors due to the context restoration (eg "ValueError: id {gene_id} is already present in list")
+    model_nogenes = model.copy()
+    cobra.manipulation.remove_genes(model_nogenes, [g for g in model_nogenes.genes], remove_reactions=False)
+    universe_nogenes = universe.copy()
+    cobra.manipulation.remove_genes(universe_nogenes, [g for g in universe_nogenes.genes], remove_reactions=False)
+    
+    
+    """
+    # set new solver if needed (cannot be 'glpk_exact').
+    if get_solver(model_nogenes) != solver: model_nogenes.solver = solver
+    if get_solver(universe_nogenes) != solver: universe_nogenes.solver = solver
+    """
 
-        """
-        # set new solver if needed (cannot be 'glpk_exact').
-        if get_solver(model) != solver: model.solver = solver
-        if get_solver(universe) != solver: universe.solver = solver
-        """
-
-        # if focusing on a particular biosynthesis
-        if mid != None:
-            model.objective = add_demand(model, mid)
-            universe.objective = add_demand(universe, mid)
-            
-            
-        # if requested, boost the actual sources:
-        if boost:
-            for r in model.reactions: 
-                if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'): # if exchange reaction
-                    if r.lower_bound < 0: 
-                        r.lower_bound = -1000
+    # if focusing on a particular biosynthesis
+    if mid != None:
+        model_nogenes.objective = add_demand(model_nogenes, mid)
+        universe_nogenes.objective = add_demand(universe_nogenes, mid)
 
 
-        # if requested, try to reduce the universe complexity:
-        if slim == 'FBA':
-            fluxes = universe.optimize().fluxes
-            rids_to_keep = fluxes[fluxes != 0].index
-            remove_rids(universe, rids_to_keep, inverse=True)
-        elif slim == 'FVA':
-            fluxes = cobra.flux_analysis.flux_variability_analysis(universe, fraction_of_optimum=0.01, loopless=False)
-            rids_to_keep = fluxes[(fluxes['minimum']!=0) | (fluxes['maximum']!=0)].index
-            remove_rids(universe, rids_to_keep, inverse=True)
-            
-            
-        # "AssertionError: daemonic processes are not allowed to have children"
-        # could be raise as child processes created by multiprocessing.Pool are demoniac by deafault,
-        # and demoniac processes cannot create their own child processes like the temporized gap-filler. 
-        if timeout != None: 
-            
-            
-            # run the gapfilling algorithm inside a timer: 
-            # first define the worker for the separate process
-            def worker(results_channel):
-                result = temporized_task(model, universe, minflux, exr, nsol, penalties)
-                results_channel.put(result)
+    # if requested, boost the actual sources:
+    if boost:
+        for r in model_nogenes.reactions: 
+            if len(r.metabolites)==1 and list(r.metabolites)[0].id.endswith('_e'): # if exchange reaction
+                if r.lower_bound < 0: 
+                    r.lower_bound = -1000
 
 
-            # then start the separate process
-            results_channel = multiprocessing.Queue()
-            process = multiprocessing.Process(target=worker, args=(results_channel,))
-            process.start()  # start the process
-            process.join(timeout) # wait for the process to finish or timeout
-        
-        
-            # if still running after the timeout:
-            if process.is_alive():  
-                process.terminate()
-                e = "Gap-filling timed out, consider to increase the 'timeout' attribute."
-                if verbose:  # avoid the error stack trace
-                    print("ERROR: cobrapy:", e) if logger==None else logger.debug(f'cobrapy: {e}')  
-                    #raise TimeoutError(result)  # show the error trace
-                return None
-        
-        
-            else: # the worker finished: retrieve the result or exception from the queue:
-                result = results_channel.get()
-                if isinstance(result, Exception):  
-                    if verbose: 
-                        print("ERROR: cobrapy:", result) if logger==None else logger.debug(f'cobrapy: {result}')  
-                        #raise Exception(result)  # show the error trace
-                    return None  # exit the function
-                else:  # a true result
-                    solutions = result
-                    
-                    
-        else:  # do not temporize the gap-filling:
-            result = temporized_task(model, universe, minflux, exr, nsol, penalties)
+    # if requested, try to reduce the universe complexity:
+    if slim == 'FBA':
+        fluxes = universe_nogenes.optimize().fluxes
+        rids_to_keep = fluxes[fluxes != 0].index
+        remove_rids(universe_nogenes, rids_to_keep, inverse=True)
+    elif slim == 'FVA':
+        fluxes = cobra.flux_analysis.flux_variability_analysis(universe_nogenes, fraction_of_optimum=0.01, loopless=False)
+        rids_to_keep = fluxes[(fluxes['minimum']!=0) | (fluxes['maximum']!=0)].index
+        remove_rids(universe_nogenes, rids_to_keep, inverse=True)
+
+
+    # "AssertionError: daemonic processes are not allowed to have children"
+    # could be raise as child processes created by multiprocessing.Pool are demoniac by deafault,
+    # and demoniac processes cannot create their own child processes like the temporized gap-filler. 
+    if timeout != None: 
+
+
+        # run the gapfilling algorithm inside a timer: 
+        # first define the worker for the separate process
+        def worker(results_channel):
+            result = temporized_task(model_nogenes, universe_nogenes, minflux, exr, nsol, penalties)
+            results_channel.put(result)
+
+
+        # then start the separate process
+        results_channel = multiprocessing.Queue()
+        process = multiprocessing.Process(target=worker, args=(results_channel,))
+        process.start()  # start the process
+        process.join(timeout) # wait for the process to finish or timeout
+
+
+        # if still running after the timeout:
+        if process.is_alive():  
+            process.terminate()
+            e = "Gap-filling timed out, consider to increase the 'timeout' attribute."
+            if verbose:  # avoid the error stack trace
+                print("ERROR: cobrapy:", e) if logger==None else logger.debug(f'cobrapy: {e}')  
+                #raise TimeoutError(result)  # show the error trace
+            return None
+
+
+        else: # the worker finished: retrieve the result or exception from the queue:
+            result = results_channel.get()
             if isinstance(result, Exception):  
                 if verbose: 
-                    print("ERROR: cobrapy:", result) if logger==None else logger.debug(f'cobrapy: {result}')
-                return None
+                    print("ERROR: cobrapy:", result) if logger==None else logger.debug(f'cobrapy: {result}')  
+                    #raise Exception(result)  # show the error trace
+                return None  # exit the function
             else:  # a true result
                 solutions = result
-                
-
-        # iterate the solutions:
-        first_sol_rids = []  # rids proposed during the 1st solution
-        for i, solution in enumerate(solutions):
-            if verbose and logger==None: print(f'Solution {i+1}. Reactions to add: {len(solution)}.')
 
 
-            # iterate the reactions: 
-            counter = 0
-            for r in solution: 
-                counter += 1
-                # Note: this 'r' is not linked to any model. 
-                # Indeed, calling r.model, None will be returned. 
-                if verbose and logger==None: print(f'{counter} {r.id} {r.name}')
-
-                # populate results with IDs from first solution:
-                if i == 0: first_sol_rids.append(r.id)
-
-            # separate solutions with a new line:
-            if i+1 != len(solutions): 
-                if verbose and logger==None: print()
+    else:  # do not temporize the gap-filling:
+        
+        result = temporized_task(model_nogenes, universe_nogenes, minflux, exr, nsol, penalties)
+        if isinstance(result, Exception):  
+            if verbose: 
+                print("ERROR: cobrapy:", result) if logger==None else logger.debug(f'cobrapy: {result}')
+            return None
+        else:  # a true result
+            solutions = result
 
 
-        return first_sol_rids
+    # iterate the solutions:
+    first_sol_rids = []  # rids proposed during the 1st solution
+    for i, solution in enumerate(solutions):
+        if verbose and logger==None: print(f'Solution {i+1}. Reactions to add: {len(solution)}.')
+
+
+        # iterate the reactions: 
+        counter = 0
+        for r in solution: 
+            counter += 1
+            # Note: this 'r' is not linked to any model. 
+            # Indeed, calling r.model, None will be returned. 
+            if verbose and logger==None: print(f'{counter} {r.id} {r.name}')
+
+            # populate results with IDs from first solution:
+            if i == 0: first_sol_rids.append(r.id)
+
+        # separate solutions with a new line:
+        if i+1 != len(solutions): 
+            if verbose and logger==None: print()
+
+
+    return first_sol_rids
         
     
 
