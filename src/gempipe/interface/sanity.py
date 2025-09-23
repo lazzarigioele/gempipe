@@ -7,6 +7,8 @@ import cobra
 
 from gempipe.interface.gaps import get_solver
 from gempipe.interface.gaps import get_objectives
+from ..commons import fba_no_warnings
+
 
 
 def close_boundaries(model):
@@ -89,41 +91,44 @@ def verify_egc(model, mid, escher=False, threshold=1e-5, verbose=True):
         
         # set the objective and optimize: 
         model.objective = f'__dissip__{mid}'
-        res = model.optimize()
+        res, obj_value, status = fba_no_warnings(model)
         
         
         # apply the threshold:
         obj_value = res.objective_value
+        status = res.status
         if abs(obj_value) < threshold:
             obj_value = 0
         
         
         # log some messages
-        if obj_value != 0 or verbose:
+        if verbose:
             print(dissip.reaction)
             print(obj_value , ':', res.status )
+            
+        
+        # log some messages
+        if obj_value > 0 and status == 'optimal' and verbose:
+            
+
+            # get suspect !=0 fluxes 
+            fluxes = res.fluxes
+            print()  # skip a line befor printing the EGC members
+            # get interesting fluxes (0.001 tries to take into account the approximation in glpk and cplex solvers)
+            fluxes_interesting = fluxes[((fluxes > 0.001) | (fluxes < -0.001)) & (fluxes.index != f'__dissip__{mid}')]
+            print(fluxes_interesting.to_string())
 
 
-            # get suspect !=0 fluxes (if any)
-            if obj_value != 0: 
-                fluxes = res.fluxes
-                print()  # skip a line befor printing the EGC members
-
-                # get interesting fluxes (0.001 tries to take into account the approximation in glpk and cplex solvers)
-                fluxes_interesting = fluxes[((fluxes > 0.001) | (fluxes < -0.001)) & (fluxes.index != f'__dissip__{mid}')]
-                print(fluxes_interesting.to_string())
-
-
-                # create a model for escher
-                if escher:  
-                    model_copy = model.copy()
-                    all_rids = [r.id for r in model_copy.reactions]
-                    to_delete = set(all_rids) - set(fluxes_interesting.index)
-                    model_copy.remove_reactions(to_delete)
-                    cobra.io.save_json_model(model_copy, f'__dissip__{mid}' + '.json')
-                    print(f'__dissip__{mid}' + '.json', "saved in current directory.")
+            # create a model for escher
+            if escher:  
+                model_copy = model.copy()
+                all_rids = [r.id for r in model_copy.reactions]
+                to_delete = set(all_rids) - set(fluxes_interesting.index)
+                model_copy.remove_reactions(to_delete)
+                cobra.io.save_json_model(model_copy, f'__dissip__{mid}' + '.json')
+                print(f'__dissip__{mid}' + '.json', "saved in current directory.")
                     
-        if obj_value != 0: 
+        if obj_value > 0 and status == 'optimal': 
             return True
         else: return False
 
