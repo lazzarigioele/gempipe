@@ -235,9 +235,10 @@ def animatrix(
     # (7) save to disk
     # bbox_inches='tight' removes white spaces around the figure. 
     if outfile != None:
-        plt.savefig(outfile, dpi=200, bbox_inches='tight')
+        plt.savefig(outfile, dpi=300, bbox_inches='tight')
     
     
+    fig.set_dpi(300)
     return fig, triangular
 
 
@@ -406,9 +407,10 @@ def phylogenomics(
     # (8) save to disk
     # bbox_inches='tight' removes white spaces around the figure. 
     if outfile != None:
-        plt.savefig(outfile, dpi=200, bbox_inches='tight')
+        plt.savefig(outfile, dpi=300, bbox_inches='tight')
         
-        
+    
+    fig.set_dpi(300)
     return fig
 
 
@@ -543,4 +545,5 @@ def get_filtering_summary(working_dir='gempipe/working/', thr_N50=50000, thr_nc=
             axs[i].invert_xaxis()
     
     
+    fig.set_dpi(300)
     return summary_table, summary_table_filt, fig

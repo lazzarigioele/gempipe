@@ -220,9 +220,11 @@ def silhouette_analysis(
         
     # save to disk; bbox_inches='tight' removes white spaces around the figure. 
     if outfile != None:
-        plt.savefig(outfile, dpi=200, bbox_inches='tight')
+        plt.savefig(outfile, dpi=300, bbox_inches='tight')
         
         
+    fig.set_dpi(300)
+    fig.tight_layout()
     return (fig, acc_to_cluster, cluster_to_color)
 
 
@@ -356,9 +358,11 @@ def heatmap_multilayer(
     
     # save to disk; bbox_inches='tight' removes white spaces around the figure. 
     if outfile != None:
-        plt.savefig(outfile, dpi=200, bbox_inches='tight')
+        plt.savefig(outfile, dpi=300, bbox_inches='tight')
                 
         
+    fig.set_dpi(300)
+    fig.tight_layout()
     return fig, ord_data_bool
 
 
@@ -498,5 +502,7 @@ def discriminant_feat(binary_feats, acc_to_cluster, cluster_to_color, threshold=
             annot_color = 'white' if freq_to_show >= 0.60 else 'black'
             axs[1].text(j, i, f'{freq_to_show}', ha='center', va='center', color=annot_color)
     
-
+    
+    fig.set_dpi(300)
+    fig.tight_layout()
     return fig, df_relfreq
