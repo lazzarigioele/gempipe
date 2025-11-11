@@ -22,6 +22,9 @@ src/generated/mnx_dicts_M/crossrefs.pickle
 testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
 testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
 testing/09_aphidicola_auto2/working/dbs/eggnog.db
+testing/revision-2/working/rec_masking/sequences.csv
+testing/revision-2/working/clustering/combined.faa
+testing/revision-2/working/rec_overlap/sequences.csv
 paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/rec_broken/sequences.csv
 paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/rec_masking/sequences.csv
 paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/clustering/sequences.csv
@@ -92,9 +95,6 @@ paper_gempipe/old/case_study/gempipe/working/rec_overlap/sequences.csv
 paper_gempipe/dbs/eggnog_proteins.dmnd
 paper_gempipe/dbs/eggnog.taxa.db
 paper_gempipe/dbs/eggnog.db
-applications/plantarum_capozzi/complete_genomes/orthogroups/myproject.blast-graph
-applications/plantarum_capozzi/complete_genomes/orthogroups/myproject.proteinortho-graph
-applications/plantarum_capozzi/complete_genomes/ncbi_dataset.zip
 applications/plantarum/old_stuff/pa_matrix_refound_frag.csv
 applications/plantarum/gempipe/working/coordinates/seq_to_coords.pickle
 applications/plantarum/gempipe/working/rec_broken/pam.csv
