@@ -89,7 +89,8 @@ def gather_results(results):
     # To handle this: (1) Filter out empty DataFrames. (2) Filter out DataFrames that contain only NA values.
     all_df_combined = [df for df in all_df_combined if not df.empty and not df.isna().all().all()]
 
-    all_df_combined = pnd.concat(all_df_combined, axis=0)
+    try: all_df_combined = pnd.concat(all_df_combined, axis=0)
+    except: all_df_combined = None
     
     
     return all_df_combined

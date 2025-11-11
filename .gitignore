@@ -22,6 +22,9 @@ src/generated/mnx_dicts_M/crossrefs.pickle
 testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
 testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
 testing/09_aphidicola_auto2/working/dbs/eggnog.db
+testing/revision-2/working/dbs/eggnog_proteins.dmnd
+testing/revision-2/working/dbs/eggnog.taxa.db
+testing/revision-2/working/dbs/eggnog.db
 paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/rec_broken/sequences.csv
 paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/rec_masking/sequences.csv
 paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/clustering/sequences.csv

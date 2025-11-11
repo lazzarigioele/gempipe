@@ -19,6 +19,9 @@
 8.7G	./testing/09_aphidicola_auto2/working/dbs/eggnog_proteins.dmnd
 266M	./testing/09_aphidicola_auto2/working/dbs/eggnog.taxa.db
 39G	./testing/09_aphidicola_auto2/working/dbs/eggnog.db
+8.7G	./testing/revision-2/working/dbs/eggnog_proteins.dmnd
+266M	./testing/revision-2/working/dbs/eggnog.taxa.db
+39G	./testing/revision-2/working/dbs/eggnog.db
 63M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/rec_broken/sequences.csv
 63M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/rec_masking/sequences.csv
 63M	./paper_gempipe/validation/01_klebsiella/tools_runs/gempipe_pan/working/clustering/sequences.csv

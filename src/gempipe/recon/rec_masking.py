@@ -215,7 +215,7 @@ def task_recmasking(genome, args):
             # populate the sequences dataframe
             new_rows.append({'cds': refound_gid, 'accession': accession, 'aaseq': str(curr_seq_translated)})
 
-
+    
     # save the filtered hsps for this genome:
     alignment_filtered = pnd.DataFrame.from_records(alignment_filtered)
     alignment_filtered.to_csv(f'working/rec_masking/alignments_filtered/{accession}.csv')
@@ -303,6 +303,9 @@ def recovery_masking(logger, cores):
             itertools.repeat({'pam': pam, 'cluster_to_rep': cluster_to_rep, 'rep_to_aaseq': rep_to_aaseq, 'acc_to_suffix': acc_to_suffix, 'seq_to_coords': seq_to_coords}),
         ), chunksize = 1)
     all_df_combined = gather_results(results)
+    if all_df_combined == None:  # no sequence (not even 1 in a single strain) was recovered
+        all_df_combined = pnd.DataFrame(columns=['cds', 'accession', 'aaseq'])  # empty dataframe
+        all_df_combined = all_df_combined.set_index('cds', drop=None)
     
     
     # save tabular results:
