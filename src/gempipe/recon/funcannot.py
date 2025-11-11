@@ -80,7 +80,24 @@ def func_annot(logger, cores, outdir, dbs, dbmem):
     if (not os.path.exists(dbs + 'eggnog_proteins.dmnd')) or (not os.path.exists(dbs + 'eggnog.db')):
         logger.info("The database for functional annotation is missing. It will be dowloaded now...")
         with open(f'working/logs/stdout_funcdownload.txt', 'w') as stdout, open(f'working/logs/stderr_funcdownload.txt', 'w') as stderr: 
-            command = f"""download_eggnog_data.py -y --data_dir {dbs}"""
+            command = f"""
+            #download_eggnog_data.py -y --data_dir {dbs}
+            
+            # above command is commented as no more functioning. The error is similar to the following: 
+            #--2025-11-11 14:06:37--  http://eggnogdb.embl.de/download/emapperdb-5.0.2/eggnog.db.gz
+            #Resolving eggnogdb.embl.de (eggnogdb.embl.de)... 194.94.44.170
+            #Connecting to eggnogdb.embl.de (eggnogdb.embl.de)|194.94.44.170|:80... connected.
+            #HTTP request sent, awaiting response... 404 Not Found
+            #2025-11-11 14:06:37 ERROR 404: Not Found.
+            
+            wget -P {dbs} eggnog5.embl.de/download/emapperdb-5.0.2/eggnog.db.gz
+            wget -P {dbs} eggnog5.embl.de/download/emapperdb-5.0.2/eggnog.taxa.tar.gz
+            wget -P {dbs} eggnog5.embl.de/download/emapperdb-5.0.2/eggnog_proteins.dmnd.gz
+
+            gzip -d {dbs}/eggnog.db.gz
+            tar -xzf {dbs}/eggnog.taxa.tar.gz -C {dbs} && rm {dbs}/eggnog.taxa.tar.gz
+            gzip -d {dbs}/eggnog_proteins.dmnd.gz
+            """
             process = subprocess.Popen(command, shell=True, stdout=stdout, stderr=stderr)
             process.wait()
         logger.info("Download completed. Now executing the annotation...")

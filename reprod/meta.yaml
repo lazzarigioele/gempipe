@@ -49,6 +49,9 @@ requirements:
         - seaborn >=0.13.0
         - scipy >=1.10.0
         - scikit-learn >=1.3.0
+        - wget
+        - gzip
+        - tar
 
 test:
     imports:

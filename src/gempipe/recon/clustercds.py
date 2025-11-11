@@ -21,6 +21,10 @@ def create_combined(logger):
     for species in species_to_proteome.keys(): 
         for proteome in species_to_proteome[species]:
             proteomes.append(proteome)
+    if len(proteomes) == 0:   # all strains were filtered
+        logger.error("No strain passed quality-filtering: please relax the thresholds to retain at least 1 strain!")
+        return 1
+    
         
            
     # create foundamental objects:

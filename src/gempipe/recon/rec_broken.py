@@ -476,7 +476,8 @@ def update_sequences(logger):
                 contig, strand, start, end)
             new_rows.append({'cds': row['ID'], 'accession': accession, 'aaseq': seq})
     new_rows = pnd.DataFrame.from_records(new_rows)
-    new_rows = new_rows.set_index('cds', drop=True, verify_integrity=True)
+    try: new_rows = new_rows.set_index('cds', drop=True, verify_integrity=True)
+    except: pass  # no new rows where inserted, meaning that no broken proteins where detected
     sequences_df_updated = pnd.concat([sequences_df_updated, new_rows])
     logger.debug(f'rec_broken: seq_to_coords: {len(sequences_df_updated)} sequences after the addition of new IDs.')
 

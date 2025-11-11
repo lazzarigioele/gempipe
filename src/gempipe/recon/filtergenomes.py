@@ -305,7 +305,7 @@ def figure_tmetrics(logger, outdir, bad_genomes):
         df['sum_len'] = df['sum_len'].apply(lambda x: x / 1000 / 1000)  # convert to Mb
         
         # create new col to show filtering: 
-        df['excluded'] = 0
+        df['excluded'] = 0.0
         for accession, row in df.iterrows(): 
             if accession in bad_genomes: 
                 df.loc[accession, 'excluded'] = df.loc[accession, tmetric]
