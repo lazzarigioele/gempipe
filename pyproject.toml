@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gempipe"
-version = "1.38.4"
+version = "1.38.5"
 description = ""
 authors = ["Gioele Lazzari"]
 license = "GNU General Public License v3.0"
